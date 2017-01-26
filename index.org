@@ -1,0 +1,43 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t
+#+OPTIONS: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
+#+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t tags:t
+#+OPTIONS: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
+#+TITLE: Matematika skozi Python
+#+DATE: <2017-01-26 čet>
+#+AUTHOR: Martin Vuk
+#+EMAIL: martin.vuk@fri.uni-lj.si
+#+LANGUAGE: sl
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 25.1.1 (Org mode 9.0.3)
+
+* Matematika skozi Python
+Pred vami je priročnik o tem, kako uporabiti znanje matematike pri
+programiranju. Priročnik je nastal kot dopolnilno gradivo pri predmetu
+Matematika na Fakulteti za računalništvo in informatiko, Univerze v Ljubljani.
+
+Priročnik spremljajo tudi naloge na portalu [[https://www.projekt-tomo.si/course/15/][projekt Tomo]], kjer lahko vsebino te
+knjige tudi praktično preskusite. Z reševanjem teh nalog boste pridobili tako
+znanje programiranja, kot tudi boljše razumevanje matematičnih pojmov. Obvezno
+za vse, ki hočejo od predmeta nekaj več. Vabljeni ste tudi, da dodate
+predmet Matematika med svoje predmete, tako da kliknete na zvezdico nad imenom
+predmeta. 
+
+Poleg tega so na voljo tudi kratki videi na YouTube kanalu.
+
+** Uvod
+
+*** Kako brati to knjigo
+Vsekakor priporočamo, da naloge poskusite rešiti povsem samostojno. Rešitve so 
+v začetku skrite, da vas ne bi premamile. Če se vam zatakne, si poglejte najprej
+splošna, matematična navodila za rešitev naloge in poskusite vsaj programerski
+del rešiti sami. Če tudi to ne gre, si le poglejte rešitev. Rešitve ne
+kopirajte, ampak jo raje prepišete ali še bolje napišite sami. Tako bodo vaši
+možgani imeli več od tega.
+
+ #+INCLUDE: "./zaporedja.org"
+ #+INCLUDE: "./funkcije.org"
+ #+INCLUDE: "./odvod.org"
+ #+INCLUDE: "./integral.org"
+ #+INCLUDE: "./vektorji.org"
+ #+INCLUDE: "./matrike.org"

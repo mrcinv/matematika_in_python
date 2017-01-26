@@ -1,0 +1,11 @@
+* Vektorji v ravnini in prostoru
+** Vektorji
+Napišite razred `Vektor`, ki predstavlja vektorje (n-terice števil).
+** Premica in ravnina v 3D
+** Raytracing
+*** Presečišče poltraka in ravnine
+*** Presečišče poltraka in krogle
+*** Scena s kroglo in svetilom
+*** Scena s tetraedrom in svetilom
+**** Ali točka leži na trikotniku?
+*** Večkratni odboji
