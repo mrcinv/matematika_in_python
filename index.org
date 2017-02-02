@@ -1,4 +1,5 @@
-#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t
+#+SETUPFILE: org-html-themes/setup/theme-readtheorg-local.setup
+#+OPTIONS: ':nil *:t -:t ::t <:t H:4 \n:nil ^:t arch:headline author:t
 #+OPTIONS: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
 #+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t tags:t
 #+OPTIONS: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
@@ -10,8 +11,8 @@
 #+SELECT_TAGS: export
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 25.1.1 (Org mode 9.0.3)
-
-* Matematika skozi Python
+#+PROPERTY: header-args    :results both
+* Uvod 
 Pred vami je priročnik o tem, kako uporabiti znanje matematike pri
 programiranju. Priročnik je nastal kot dopolnilno gradivo pri predmetu
 Matematika na Fakulteti za računalništvo in informatiko, Univerze v Ljubljani.
@@ -20,14 +21,12 @@ Priročnik spremljajo tudi naloge na portalu [[https://www.projekt-tomo.si/cours
 knjige tudi praktično preskusite. Z reševanjem teh nalog boste pridobili tako
 znanje programiranja, kot tudi boljše razumevanje matematičnih pojmov. Obvezno
 za vse, ki hočejo od predmeta nekaj več. Vabljeni ste tudi, da dodate
-predmet Matematika med svoje predmete, tako da kliknete na zvezdico nad imenom
+predme Matematika med svoje predmete, tako da kliknete na zvezdico nad imenom
 predmeta. 
 
 Poleg tega so na voljo tudi kratki videi na YouTube kanalu.
 
-** Uvod
-
-*** Kako brati to knjigo
+** Kako brati to knjigo
 Vsekakor priporočamo, da naloge poskusite rešiti povsem samostojno. Rešitve so 
 v začetku skrite, da vas ne bi premamile. Če se vam zatakne, si poglejte najprej
 splošna, matematična navodila za rešitev naloge in poskusite vsaj programerski
@@ -35,9 +34,284 @@ del rešiti sami. Če tudi to ne gre, si le poglejte rešitev. Rešitve ne
 kopirajte, ampak jo raje prepišete ali še bolje napišite sami. Tako bodo vaši
 možgani imeli več od tega.
 
- #+INCLUDE: "./zaporedja.org"
- #+INCLUDE: "./funkcije.org"
- #+INCLUDE: "./odvod.org"
- #+INCLUDE: "./integral.org"
- #+INCLUDE: "./vektorji.org"
- #+INCLUDE: "./matrike.org"
+Knjiga je na voljo v različnih formatih
+
+- [[file:index.html][HTML spletna stran]]
+- [[file:index.pdf][PDF dokument]]
+- predmet [[https://www.projekt-tomo.si/course/15/][Matematika]] na portalu [[https://www.projekt-tomo.si/][Projekt Tomo]]
+- [[file:index.org][izvorna koda]] v obliki  [[https://orgmode.org][Org-mode]] za urejevalnik [[https://www.gnu.org/software/emacs/][Emacs]]
+ 
+
+* Zaporedja in vrste
+** Zaporedja
+V vsakdanjem življenju pojem zaporedja pogosto
+pomeni seznam elementov, pri katerem je pomemben vrstni red. Na primer zaporedje
+plesnih korakov v koreografiji, zaporedje števil pri lotu ali pa zaporedje
+postajališč na liniji mestnega prometa. Matematike seveda zanima vse kar je
+povezano z neskončnostjo, zato si pod pojmom zaporedja predstavljamo neskončna
+zaporedja, ki jih formalno definiramo kot funkcijo 
+$$\mathbb{N}\to A,$$ 
+ki vsakemu naravnemu številu $n$ priredi nek element množice $a_n=a(n)\in A$. 
+Element $a_n$ imenujemo $n$ - ti člen zaporedja.  V Pythonu so neskončni objekti nepraktični[fn:generator], zato so zaporedja povezana s
+podatkovnim tipom ~list~, ki predstavlja končni seznam elementov in zankami
+~for~ in ~while~, s katerimi se sprehodimo po elementih seznama in izvedemo
+zaporedje korakov.
+[fn:generator] Tudi v Pythonu poznamo posplošitev pojma končnega zaporedja
+in to je [[https://wiki.python.org/moin/Generators][generator]], ki je še najbližje matematičnemu pojmu zaporedja.
+*** Naloga
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: naloga
+    :END:
+Zapiši približne vrednosti prvih 100 členov zaporedja $a_n=\frac{n-1}{n+1}$.
+**** Namig
+     :PROPERTIES:
+     :HTML_CONTAINER_CLASS: resitev
+     :END:
+    Uporabi zanko ~for n in range(100):~.
+**** Rešitev 
+     :PROPERTIES:
+     :HTML_CONTAINER_CLASS: resitev
+     :END:
+    #+BEGIN_SRC python
+      for n in range(100):
+          print((n-1)/(n+1))
+    #+END_SRC
+*** Naloga
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: naloga
+    :END:
+Zaporedje je podano z rekurzivno formulo $$a_{n+1}=\frac{2a_n^3+2}{3a_n^2}$$ in
+začetnim členom $a_0=3$. Zapiši prvih 10 členov zaporedja. Kaj opaziš? 
+**** Rešitev
+     :PROPERTIES:
+     :HTML_CONTAINER_CLASS: resitev
+     :END:
+#+BEGIN_SRC python :results output
+  an = 2
+  print(an)
+  for i in range(9):
+      an = (2*an**3+2)/(3*an**2)
+      print(an)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+2
+1.5
+1.2962962962962963
+1.2609322247417485
+1.2599218605659261
+1.2599210498953948
+1.259921049894873
+1.2599210498948732
+1.259921049894873
+1.2599210498948732
+#+end_example
+
+Členi zaporedja se po 5. členu začnejo ponavljati. Zaporedje je očitno
+*konvergentno*. Zadnjih nekaj členov so zelo dobri približki za *limito*.
+**** Rešitev z generatorjem
+     :PROPERTIES:
+     :HTML_CONTAINER_CLASS: resitev
+     :END:
+Za ilustracijo nalogo rešimo še z *generatorjem*. Generator je funkcija, ki je
+posebne vrste tip *iteratorja*. *Iterator* je objekt, ki pozna metodo ~next()~
+in ga lahko uporabimo v ~for~ zanki. Funkcijo spremenimo v *generator* z uporabo
+ukaza ~yield~, ki je zelo podoben ukazu ~return~, le da se ob njegovem klicu
+izvajanje funkcije zamrzne do naslednjega klica metode ~next()~. Z generatorjem
+na ta način lahko definiramo tudi neskončna zaporedja oziroma zaporedja
+poljubnih dolžin. 
+
+#+BEGIN_SRC python :results output
+  def zaporedje(n):
+      "Generator za prvih n členov zaporedja an"
+      an = 2
+      while n>0:
+          yield an
+          an = (2*an**3+2)/(3*an**2)
+          n -= 1
+
+  for clen in zaporedje(10):
+      print(clen)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+2
+1.5
+1.2962962962962963
+1.2609322247417485
+1.2599218605659261
+1.2599210498953948
+1.259921049894873
+1.2599210498948732
+1.259921049894873
+1.2599210498948732
+#+end_example
+**** Rešitev z rekurzijo
+     :PROPERTIES:
+     :HTML_CONTAINER_CLASS: resitev
+     :END:
+Zaporedje $a_n$ lahko definiramo tudi z rekurzivno funkcijo. Paziti moramo le,
+da znotraj funkcije opravimo le en klic na isto funkcijo, sicer časovna
+zahtevnost eksponentno narašča.
+#+BEGIN_SRC python :results output
+  def zaporedje(n):
+      "Rekurzivna funkcija, ki definira rekurzivno zaporedje"
+      if n<=0:
+          return 2
+      else:
+          an = zaporedje(n-1)
+          return (2*an**3+2)/(3*an**2) 
+
+  for n in range(10):
+      print(zaporedje(n))
+#+END_SRC  
+
+#+RESULTS:
+#+begin_example
+2
+1.5
+1.2962962962962963
+1.2609322247417485
+1.2599218605659261
+1.2599210498953948
+1.259921049894873
+1.2599210498948732
+1.259921049894873
+1.2599210498948732
+#+end_example
+
+Kljub temu, da smo se z enim rekurzivnim klicem funkcije izognili eksponentni
+časovni odvisnosti, je pri večkratnih klicih funkcije ~zaporedje~ še vedno
+precej odvečnih izračunov. Ob vsakem zaporednem klicu funkcije ponovno
+izračunamo vse člene od prvega naprej. Časovna zahtevnost ~for~ zanke je tako
+kvadratična, medtem ko je pri prejšnjih rešitvah časovna zahtevnost linearna. 
+*** Naloga
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: naloga
+    :END:
+Za zaporedje $$a_n=\frac{n^2+n-1}{1-2n^2},$$ poišči prvi člen $a_n$, ki se za
+manj kot
+$\varepsilon=\frac{1}{100}$ razlikuje od limite.
+**** Namig
+     :PROPERTIES:
+     :HTML_CONTAINER_CLASS: resitev
+     :END:
+Poišči najmanjše naravno število $n$, da bo $|a_n-a|<\varepsilon$, kjer je  
+$$a=\lim_{n\to\infty}a_n=-\frac{1}{2}.$$ Uporabi zanko ~while~.
+**** Rešitev
+     :PROPERTIES:
+     :HTML_CONTAINER_CLASS: resitev
+     :END:
+#+BEGIN_SRC python :results output
+  n = 0
+  a = -0.5
+  eps = 0.01
+  while abs((n**2+n-1)/(1-2*n**2)-a)>eps:
+      n += 1
+  print(n)
+#+END_SRC
+
+#+RESULTS:
+: 50
+**** Rešitev z generatorjem
+     :PROPERTIES:
+     :HTML_CONTAINER_CLASS: resitev
+     :END:
+Za ilustracijo nalogo rešimo še z *generatorjem*. Generator je funkcija, ki je
+posebne vrste tip *iteratorja*. *Iterator* je objekt, ki pozna metodo ~next()~
+in ga lahko uporabimo v ~for~ zanki. Funkcijo spremenimo v *generator* z uporabo
+ukaza ~yield~, ki je zelo podoben ukazu ~return~, le da se ob 
+
+#+BEGIN_SRC python :results output
+  def zaporedje():
+      n = 0
+      while True:
+          yield n, (n**2+n-1)/(1-2*n**2)
+          n += 1
+  a = -0.5
+  eps = 0.01
+
+  for n, clen in zaporedje():
+      if abs(clen-a)<eps:
+          print(n)
+          break
+#+END_SRC
+
+#+RESULTS:
+: 50
+
+** Vrste
+
+* Funkcije
+** Ničle funkcij in enačbe
+** Izračun vrednosti polinoma
+** Kotne funkcije
+*** Tabela kotnih funkcij
+Napiši program, ki generira tabeli kotnih funkcij $\sin$ in $\cos$ na intervalu
+$[0,2\pi]$  v točkah $$x_i=i\frac{\pi}{100};\quad i=0,\ldots, 200.$$ Uporabi
+adicijske izreka za sinus in cosinus
+\begin{eqnarray*}
+\sin(x+y)&=&\sin(x)\cos(y)+\sin(y)\cos(x)\\
+\cos(x+y)&=&\cos(x)\cos(y) - \sin(x)\sin(y)
+\end{eqnarray*}
+in približne vrednosti
+ $\sin(\frac{\pi}{100})\simeq \frac{\pi}{100}$ 
+src_python{import math;return math.sin(math.pi/100)} {{{results(=0.03141075907812829=)}}}
+$\cos(\frac{\pi}{100})\simeq 1$
+src_python{import math; return math.cos(math.pi/100)} {{{results(=0.9995065603657316=)}}}.
+
+Dobljene vrednosti primerjaj z vrednostmi, ki jih vrneta funkciji ~math.sin~
+in ~math.cos~, tako da poiščete razlike. Kolikšna je največja razlika med
+vrednostjo,ki jo je izračunal vaš program in vrednostjo, ki jo je dala vgrajena
+funkcija?  
+*** Sinus in kosinus 1
+Napiši funkcijo, ki izračuna vrednost funkcije $\sin(x)$ in $\cos(x)$ na
+intervalu $[0,\frac{\pi}{2}]$, tako da uporabiš
+adicijska izreka za dvojni kot
+$$\sin(2x) = 2\sin(x)\cos(x),\quad \cos(2x)=\cos^2(x)-\sin^2(x)$$  
+ in za majhne $x$ upošteva približni enakosti
+$$\sin(x)\simeq x\text{ in } \cos(x)\simeq 1;\quad |x|<10^{-1}.$$
+*** Sinus in kosinus 2
+Funkcijo iz prejšnje naloge razširi na vsa realna števila. Uporabi periodičnost
+in simetrije funkcij $\sin$ in $\cos$.
+* Odvod
+** Simbolično odvajanje
+*** RPN prestavitev računskih izrazov
+*** Odvod RPN zapisa
+** Avtomatsko odvajanje
+*** Program kot matematična funkcija
+*** Program kot zaporedje(kompozitum) preprostih operacij
+** Numerično odvajanje
+** Tangenta in normala
+# #+INCLUDE: "./funkcije.org" :minlevel 1
+
+
+# #+INCLUDE: "./integral.org" :minlevel 1
+* Integral
+** Nedoločeni integral
+*** Integral polinoma
+** Določeni integral
+*** Trapezna in Simpsonova metoda
+* Vektorji v ravnini in prostoru
+** Vektorji
+*** Python razred za vektorje
+*** Skalarni in vektorski produkt
+*** Enakost, kolinearnost in koplanarnost vektorjev
+ Napišite razred `Vektor`, ki predstavlja vektorje (n-terice števil).
+** Premica in ravnina v 3D
+*** Python razreda za ravnino in premico
+*** Enakost, vzporednost med ravninami, premicami
+*** Presečišča
+** Raytracing
+*** Presečišče poltraka in ravnine
+*** Presečišče poltraka in krogle
+*** Scena s kroglo in svetilom
+*** Scena s tetraedrom in svetilom
+**** Ali točka leži na trikotniku?
+*** Večkratni odboji
+* Matrike in sistemi enačb
+** Matrike
+*** Python razred za matrike
+** Gaussova eliminacija
