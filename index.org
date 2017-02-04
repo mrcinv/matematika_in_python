@@ -419,3 +419,15 @@ in simetrije funkcij $\sin$ in $\cos$.
 ** Matrike
 *** Python razred za matrike
 ** Gaussova eliminacija
+* Licenca 
+#+BEGIN_EXPORT html
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+<img alt="Creative Commons licenca" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
+</a><br />
+<span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">Matematika skozi Python</span>, avtorja/ke <a xmlns:cc="http://creativecommons.org/ns#" href="https://mrcinv.github.io" property="cc:attributionName" rel="cc:attributionURL">Martin Vuk</a> 
+je objavljeno pod <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Priznanje avtorstva-Deljenje pod enakimi pogoji 4.0 Mednarodna licenco</a>.
+<br />Ustvarjeno na podlagi dela, dostopnega na 
+<a xmlns:dct="http://purl.org/dc/terms/" href="https://mrcinv.github.io/matematika-skozi-python" rel="dct:source">https://mrcinv.github.io/matematika-skozi-python</a>.
+<br />Dodatna dovoljenja, ki presegajo obsege te licence, so dostopna na 
+<a xmlns:cc="http://creativecommons.org/ns#" href="https://mrcinv.github.io" rel="cc:morePermissions">https://mrcinv.github.io</a>.
+#+END_EXPORT
