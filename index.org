@@ -1,7 +1,8 @@
-#+SETUPFILE: org-html-themes/setup/theme-readtheorg-local.setup
+# #+SETUPFILE: org-html-themes/setup/theme-readtheorg-local.setup
+#+SETUPFILE: org-bootstrap-document/setup.org
 #+OPTIONS: ':nil *:t -:t ::t <:t H:4 \n:nil ^:t arch:headline author:t
 #+OPTIONS: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
-#+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t tags:t
+#+OPTIONS: email:t f:t inline:t num:3 p:nil pri:nil prop:nil stat:t tags:t
 #+OPTIONS: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
 #+TITLE: Matematika skozi Python
 #+DATE: <2017-01-26 čet>
@@ -11,7 +12,7 @@
 #+SELECT_TAGS: export
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 25.1.1 (Org mode 9.0.3)
-#+PROPERTY: header-args    :results both
+#+PROPERTY: header-args  :results output
 * Uvod 
 Pred vami je priročnik o tem, kako uporabiti znanje matematike pri
 programiranju. Priročnik je nastal kot dopolnilno gradivo pri predmetu
@@ -21,10 +22,10 @@ Priročnik spremljajo tudi naloge na portalu [[https://www.projekt-tomo.si/cours
 knjige tudi praktično preskusite. Z reševanjem teh nalog boste pridobili tako
 znanje programiranja, kot tudi boljše razumevanje matematičnih pojmov. Obvezno
 za vse, ki hočejo od predmeta nekaj več. Vabljeni ste tudi, da dodate
-predme Matematika med svoje predmete, tako da kliknete na zvezdico nad imenom
+predme Matematika med svoje predmete, tako da kliknete na zvezdico nad imen Symbol’s value as variable is void: org-export-use-babelom
 predmeta. 
 
-Poleg tega so na voljo tudi kratki videi na YouTube kanalu.
+Poleg tega so na voljo tudi kratki vide Symbol’s value as variable is void: org-export-use-babeli na YouTube kanalu.
 
 ** Kako brati to knjigo
 Vsekakor priporočamo, da naloge poskusite rešiti povsem samostojno. Rešitve so 
@@ -62,7 +63,7 @@ in to je [[https://wiki.python.org/moin/Generators][generator]], ki je še najbl
     :PROPERTIES:
     :HTML_CONTAINER_CLASS: naloga
     :END:
-Zapiši približne vrednosti prvih 100 členov zaporedja $a_n=\frac{n-1}{n+1}$.
+Zapiši približne vrednosti prvih 15 členov zaporedja $a_n=\frac{n-1}{n+1}$
 **** Namig
      :PROPERTIES:
      :HTML_CONTAINER_CLASS: resitev
@@ -73,9 +74,29 @@ Zapiši približne vrednosti prvih 100 členov zaporedja $a_n=\frac{n-1}{n+1}$.
      :HTML_CONTAINER_CLASS: resitev
      :END:
     #+BEGIN_SRC python
-      for n in range(100):
+      for n in range(15):
           print((n-1)/(n+1))
     #+END_SRC
+
+    #+RESULTS:
+    #+begin_example
+    -1.0
+    0.0
+    0.3333333333333333
+    0.5
+    0.6
+    0.6666666666666666
+    0.7142857142857143
+    0.75
+    0.7777777777777778
+    0.8
+    0.8181818181818182
+    0.8333333333333334
+    0.8461538461538461
+    0.8571428571428571
+    0.8666666666666667
+#+end_example
+
 *** Naloga
     :PROPERTIES:
     :HTML_CONTAINER_CLASS: naloga
@@ -246,7 +267,90 @@ ukaza ~yield~, ki je zelo podoben ukazu ~return~, le da se ob
 
 * Funkcije
 ** Ničle funkcij in enačbe
+*** Ničle tabelirane funkcije
+Za zvezno funkcija poznamo le nekaj posameznih vrednosti. Podana imamo dva
+seznama enake dolžine ~x~ in ~y~, tako da velja ~y[i] == f(x[i])~.
+
+Napišite funkcijo ~nicle(x,y)~, ki izračuna približne vrednosti ničel, tako da
+funkcijo nadomesti z /linearnim zlepkom/ in izračuna ničle zlepka. Linearni zlepek
+dobimo tako, da graf funkcije $f(x)$
+nadomestimo z daljicami (linearno funkcijo $y=kx+n$) med točkami, ki so podane s
+seznamoma ~x~ in ~y~.
+
+Funkcija ~nicle(x,y)~ naj vrne seznam približkov za ničle, urejenih po velikosti. Primer:
+
+#+BEGIN_SRC python 
+x = [-1, 0, 1, 2, 3]
+y = [1, -1, 1, 2, 3]
+nicle(x,y)
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+[-0.5, 0.5]
+#+END_EXAMPLE
+**** Matematična izpeljava
+Označimo z $x_1,x_2,\ldots,x_n$ in z $y_1,y_2,\ldots, y_n$ vrednosti v tabelah
+~x~ in ~y~. Za neznano zvezno funkcijo $f$ velja 
+$$y_i=f(x_i).$$
+
+Ker je $f4 zvezna, lahko z gotovostjo trdimo, da je ničla na intervalu
+$[x_i,x_{i+1}]$, kjer sta $y_i$ in $y_{i+1}$ različnega predznaka. Najprej mora
+funkcija ~nicle~ poiskati intervale, kjer se to zgodi.
+
+Denimo, da je na intervalu $[x_i,x_{i+1}]$ ničla. Enačbo za odsek linearnega
+zlepka na tem intervalu dobimo tako, da poiščemo enačbo premice skozi točki na
+krajiščih $(x_i,y_i)$ in $(x_{i+1},y_{i+1})$. V resnici nas zanima le, pri
+kateri vrednosti, premica seka os $x$. To najlažje določimo s podobnimi
+trikotniki:
+
+#+header: :exports results :file zlepek.png 
+#+header: :imagemagick yes :iminoptions -density 600 :imoutoptions -geometry 400 
+#+header: :packages '(("" "tikz")) :border 1em :results raw
+#+begin_src latex
+  % Define block styles
+  \usetikzlibrary{arrows}
+\definecolor{uququq}{rgb}{0.25,0.25,0.25}
+\definecolor{xdxdff}{rgb}{0.49,0.49,1}
+\definecolor{qqqqff}{rgb}{0,0,1}
+\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+\draw[->,color=black] (-1,0) -- (6,0);
+\foreach \x in {-1,1,2,3,4,5}
+\draw[shift={(\x,0)},color=black] (0pt,-2pt);
+\draw[color=black] (5.64,0.09) node [anchor=south west] { x};
+\draw[->,color=black] (0,-5) -- (0,3);
+\foreach \y in {-5,-4,-3,-2,-1,1,2}
+\draw[shift={(0,\y)},color=black] (2pt,0pt) -- (-2pt,0pt);
+\draw[color=black] (0.11,2.57) node [anchor=west] { y};
+\clip(-1,-5) rectangle (6,3);
+\draw (1,2)-- (4,-4);
+\draw (1,2)-- (1,0);
+\draw (4,-4)-- (4,0);
+\draw (1,0)-- (4,0);
+%\begin{scriptsize}
+\fill [color=qqqqff] (1,2) circle (1.5pt);
+\draw[color=qqqqff] (1.75,2.28) node {$(x_i,y_i)$};
+\fill [color=qqqqff] (4,-4) circle (1.5pt);
+\draw[color=qqqqff] (5.1,-3.7) node {$(x_{i+1},y_{i+1}})$};
+\fill [color=xdxdff] (1,0) circle (1.5pt);
+\draw[color=xdxdff] (1.42,0.28) node {$x_i$};
+\draw[color=black] (0.96,1.16) node {$y_i$};
+\fill [color=qqqqff] (4,0) circle (1.5pt);
+\draw[color=qqqqff] (4.78,0.28) node {$x_{i+1}$};
+\draw[color=black] (5.05,-1.83) node {$y_{i+1}$};
+\fill [color=uququq] (2,0) circle (1.5pt);
+\draw[color=uququq] (2.32,0.28) node {$x$};
+%\end{scriptsize}
+\end{tikzpicture}
+#+end_src
+
+#+RESULTS:
+[[file:zlepek.png]]
+
+*** Bisekcija
+*** Sekantna metoda
 ** Izračun vrednosti polinoma
+*** Hornerjev algoritem
 ** Kotne funkcije
 *** Tabela kotnih funkcij
 Napiši program, ki generira tabeli kotnih funkcij $\sin$ in $\cos$ na intervalu
@@ -258,14 +362,14 @@ adicijske izreka za sinus in cosinus
 \end{eqnarray*}
 in približne vrednosti
  $\sin(\frac{\pi}{100})\simeq \frac{\pi}{100}$ 
-src_python{import math;return math.sin(math.pi/100)} {{{results(=0.03141075907812829=)}}}
+src_octave{disp(sin(pi/100))} {{{results(= 0.031411=)}}}
 $\cos(\frac{\pi}{100})\simeq 1$
 src_python{import math; return math.cos(math.pi/100)} {{{results(=0.9995065603657316=)}}}.
 
 Dobljene vrednosti primerjaj z vrednostmi, ki jih vrneta funkciji ~math.sin~
 in ~math.cos~, tako da poiščete razlike. Kolikšna je največja razlika med
-vrednostjo,ki jo je izračunal vaš program in vrednostjo, ki jo je dala vgrajena
-funkcija?  
+vrednostjo, ki jo je izračunal vaš program in vrednostjo, ki jo je dala vgrajena
+funkcija?   
 *** Sinus in kosinus 1
 Napiši funkcijo, ki izračuna vrednost funkcije $\sin(x)$ in $\cos(x)$ na
 intervalu $[0,\frac{\pi}{2}]$, tako da uporabiš
