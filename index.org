@@ -13,6 +13,7 @@
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 25.1.1 (Org mode 9.0.3)
 #+PROPERTY: header-args  :results output 
+#+PROPERTY: header-args  :noweb strip-export 
 * Uvod 
 Pred vami je priročnik o tem, kako uporabiti znanje matematike pri
 programiranju. Priročnik je nastal kot dopolnilno gradivo pri predmetu
@@ -267,6 +268,8 @@ ukaza ~yield~, ki je zelo podoben ukazu ~return~, le da se ob
 
 * Funkcije
 ** Ničle funkcij in enačbe
+Preskusili boste različne metode za iskanje ničel funkcije. Ničla funkcije
+$f(x)$ je vrednost spremenljivke $x$ za katero $f(x)=0$.
 *** Ničle tabelirane funkcije
 Za zvezno funkcija poznamo le nekaj posameznih vrednosti. Podana imamo dva
 seznama enake dolžine ~x~ in ~y~, tako da velja ~y[i] == f(x[i])~.
@@ -358,6 +361,21 @@ trikotniki:
 #+END_SRC
 
 #+RESULTS: nicle
+**** Testi 
+S spodnjo kodo lahko preskusite pravilnost delovanja vaše funkcije
+#+BEGIN_SRC python :noweb strip-export
+  <<nicle>>
+  import unittest
+  import random
+
+  class NicleTest(unittest.TestCase):
+      def test_primer(self):
+          self.assertEqual(nicle([-1, 0, 1, 2, 3], [1, -1, 1, 2, 3]), [-0.5, 0.5])
+
+  unittest.main()
+#+END_SRC
+
+#+RESULTS:
 
 *** Bisekcija
 Če ima zvezna funkcija v krajiščih intervala različna predznaka, potem je na tem
@@ -372,16 +390,16 @@ tipa ~ValueError~.
 
 Primer:
 
-#+BEGIN_SRC python :noweb strip-export :exports both
+#+BEGIN_SRC python :noweb strip-export :results output :exports both
 <<bisekcija>>
 f = lambda x: x**2-2
 print(bisekcija(f, (1,2), 0.3))
 #+END_SRC
 
 #+RESULTS:
-: [1, 1.5]
+: [1.25, 1.5]
 
-#+BEGIN_SRC python :noweb strip-export
+#+BEGIN_SRC python :results output
   <<bisekcija>>
   try:
     f = lambda x: x**2-2
@@ -412,8 +430,22 @@ ValueError: Na intervalu ni ničle.
               a, fa = c, fc
           elif fc == 0:
               return [c,c]
-          return [a,b]
+      return [a,b]
 #+END_SRC
++RESULTS: bisekcija
+: None
+
+**** Testi
+#+BEGIN_SRC python
+  <<bisekcija>>
+  import unittest
+  class BisekcijaTest(unittest.TestCase):
+        def test_primer(self):
+            f = lambda x: x**-2
+            self.assertEqual(bisekcija(f,[1,2],0.3),[1.25,1.5])
+
+  unittest.main()
+#+END
 *** Sekantna metoda
 ** Izračun vrednosti polinoma
 *** Hornerjev algoritem
@@ -466,10 +498,127 @@ in simetrije funkcij $\sin$ in $\cos$.
 *** Trapezna in Simpsonova metoda
 * Vektorji v ravnini in prostoru
 ** Vektorji
+
 *** Python razred za vektorje
 *** Skalarni in vektorski produkt
 *** Enakost, kolinearnost in koplanarnost vektorjev
- Napišite razred `Vektor`, ki predstavlja vektorje (n-terice števil).
+ Npiši funkcijo ~kolinearna(a,b)~, ki preveri ali sta dva vektorja ~a~ in ~b~
+ kolinearna in vrne ~True~, če sta kolinearna in ~False~, če nista.
+ Vektorja ~a~ in ~b~ sta bodisi seznama tipa ~list~ ali n-terici tipa ~tuple~.
+ 
+ Na primer:
+#+BEGIN_SRC python :results output :exports both
+<<kolinearna>>
+print(kolinearna([3,2], [6,4]))
+print(kolinearna((0,0,1), (1,0,0)))
+#+END_SRC
+
+#+RESULTS:
+: True
+: False
+**** Rešitev
+#+name: kolinearna
+#+BEGIN_SRC python
+  def kolinearna(a, b):
+      n, m = len(a), len(b)
+      if n != m:
+          # vektorja nista enakih dimenzij
+          return False
+      for i in range(n):
+          if a[i] !=0:
+              # we have found the pivot
+              k = b[i]/a[i]
+              prvi, drugi = a, b
+              break
+          elif b[i] != 0:
+              k = a[i]/b[i]
+              prvi, drugi = b,a
+              break
+      for j in range(i+1,n):
+          if k*prvi[j] != drugi[j]:
+              return False
+      return True
+#+END_SRC
+**** Testi
+Check.part()
+Check.equal('kolinearna([1,2,3], [2,4,6])', True)
+Check.equal('kolinearna([0,0,0,0], [1,2,3,4])', True)
+Check.equal('kolinearna([1,0], [1,0,0])', False)
+Check.secret(kolinearna([0,0,1],[0,0,2]))
+Check.secret(kolinearna([1,2],[-1,-2]))
+Check.secret(kolinearna([0,0,1],[0,1,-2]))
+*** Koplanarni vektorji 
+Npiši funkcijo ~koplanarni(a,b,c)~, ki preveri ali trije 3D vektorji ~a~, ~b~ in ~c~
+ležijo na isti ravnini in vrne ~True~, če ležijo in ~False~ sicer.
+Vektorji ~a~, ~b~ in ~c~ so bodisi seznama tipa ~list~ ali n-terici tipa ~tuple~.
+
+Na primer:
+
+#+BEGIN_SRC python :results output :exports both
+print(koplanarni([3,2,0], [6,4,0],[-1,2,0]))
+print(koplanarni((1,0,0), (0,1,0),(0,0,1)))
+#+END_SRC
+**** Rešitev
+#+name: koplanarni
+#+BEGIN_SRC python
+
+def dot(x,y):
+    "Izračuna skalarni produkt dveh vektorjev"
+    return sum(x[i]*y[i] for i in range(len(x)))
+def cross(x,y):
+    "Izračuna vektorski produkt dveh vektorjev"
+    return (x[1]*y[2]-x[2]*y[1], x[2]*y[0]-x[0]*y[2], x[0]*y[1]-x[1]*y[0])
+
+def koplanarni(a, b, c):
+    # pri koplanarnih vektorjih je mešani produkt enak 0
+    return dot(a,cross(b,c)) == 0
+#+END_SRC
+**** Testi
+Check.part()
+Check.equal('koplanarni([1,2,0], [2,4,0],[-2,3,0])', True)
+Check.equal('koplanarni([1,0,0], [0,1,0],[0,0,1])', False)
+Check.equal('koplanarni([1,2,2], [0,1,2],[0,0,1])', False)
+Check.equal('koplanarni([1,0,-3], [0,1,0],[1,1,-3])', True)
+Check.equal('koplanarni([1,2,3], [0,1,2],[0,0,0])', True)
+Check.equal('koplanarni([0,1,0], [0,1,2],[1,0,1])', False)
+Check.secret(koplanarni([1,1,2], [2,1,2],[1,2,1]))
+Check.secret(koplanarni([1,2,1], [1,1,1],[1,3,1]))
+Check.secret(koplanarni([2,2,2], [1,-2,1],[1,1,1]))
+Check.secret(koplanarni([1,1,0], [0,1,2],[1,-1,1]))
+*** Linearna odvisnost
+Napiši funkcijo ~odvisni(*vektorji)~, ki preveri ali so dani vektorji
+linearno odvisni in vrne ~True~, če so odvisni in ~False~, če niso.
+Vektorji so lahko poljubne dimenzije. Uporabiš
+lahko metodo ~linalg.matrix_rank~ iz knjižnice ~numpy~.
+
+Na primer:
+
+#+BEGIN_SRC python
+    >>> odvisni([1,1],[1,2],[3,4])
+    True
+    >>> odvisni([1,2,3],[1,2,4])
+    False
+#+END_SRC
+**** Rešitev
+#+name: odvisni
+#+BEGIN_SRC python
+import numpy as np
+def odvisni(*vektorji):
+    matrika = np.array(vektorji)
+    return np.linalg.matrix_rank(matrika)<len(vektorji)
+#+END_SRC
+**** Testi
+
+#+BEGIN_SRC python
+Check.part()
+Check.equal('odvisni(list(range(10)),10*[1])', False)
+Check.equal('odvisni(3*[1],3*[2],3*[0])', True)
+Check.equal('odvisni([1,0,0],[0,1,1],[0,1,-1])', False)
+Check.secret(odvisni([1,1,1],[1,2,3],[0,0,0]))
+Check.secret(odvisni([1,1,1],[1,1,2],[0,1,0]))
+#+END_SRC
+
+
 ** Premica in ravnina v 3D
 *** Python razreda za ravnino in premico
 *** Enakost, vzporednost med ravninami, premicami
