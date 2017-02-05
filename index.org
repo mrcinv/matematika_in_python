@@ -12,7 +12,7 @@
 #+SELECT_TAGS: export
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 25.1.1 (Org mode 9.0.3)
-#+PROPERTY: header-args  :results output
+#+PROPERTY: header-args  :results output 
 * Uvod 
 Pred vami je priročnik o tem, kako uporabiti znanje matematike pri
 programiranju. Priročnik je nastal kot dopolnilno gradivo pri predmetu
@@ -279,16 +279,15 @@ seznamoma ~x~ in ~y~.
 
 Funkcija ~nicle(x,y)~ naj vrne seznam približkov za ničle, urejenih po velikosti. Primer:
 
-#+BEGIN_SRC python 
+#+BEGIN_SRC python :noweb strip-export :exports both
+<<nicle>>
 x = [-1, 0, 1, 2, 3]
 y = [1, -1, 1, 2, 3]
-nicle(x,y)
+print(nicle(x,y))
 #+END_SRC
 
 #+RESULTS:
-#+BEGIN_EXAMPLE
-[-0.5, 0.5]
-#+END_EXAMPLE
+: [-0.5, 0.5]
 **** Matematična izpeljava
 Označimo z $x_1,x_2,\ldots,x_n$ in z $y_1,y_2,\ldots, y_n$ vrednosti v tabelah
 ~x~ in ~y~. Za neznano zvezno funkcijo $f$ velja 
@@ -346,8 +345,75 @@ trikotniki:
 
 #+RESULTS:
 [[file:zlepek.png]]
+**** Rešitev
+#+name: nicle
+#+BEGIN_SRC python 
+  def nicle(x, y):
+      x_n = []
+      for i in range(len(x)-1):
+          if y[i]*y[i+1]<0:
+              nicla = (y[i+1]*x[i] - y[i]*x[i+1])/(y[i+1] - y[i])
+              x_n.append(nicla)
+      return x_n
+#+END_SRC
+
+#+RESULTS: nicle
 
 *** Bisekcija
+Če ima zvezna funkcija v krajiščih intervala različna predznaka, potem je na tem
+intervalu zagotovo vsaj ena ničla. To dejstvo uporabi metoda bisekcije, s katero
+lahko poiščemo ničle. 
+
+Napišite funkcijo ~bisekcija(f, interval, eps)~, ki z bisekcijo poišče interval
+dolžine največ eps, na katerem je ničla funkcije $f$. Krajišči začetnega intervala
+sta podani v seznamu ~interval~. Funkcija naj vrne seznam s krajišči intervala. Če
+vrednosti na intervalu nimajo različnega predznaka, naj funkcija javi napako
+tipa ~ValueError~. 
+
+Primer:
+
+#+BEGIN_SRC python :noweb strip-export :exports both
+<<bisekcija>>
+f = lambda x: x**2-2
+print(bisekcija(f, (1,2), 0.3))
+#+END_SRC
+
+#+RESULTS:
+: [1, 1.5]
+
+#+BEGIN_SRC python :noweb strip-export
+  <<bisekcija>>
+  try:
+    f = lambda x: x**2-2
+    bisekcija(f,(2,3),0.3)
+  except ValueError as err:
+    print(err)
+#+END_SRC
+
+#+RESULTS:
+: Vrednosti v krajiščih nimajo različnih predznakov
+
+ValueError: Na intervalu ni ničle.
+
+**** Rešitev
+#+name: bisekcija 
+#+BEGIN_SRC python
+  def bisekcija(f, interval, eps):
+      a,b = interval
+      fa, fb = (f(a),f(b))
+      if fa*fb > 0:
+          raise(ValueError("Vrednosti v krajiščih nimajo različnih predznakov"))
+      while abs(b-a) > eps:
+          c = (a+b)/2
+          fc = f(c)
+          if fa*fc < 0:
+              b, fb = c, fc
+          elif fb*fc <0:
+              a, fa = c, fc
+          elif fc == 0:
+              return [c,c]
+          return [a,b]
+#+END_SRC
 *** Sekantna metoda
 ** Izračun vrednosti polinoma
 *** Hornerjev algoritem
