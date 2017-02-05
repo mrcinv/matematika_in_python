@@ -40,7 +40,7 @@ Knjiga je na voljo v različnih formatih
 - [[file:index.html][HTML spletna stran]]
 - [[file:index.pdf][PDF dokument]]
 - predmet [[https://www.projekt-tomo.si/course/15/][Matematika]] na portalu [[https://www.projekt-tomo.si/][Projekt Tomo]]
-- [[file:index.org][izvorna koda]] v obliki  [[https://orgmode.org][Org-mode]] za urejevalnik [[https://www.gnu.org/software/emacs/][Emacs]]
+- [[http:index.org][izvorna koda]] v obliki  [[https://orgmode.org][Org-mode]] za urejevalnik [[https://www.gnu.org/software/emacs/][Emacs]]
  
 
 * Zaporedja in vrste
@@ -424,10 +424,8 @@ in simetrije funkcij $\sin$ in $\cos$.
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
 <img alt="Creative Commons licenca" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
 </a><br />
-<span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">Matematika skozi Python</span>, avtorja/ke <a xmlns:cc="http://creativecommons.org/ns#" href="https://mrcinv.github.io" property="cc:attributionName" rel="cc:attributionURL">Martin Vuk</a> 
-je objavljeno pod <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Priznanje avtorstva-Deljenje pod enakimi pogoji 4.0 Mednarodna licenco</a>.
-<br />Ustvarjeno na podlagi dela, dostopnega na 
-<a xmlns:dct="http://purl.org/dc/terms/" href="https://mrcinv.github.io/matematika-skozi-python" rel="dct:source">https://mrcinv.github.io/matematika-skozi-python</a>.
-<br />Dodatna dovoljenja, ki presegajo obsege te licence, so dostopna na 
-<a xmlns:cc="http://creativecommons.org/ns#" href="https://mrcinv.github.io" rel="cc:morePermissions">https://mrcinv.github.io</a>.
+<span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">Matematika skozi Python</span>, 
+avtorja <a xmlns:cc="http://creativecommons.org/ns#" href="https://mrcinv.github.io" property="cc:attributionName" rel="cc:attributionURL">Martin Vuk</a> 
+je objavljena pod licenco <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Priznanje avtorstva-Deljenje pod enakimi pogoji 4.0 Mednarodna licenco</a>.
+<br />Za dodatna dovoljenja, ki presegajo obseg te licence, kontaktirajte avtorja. 
 #+END_EXPORT
