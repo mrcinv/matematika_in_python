@@ -46,20 +46,26 @@ Knjiga je na voljo v različnih formatih
 
 * Zaporedja in vrste
 ** Zaporedja
-V vsakdanjem življenju pojem zaporedja pogosto
-pomeni seznam elementov, pri katerem je pomemben vrstni red. Na primer zaporedje
-plesnih korakov v koreografiji, zaporedje števil pri lotu ali pa zaporedje
-postajališč na liniji mestnega prometa. Matematike seveda zanima vse kar je
-povezano z neskončnostjo, zato si pod pojmom zaporedja predstavljamo neskončna
-zaporedja, ki jih formalno definiramo kot funkcijo 
+V vsakdanjem življenju pojem zaporedja pogosto pomeni seznam elementov, pri
+katerem je pomemben vrstni red. Na primer zaporedje plesnih korakov v
+koreografiji, zaporedje števil pri lotu ali pa zaporedje postajališč na liniji
+mestnega prometa. Matematike seveda zanima vse kar je povezano z neskončnostjo,
+zato si pod pojmom zaporedja predstavljamo neskončna zaporedja, ki jih formalno
+definiramo kot funkcijo 
+
 $$\mathbb{N}\to A,$$ 
-ki vsakemu naravnemu številu $n$ priredi nek element množice $a_n=a(n)\in A$. 
-Element $a_n$ imenujemo $n$ - ti člen zaporedja.  V Pythonu so neskončni objekti nepraktični[fn:generator], zato so zaporedja povezana s
-podatkovnim tipom ~list~, ki predstavlja končni seznam elementov in zankami
-~for~ in ~while~, s katerimi se sprehodimo po elementih seznama in izvedemo
-zaporedje korakov.
-[fn:generator] Tudi v Pythonu poznamo posplošitev pojma končnega zaporedja
-in to je [[https://wiki.python.org/moin/Generators][generator]], ki je še najbližje matematičnemu pojmu zaporedja.
+
+ki vsakemu naravnemu številu $n$
+priredi nek element $a_n=a(n)$ množice $A$. Element $a_n$ imenujemo $n$ - ti
+člen zaporedja. 
+
+V računalništvu nas velikokrat zanimajo le končna zaporedja. V Python-u so
+končna zaporedja najpogosteje predstavljena s podatkovnim tipom ~list~, ki
+predstavlja končni seznam elementov. Z zankami ~for~ in ~while~ se lahko
+sprehodimo po elementih seznama in izvedemo zaporedje ukazov. Najbližje pojmu
+neskončnega zaporedja sta [[https://wiki.python.org/moin/Iterator][iterator]] in [[https://wiki.python.org/moin/Generators][generator]], ki predstavljata posplošitev
+kolekcij elementov, po katerih se lahko sprehajamo s ~for~ zanko. 
+
 *** Naloga
     :PROPERTIES:
     :HTML_CONTAINER_CLASS: naloga
