@@ -507,18 +507,15 @@ in simetrije funkcij $\sin$ in $\cos$.
  Vektorja ~a~ in ~b~ sta bodisi seznama tipa ~list~ ali n-terici tipa ~tuple~.
  
  Na primer:
-#+BEGIN_SRC python :results output :exports both
-<<kolinearna>>
-print(kolinearna([3,2], [6,4]))
-print(kolinearna((0,0,1), (1,0,0)))
+#+BEGIN_SRC python :session kolinearna :results output :exports both
+kolinearna([3,2], [6,4]), kolinearna((0,0,1), (1,0,0))
 #+END_SRC
 
 #+RESULTS:
-: True
-: False
+: (True, False)
 **** Rešitev
 #+name: kolinearna
-#+BEGIN_SRC python
+#+BEGIN_SRC python :session kolinearna
   def kolinearna(a, b):
       n, m = len(a), len(b)
       if n != m:
@@ -539,6 +536,9 @@ print(kolinearna((0,0,1), (1,0,0)))
               return False
       return True
 #+END_SRC
+
+#+RESULTS: kolinearna
+
 **** Testi
 Check.part()
 Check.equal('kolinearna([1,2,3], [2,4,6])', True)
@@ -623,6 +623,175 @@ Check.secret(odvisni([1,1,1],[1,1,2],[0,1,0]))
 *** Python razreda za ravnino in premico
 *** Enakost, vzporednost med ravninami, premicami
 *** Presečišča
+*** Razred za ravnino v prostoru
+Sestavite razred ~Ravnina~, ki predstavlja ravnino v prostoru.
+Razred naj ima metodo ~__init__(self,n,T)~, ki ravnino določi z normalo in točko
+in metodo ~vsebuje(self,T)~, ki preveri ali točka ~T~ leži na ravnini.
+Na primer:
+
+#+BEGIN_SRC python 
+R = Ravnina([1,1,1],[0,0,0]) # ravnina x+y+z=0
+R.vsebuje([1,0,-1])
+#+END_SRC
+
+Dopolnite razred ~Ravnina~ z metodo ~__eq__(self,other)~, ki preveri
+ali objekta ~self~ in ~other~ predstavljata isto ravnino.
+
+Na primer:
+
+    >>> Ravnina([1,1,1],[0,0,0]) == Ravnina([-1,-1,-1],[1,0,-1])
+    True
+
+**** Rešitev
+
+#+name: ravnina
+#+BEGIN_SRC python
+from numpy import dot
+class Ravnina:
+    def __init__(self,n,T):
+        self.n = n # koeficientni a b c
+        self.d = dot(n,T) # koeficient d
+        self.T = T #
+    def vsebuje(self,T):
+        return dot(self.n,T) == self.d
+    def __eq__(self,other):
+        a,b,c,d = self.n+[self.d]
+        e,f,g,h = other.n+[other.d]
+        # preverimo, če sta vektorja koeficientov kolinearna (ne najbolj optimalno)
+        return a*f == b*e and a*g==c*e and b*g==c*f and a*h==d*e and b*h==d*f and c*h==d*g
+#+END_SRC
+**** Testi
+
+#+BEGIN_SRC python
+Check.part()
+Check.equal('Ravnina([1,2,3],[1,0,0]).vsebuje([0,-1,1])', True)
+Check.equal('Ravnina([1,2,3],[1,0,0]).vsebuje([0,1,1])', False)
+Check.secret('Ravnina([1,2,3],[1,2,3]).vsebuje([0,1,1])')
+Check.secret('Ravnina([1,2,3],[1,2,3]).vsebuje([14,0,0])')
+
+Check.part()
+Check.equal('Ravnina([1,2,3],[1,0,0])==Ravnina([1,2,3],[0,-1,1])', True)
+Check.equal('Ravnina([1,2,3],[1,0,0])==Ravnina([2,4,6],[1,0,1])', False)
+Check.equal('Ravnina([1,2,3],[1,0,0])==Ravnina([2,4,6],[1,0,0])', True)
+Check.secret('Ravnina([1,2,3],[1,2,3])==Ravnina([1,2,3],[1,2,-3])')
+Check.secret('Ravnina([1,2,3],[1,2,3])==Ravnina([3,6,9],[14,0,0])')
+Check.secret('Ravnina([0,0,3],[1,2,3])==Ravnina([1,2,3],[14,0,0])')
+Check.secret('Ravnina([0,2,0],[1,2,3])==Ravnina([0,1,0],[1,2,3])')
+#+END_SRC
+*** Razred za premico v prostoru
+Sestavite razred ~Premica~, ki predstavlja premico v prostoru.
+Razred naj ima metodo ~__init__(self,e,T)~, ki premico določi
+s smernim vektorjem ~e~ in točko ~T~. Razred naj ima tudi metodo ~skozi_tocke(A,B)~, ki naj vrne premico skozi točki ~A~ in ~B~ in metodo
+~__eq__(self,p)~, ki preveri ali sta dve premici enaki.
+
+Na primer:
+#+BEGIN_SRC python
+
+    >>> p = Premica([1,2,3],[0,1,2]) # premica x=t,y=1+2t,z=2+3t
+    >>> q = Premica.skozi_tocke([0,1,2],[1,3,5])
+    >>> p == q
+    True
+#+END_SRC
+**** Rešitev
+
+#+name: premica
+#+BEGIN_SRC python
+from numpy import dot
+class Premica:
+    def __init__(self,e,T0):
+        self.e = e # koeficientni a b c
+        self.T0 = T0 # točka na premici
+    def skozi_tocke(A,B):
+        e = [B[i]-A[i] for i in range(len(A))] # e=B-A
+        return Premica(e,A)
+    def __eq__(self,other):
+        # preverimo, če sta smerna vektorja koeficientov kolinearna in
+        # če je vektor med dvema točkama na premicah tudi
+        # vzporeden s smernima vektorjema
+        a,b,c = self.e
+        d,e,f = other.e
+        T0T = [self.T0[i]-other.T0[i] for i in range(3)] # razlika
+        r,s,t = T0T
+        return a*s == b*r and a*t==c*r and b*t==c*s and a*e == b*d and a*f==c*d and b*f==c*e
+#+END_SRC
+**** Testi
+#+BEGIN_SRC python
+
+Check.part()
+Check.equal('Premica([1,2,3],[1,0,0])==Premica([-1,-2,-3],[0,-2,-3])', True)
+Check.equal('Premica([1,2,0],[1,0,0])==Premica([2,4,0],[2,2,0])', True)
+Check.equal('Premica([1,2,0],[1,0,0])==Premica([2,4,0],[2,1,0])', False)
+Check.equal('Premica([1,2,0],[1,0,0])==Premica.skozi_tocke([1,0,0],[2,2,0])', True)
+Check.equal('Premica.skozi_tocke([1,1,1],[3,5,1])==Premica([2,4,0],[2,1,0])', False)
+Check.secret('Premica([1,2,3],[1,2,3])==Premica([1,2,3],[1,2,-3])')
+Check.secret('Premica([1,2,3],[1,2,3])==Premica([1,2,3],[0,0,0])')
+#+END_SRC
+#+END_SRC
+*** Presečišče premice in ravnine
+Napišite funkcijo ~presecisce(p,R)~, ki izračuna presečišče
+premice ~p~ in ravnine ~R~. če presečišča ni
+ali jih je neskončno naj funkcija javi napako tipa
+~Exception('Presečišča ni ali jih je neskončno')~. 
+Argument ~p~ naj bo razreda ~Premica~, ~R~ pa razreda ~Ravnina~.
+
+Na primer:
+
+#+BEGIN_SRC python
+    >>> presecisce(Premica([1,2,3],[1,2,3]), Ravnina([1,1,1],[1,2,3]))
+    [1,2,3]
+    >>> presecisce(Premica([1,0,-1],[0,0,1]), Ravnina([1,1,1],[0,0,2]))
+    None
+#+END_SRC
+
+**** Rešitev
+#+name: presecisce
+#+BEGIN_SRC python
+
+from numpy import dot
+from numpy.linalg import solve
+class Ravnina:
+    def __init__(self,n,T):
+        self.n = n # koeficientni a b c
+        self.d = dot(n,T) # koeficient d
+    def vsebuje(self,T):
+        return dot(self.n,T) == self.d
+
+class Premica:
+    def __init__(self,e,T0):
+        self.e = e # koeficientni a b c
+        self.T0 = T0 # točka na premici
+    def skozi_tocke(A,B):
+        e = [B[i]-A[i] for i in range(len(A))] # e=B-A
+        return Premica(e,A)
+
+def presecisce(p,R):
+    if dot(p.e,R.n)==0:
+        raise Exception('Nič ali neskončno presečišč!')
+    t = (R.d-dot(R.n,p.T0))/dot(R.n,p.e)
+    return [p.T0[i]+t*p.e[i] for i in range(3)]
+
+#+END_SRC
+
+**** Testi
+
+#+BEGIN_SRC python
+Check.part()
+Check.equal('presecisce(Premica([1,2,3],[0,-2,-3]),Ravnina([-1,-2,-3],[0,-2,-3]))', [0,-2,-3])
+try:
+    koda = 'presecisce(Premica([1,2,0],[1,0,0]),Ravnina([2,-1,0],[2,2,0]))'
+    eval(koda)
+    Check.error('%s bi moralo javiti napako.'%koda)
+except Exception as ex:
+    errmsg = "Nič ali neskončno presečišč!"
+    if ex.args[0] != errmsg:
+        Check.error("Če je presečišč neskončno ali nobenega, mora funkcija javiti napako z Exception('%s')" % errmsg)
+Check.equal('presecisce(Premica([1,2,3],[1,0,0]),Ravnina([-1,-2,-3],[-4,0,-3]))', [0,-2,-3])
+Check.equal('presecisce(Premica.skozi_tocke([1,1,1],[0,2,2]),Ravnina([-1,0,1],[0,2,1]))',[0.5,1.5,1.5])
+for i in range(10):
+  Check.secret('presecisce(Premica([1,2+i,3],[0,1,i]),Ravnina([-1+i,-2,-3],[0,-2,-3]))')
+Check.secret('presecisce(Premica.skozi_tocke([1,2,3],[0,2,1]),Ravnina([-1,-2,-3],[0,-2,-3]))')
+#+END_SRC
+
 ** Raytracing
 *** Presečišče poltraka in ravnine
 *** Presečišče poltraka in krogle
