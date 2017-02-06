@@ -620,9 +620,6 @@ Check.secret(odvisni([1,1,1],[1,1,2],[0,1,0]))
 
 
 ** Premica in ravnina v 3D
-*** Python razreda za ravnino in premico
-*** Enakost, vzporednost med ravninami, premicami
-*** Presečišča
 *** Razred za ravnino v prostoru
 Sestavite razred ~Ravnina~, ki predstavlja ravnino v prostoru.
 Razred naj ima metodo ~__init__(self,n,T)~, ki ravnino določi z normalo in točko
@@ -792,11 +789,515 @@ for i in range(10):
 Check.secret('presecisce(Premica.skozi_tocke([1,2,3],[0,2,1]),Ravnina([-1,-2,-3],[0,-2,-3]))')
 #+END_SRC
 
-** Raytracing
+** Raytracing 
 *** Presečišče poltraka in ravnine
 *** Presečišče poltraka in krogle
-*** Scena s kroglo in svetilom
-*** Scena s tetraedrom in svetilom
+** Scena s kroglo in svetilom
+Pri tej nalogi bomo generirali sliko krogle osvetljene z enim točkastim svetilom 
+v praznem prostoru.
+*** Presečišče poltraka in ravnine
+Napiši funkcijo ~presecisce(poltrak, krogla)~, ki izračuna prvo presečišče
+poltraka in krogle oziroma vrne ~None~, če presečišča ni. Poltrak naj bo podan
+kot par trojic ~(T0,e)~, kjer je ~T0~ začetna točka poltraka, ~e~ pa smerni
+vektor. Krogla naj bo tudi par  ~(S,r)~, kjer je ~S~ trojica koordinat središča
+krogle in ~r~ polmer. Če je izhodišče poltraka znotraj krogle, naj funkcija vrne
+~None~. 
+
+Primer:
+
+#+BEGIN_SRC python
+    >>> presecisce(((0,0,0),(1,0,0)), ((2,0,0),1))
+    (1,0,0)
+    >>> presecisce(((0,0,0),(-1,0,0)), ((2,0,0),1)) # vrne None
+    >>> presecisce((0,0,0),(1,0,0)), ((0,0,0),1)) # vrne None
+#+END_SRC
+
+**** Rešitev
+#+BEGIN_SRC python
+
+def dot(x,y):
+    return sum(x[i]*y[i] for i in range(len(x)))
+
+def presecisce(poltrak, krogla):
+    T0, e = poltrak
+    S, r = krogla
+    # vektorska enacba krogle (rT - rS).(rT - rS)=r
+    # rT.rT - 2rT.rS + rS.rS - r = 0
+    # enacba poltraka rT = rT0 + t*e
+    # presecisce doloca kvadratna enacba
+    # (rT0 + t*e).(rT0 + t*e) - 2(rT0 + t*e).rS + rS.rS - r = 0
+    # e.e*t^2 + 2*rT0.e*t + rT0.rT0 -2*rT0.rS - 2*e.rS*t + rS.rS - r = 0
+    a = dot(e,e)
+    b = 2*(dot(e,T0)-dot(e,S))
+    c = dot(T0,T0) - 2*dot(T0,S) + dot(S,S) - r*r
+    D = b**2 - 4*a*c
+    if D<0:
+        return None
+    t = (-b-D**0.5)/(2*a)
+    if t<0:
+        return None
+    else:
+        return tuple(T0[i]+t*e[i] for i in range(len(T0)))
+
+#+END_SRC
+Check.part()
+Check.equal('presecisce(((0,0,0),(1,0,0)), ((2,0,0),1))', (1,0,0))
+Check.equal('presecisce(((0,0,0),(-1,0,0)), ((2,0,0),1.5))', None)
+Check.equal('presecisce(((0,0,0),(1,0,0)), ((0,0,0),2))', None)
+Check.secret(presecisce(((1,1,1),(1,1,1)),((2,0,0),1)))
+Check.secret(presecisce(((1,2,-1),(-1,2,2)),((2,3,1),3)))
+Check.secret(presecisce(((1,0,1),(1,2,1)),((2,1,-1),2)))
+Check.secret(presecisce(((1,0,1),(1,2,2)),((5,10,0),6)))
+
+*** Osvetljenost
+Napiši funkcijo ~osvetljenost(T, krogla, svetilo)~, ki določi osvetljenost točke ~T~ na obodu krogle ~krogla=(S,r)~,
+če kroglo osvetlimo s svetilom v točki ~S~. Osvetljenost izračunamo s formulo
+$$\frac{\cos{\alpha}}{r^2},$$
+kjer je $r$ razdalja med točko na krogli in svetilom, kot $\alpha$ pa je kot med normalo na kroglo dani točki in vpadnim žarkom (daljico,
+ki točko $T$ povezuje s svetilom).
+Če je kot $\alpha$ večji kot $\pi/2$, naj funkcija vrne $0$.
+Primer:
+
+    >>> osvetljenost((1,0,0),((2,0,0),1), (0,0,0))
+    1
+    >>> osvetljenost((1,0,0),((2,0,0),1),(4,0,0))
+    0
+    >>> osvetljenost((1,0,0),((2,0,0),1),(0,3**0.5,0))
+    0.125
+
+**** Rešitev
+#+BEGIN_SRC python
+
+def dot(x,y):
+    return sum(x[i]*y[i] for i in range(len(x)))
+
+def osvetljenost(T, krogla, svetilo):
+    S, r = krogla
+    L = svetilo
+    n = tuple(T[i]-S[i] for i in range(len(S)))
+    TL = tuple(L[i]-T[i] for i in range(len(T)))
+    return max(0, dot(n,TL)/dot(n,n)**0.5/dot(TL,TL)**1.5)
+
+#+END_SRC
+Check.part()
+Check.equal('osvetljenost((1,0,0),((2,0,0),1), (0,0,0))', 1)
+Check.equal('osvetljenost((1,0,0),((2,0,0),1),(4,0,0))', 0)
+Check.equal('osvetljenost((1,0,0),((2,0,0),1),(0,3**0.5,0))', 0.125)
+Check.secret(osvetljenost((1,0,0),((2,0,0),1),(1,3**0.5,0)))
+Check.secret(osvetljenost((0,0,0),((2,0,0),2),(-1,3,0)))
+
+*** Krogla osvetljena s točkastim svetilom 
+Napiši funkcijo ~pogled(kamera,okvir, krogla, svetilo, slika)~, ki izdela sliko (~slika~ tipa ~PIL.Image~) ~krogle~ osvetljene s ~svetilom~,
+ki jo naredi ~kamera~ skozi dani ~okvir~.
+
+Parametri:
+
+- ~kamera~: trojica koordinat položaja kamere v prostoru
+- ~okvir~: par ~(A,u,v)~, kjer je ~A~ oglišče, ~u~ in ~v~ pa vektorja stranic paralelograma $ABCD$
+- ~krogla~: par ~((xs,ys,zs),r)~
+- ~svetilo~: par ~((xl,yl,zl),P)~, kjer je prva trojica predstavlja koordinate svetila, ~P~ pa je število, sorazmerno moči svetila.
+- ~slika~ : objekt tipa ~PIL.Image~, ki ga dobimo z ukazom ~PIL.Image('F',(n,m),"black")~
+
+Vrednost piksla z indeksi $(i,j)$ na sliki, naj bo enaka osvetljenosti
+$$\frac{P\cos\alpha}{r^2}$$
+točke na krogli, ki jo zadane žarek iz kamere skozi točko v okvirju
+$$\vec{r}_T=\vec{r}_{A}+\frac{i}{n}\vec{u}+\frac{m-j}{m}\vec{v}.$$
+
+Primer:
+
+#+BEGIN_SRC python
+    >>>from PIL import Image
+    >>>slika = Image.new('F',(255,255),"black")
+    >>>kamera = (0,0,0); okvir = ((1,-1,-1),(0,2,0),(0,0,2));
+    >>>krogla = ((2,0,0),1); svetilo = ((0,-3,0),500);
+    >>>pogled(kamera, okvir, krogla, svetilo, slika)
+    >>>slika.show()
+#+END_SRC
+
+Prikaže sliko
+#+BEGIN_EXPORT html
+<img alt="Slika krogle" src="data:image/png;base64,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">
+      #+END_EXPORT
+
+#+BEGIN_SRC python
+    >>> slika.getpixel((100,100))
+    85.13904571533203
+#+END_SRC
+#+BEGIN_SRC python
+
+def dot(x,y):
+    return sum(x[i]*y[i] for i in range(len(x)))
+def plus(x,y):
+    return [x[i]+y[i] for i in range(len(x))]
+def minus(x,y):
+    return [x[i]-y[i] for i in range(len(x))]
+def mul(alfa,x):
+    return [alfa*x[i] for i in range(len(x))]
+
+def osvetljenost(T, krogla, svetilo):
+    S, r = krogla
+    L = svetilo
+    n = tuple(T[i]-S[i] for i in range(len(S)))
+    TL = tuple(L[i]-T[i] for i in range(len(T)))
+    return max(0, dot(n,TL)/dot(n,n)**0.5/dot(TL,TL)**1.5)
+
+def presecisce(poltrak, krogla):
+    T0, e = poltrak
+    S, r = krogla
+    # vektorska enacba krogle (rT - rS).(rT - rS)=r
+    # rT.rT - 2rT.rS + rS.rS - r = 0
+    # enacba poltraka rT = rT0 + t*e
+    # presecisce doloca kvadratna enacba
+    # (rT0 + t*e).(rT0 + t*e) - 2(rT0 + t*e).rS + rS.rS - r = 0
+    # e.e*t^2 + 2*rT0.e*t + rT0.rT0 -2*rT0.rS - 2*e.rS*t + rS.rS - r = 0
+    a = dot(e,e)
+    b = 2*(dot(e,T0)-dot(e,S))
+    c = dot(T0,T0) - 2*dot(T0,S) + dot(S,S) - r*r
+    D = b**2 - 4*a*c
+    if D<0:
+        return None
+    t = (-b-D**0.5)/(2*a)
+    if t<0:
+        return None
+    else:
+        return tuple(T0[i]+t*e[i] for i in range(len(T0)))
+
+def pogled(camera, okvir, krogla, svetilo, slika):
+    n, m = slika.size
+    cv, u, v = okvir
+    bc, r = krogla
+    light, W = svetilo
+    pixels = slika.load()
+    for i in range(n):
+        xvi = plus(cv, mul(i/n,u)) # xvi = cv + i*dx
+        for j in range(m):
+            xvij = plus(xvi, mul((m-j)/m,v)) # xvij = xvi + j*dy
+            e_ray = minus(xvij, camera) # e_ray = xvij - camera
+            # (x-bc)(x-bc)-r=0 => x.x -2x.bc + bc.bc - r = 0
+            # x = camera + t*e_ray
+            # x.x = camera.camera + 2*t*e_ray.camera + t**2*e_ray.e_ray
+            # x.bc = camera.bc + t*e_ray.bc
+            a = dot(e_ray,e_ray)
+            b = 2*dot(e_ray,camera) - 2*dot(e_ray,bc)
+            c = dot(camera,camera) - 2*dot(camera,bc) + dot(bc,bc) - r
+            D = b**2 - 4*a*c
+            if D<0:
+                continue
+            t1 = (-b - D**0.5)/(2*a)
+            t2 = (-b + D**0.5)/(2*a)
+            if t1 >= 1:
+                t = t1
+            elif t2 >= 1:
+                t = t2
+            else:
+                continue
+            P = plus(camera, mul(t,e_ray))
+            lv = minus(light, P)
+            norm = minus(P, bc)
+            if dot(norm,lv)<=0:
+                continue
+            cos = W*dot(norm,lv)/a**0.5/dot(norm,norm)**0.5/dot(lv,lv) # cosine/r^2
+            pixels[i,j] = cos
+    return slika
+
+#+END_SRC
+
+**** Testi 
+#+BEGIN_SRC python
+
+Check.part()
+from PIL import Image
+slika = Image.new('F',(255,255),"black")
+kamera = (0,0,0); okvir = ((1,-1,-1),(0,2,0),(0,0,2)); krogla = ((2,0,0),1); svetilo = ((0,-3,0),500);
+pogled(kamera, okvir, krogla, svetilo, slika)
+slika.show()
+pixels = slika.load()
+#print(pixels[100,100])
+# generiramo sliko za tekst
+#import base64
+#from io import BytesIO
+#buf = BytesIO()
+#slika.convert(mode='L').save(buf, format="PNG")
+#print("<img alt=\"Slika krogle\" src=\"data:image/png;base64,%s\">"%base64.b64encode(buf.getvalue()))
+
+Check.equal('slika.getpixel((0,0))', 0)
+Check.equal('slika.getpixel((100,100))', 85.13904571533203)
+Check.secret(slika.getpixel((100,125)))
+
+#+END_SRC
+
+** Scena s tetraedrom in svetilom
+
+Na Khan academy Pixar [[https://www.khanacademy.org/partner-content/pixar/rendering][prikazuje]], kako delajo risane filme.
+Pomemben del procesa, ki pripelje do končnega izdelka je tudi metoda 
+„sledenja žarkom“(angl. raytracing), ki omogoča verno poustvarjanje osvetlitve.
+Ta naloga ilustrira, kako deluje „raytracing“.
+
+*** Presečišče poltraka in ravnine
+
+Definiraj funkcijo ~presek(p, R)~ ki vrne presečišče poltraka ~p~ in ravnine ~R~.
+Če presečišča ni, naj funkcija vrne ~None~. Poltrak je podan kot par dveh točk (trojice števil),
+kjer je prva točka začetna točka poltraka, druga pa poljubna točka na poltraku. Npr. poltrak
+~p=((0,0,0),(1,0,0))~ predstavlja pozitivni del osi $x$.
+Ravnina je podana s koeficienti enačbe $ax+by+cz=d$ kot četvorka števil ~R=(a,b,c,d)~(tuple).
+
+Primer:
+
+#+BEGIN_SRC python
+
+    >>> presek(((0,0,2),(0,0,1)), (1,1,1,0))
+    (0,0,0)
+    >>> presek(((0,0,1),(0,0,2)), (1,1,1,0)) #vrne None
+    >>>
+
+#+END_SRC
+
+**** Rešitev
+#+BEGIN_SRC python
+
+def dot(x,y):
+    "Funkcija izračuna skalarni produkt dveh vektorjev."
+    return sum(x[i]*y[i] for i in range(len(x)))
+
+def presek(p, R):
+    T0,T = p
+    e = tuple(T[i]-T0[i] for i in range(len(T))) # smerni vektor poltraka
+    n = R[0:3] # normala ravnine
+    # enačbo poltraka x = T0 + t*e vstavimo v enačbo ravnine n.x=d
+    # in dobimo enačbo n.(T0 + t*e)=d iz katere izrazimo t
+    # t = (d - n.T0)/(n.e)
+    a = dot(n,e)
+    if a==0:
+        return None # p in R vzporedni
+    t = (R[3]-dot(n,T0))/a
+    if t<0:
+        return None
+    else:
+        return tuple(T0[i]+t*e[i] for i in range(len(T0)))
+
+#+END_SRC
+
+**** Testi
+
+#+BEGIN_SRC python
+
+Check.part()
+Check.equal('presek(((0,0,2),(0,0,1)),(1,1,1,0))', (0,0,0))
+Check.equal('presek(((0,0,1),(0,0,2)),(1,1,1,0))', None)
+Check.equal('presek(((1,1,1),(2,2,2)),(1,-1,0,2))',None)
+Check.secret(presek(((1,1,1),(1,2,2)),(1,2,3,4)))
+Check.secret(presek(((1,2,2),(1,1,1)),(3,2,1,-4)))
+Check.secret(presek(((1,0,2),(1,1,1)),(0,2,1,1)))
+Check.secret(presek(((1,2,2),(1,1,1)),(3,2,0,2)))
+Check.secret(presek(((1,2,0),(1,1,0)),(3,0,1,-4)))
+
+#+END_SRC
+
+*** Na kateri strani ravnine leži točka?
+
+Definiraj funkcijo ~stran(T,R)~, ki pove na kateri strani ravnine ~R~ leži točka ~T~. 
+Funkcija naj vrne ~1~, če točka leži nad ravnino (glede na smer normale), ~-1~, če točka leži pod ravnino
+in ~0~, če je točka na ravnini. 
+Točka je podana kot trojica (tuple) števil ~T=(0,0,0)~,
+ravnina pa s koeficienti enačbe $ax+by+cz=d$ kot četvorka števil ~R=(a,b,c,d)~(tuple).
+#### Primer:
+
+    >>> stran((0,0,1), (0,0,1,0))
+    1
+    >>> stran((0,0,-1), (0,0,1,0))
+    -1
+    >>> stran((0,0,0),(0,0,1,0))
+    0
+
+**** Rešitev
+#+BEGIN_SRC python
+
+def dot(x,y):
+    "Funkcija izračuna skalarni produkt dveh vektorjev."
+    return sum(x[i]*y[i] for i in range(len(x)))
+
+def stran(T, R):
+    n = R[0:3] # normala ravnine
+    # stran nam pove predznak izraza ax+by+cz-d
+    s = dot(n,T)-R[3]
+    if s==0:
+        return 0 # T leži na R
+    elif s>0:
+        return 1
+    else:
+        return -1
+
+#+END_SRC
+
+**** Točke
+#+BEGIN_SRC python
+
+Check.part()
+Check.equal('stran((0,0,1),(0,0,1,0))', 1)
+Check.equal('stran((0,0,-1),(0,0,1,0))', -1)
+Check.equal('stran((0,0,2),(1,1,1,0))', 1)
+Check.equal('stran((0,1,1),(-2,1,1,2))', 0)
+Check.equal('stran((1,0,1),(2,2,1,4))', -1)
+Check.secret(stran((2,-3,1),(2,2,1,3)))
+Check.secret(stran((4,-3,1),(2,2,1,3)))
+Check.secret(stran((2,-3,1),(2,-5,1,3)))
+Check.secret(stran((0,-3,1),(-1,0,1,-3)))
+Check.secret(stran((0.5,-3,1),(2,2,1,6)))
+
+#+END_SRC
+
+*** Ali leži dana točka na trikotniku ABC?
+
+Večina modelov teles v 3D je sestavljena iz majhnih trikotnikov(triangulirana),
+zato mora program za raytracing vedeti, če svetlobni žarek zadene trikotnik in
+ne le ravnino trikotnika. Točka $T$ leži v trikotniku $\triangle ABC$ natanko
+tedaj, ko velja:  
+
+ - točka $T$ leži na ravnini trikotnika
+ - točki $C$ in $T$ ležita na isti strani ravnine, ki vsebuje $AB$ in je pravokotna na trikotnik
+ - točki $A$ in $T$ ležita na isti strani ravnine, ki vsebuje $BC$ in je pravokotna na trikotnik
+ - točki $B$ in $T$ ležita na isti strani ravnine, ki vsebuje $AC$ in je pravokotna na trikotnik
+
+Definiraj funkcijo ~na_trikotniku(T,trikotnik)~, ki pove ali dana točka ~T~ leži
+na danem trikotniku. Funkcija naj vrne ~true~ ali ~false~. Robovi in oglišča so
+tudi del trikotnika.  
+
+Točka je podana kot trojica (tuple) števil ~T = (0,0,0)~,
+trikotnik pa kot trojica točk ~trikotnik = ((1,2,3), (4,5,6), (3,2,1))~.
+
+Primer
+#+BEGIN_SRC python
+
+    >>> na_trikotniku((1,1,0), ((0,0,0), (3,0,0), (0,3,0)))
+    True
+    >>> na_trikotniku((1,1,0), ((0,0,1), (3,0,1), (0,3,1))) # točka ne leži na ravnini trikotnika
+    False
+    >>> na_trikotniku((1,1,0), ((0,0,0), (2,0,0), (0,2,0))) # točka leži robu
+    True
+    >>> na_trikotniku((1,1,0), ((0,0,0), (1,0,0), (0,1,0))) # točka leži ravnini a ne znotraj trikotnika
+    False
+
+#+END_SRC
+**** Rešitev
+#+BEGIN_SRC python
+
+def dot(x,y):
+    "Funkcija izračuna skalarni produkt dveh vektorjev."
+    return sum(x[i]*y[i] for i in range(len(x)))
+def cross(x,y):
+    "Funkcija izračuna vektorski produkt dveh vektorjev"
+    return (x[1]*y[2] - x[2]*y[1], x[2]*y[0] - x[0]*y[2], x[0]*y[1] - x[1]*y[0])
+
+def na_trikotniku(T,ABC):
+    A, B, C = ABC
+    a = [B[i]-A[i] for i in range(len(A))]
+    b = [C[i]-B[i] for i in range(len(B))]
+    c = [A[i]-C[i] for i in range(len(C))]
+    n = cross(a,b) # normala ravnine trikotnika
+    d = dot(n,A) # desna stran enacbe
+    if dot(T,n) != d:
+        return False # ne leži na ravnini
+    # ravnina, ki vsebuje AB in je pravokotna na trikotnik
+    na = cross(n,a)
+    da = dot(A,na)
+    if (dot(T,na) - da)*(dot(C,na) - da) < 0:
+        # T in C sta na nasprotnih straneh stranica AB
+        return False
+    # ravnina, ki vsebuje BC in je pravokotna na trikotnik
+    nb = cross(n,b)
+    db = dot(B,nb)
+    if (dot(T,nb) - db)*(dot(A,nb) - db) < 0:
+        # T in A sta na nasprotnih straneh BC
+        return False
+    # ravnina, ki vsebuje CA in je pravokotna na trikotnik
+    nc = cross(n,c)
+    dc = dot(C,nb)
+    if (dot(T,nc) - dc)*(dot(B,nc) - dc) < 0:
+        # T in B sta na nasprotnih straneh CA
+        return False
+    else:
+        return True
+
+#+END_SRC
+Check.part()
+Check.equal('na_trikotniku((1,1,0), ((0,0,0), (3,0,0), (0,3,0)))', True)
+Check.equal('na_trikotniku((1,1,0), ((0,0,1), (3,0,1), (0,3,1)))', False)
+Check.equal('na_trikotniku((1,1,0), ((0,0,0), (2,0,0), (0,2,0)))', True)
+Check.equal('na_trikotniku((1,1,0), ((0,0,0), (1,0,0), (0,1,0)))', False)
+Check.equal('na_trikotniku((1,1,1), ((3,0,0), (0,3,0), (0,0,3)))', True)
+Check.equal('na_trikotniku((1,2,-1), ((3,0,0), (0,3,0), (0,0,3)))', False)
+Check.secret(na_trikotniku((1,2,3), ((0,1,3), (-1,0,3), (1,3,2))))
+Check.secret(na_trikotniku((1,1,0), ((0,0,0), (3,0,0), (0,3,0))))
+Check.secret(na_trikotniku((1,1,2), ((1,2,-3), (3,-3,-1), (2,3,3))))
+Check.secret(na_trikotniku((1,1,-2), ((0,0,0), (3,1,-1), (1,3,5))))
+Check.secret(na_trikotniku((1,-2,0), ((0,0,0), (3,1,2), (0,3,1))))
+Check.secret(na_trikotniku((0,0,0), ((1,-1,0), (3,-2,-1), (-2,3,-1))))
+Check.secret(na_trikotniku((1,1,2), ((0,0,0), (3,0,0), (0,3,0))))
+Check.secret(na_trikotniku((1,1,0.5), ((0,0,1.5), (3,0,0), (0,3,0))))
+*** Kam se odbije žarek
+
+Definiraj funkcijo ~odboj(p, R)~, ki pove, kam se odbije svetlobni žarek, ki ga predstavlja poltrak ~p~, ko vpade na ravnino ~R~.
+
+Funkcija naj vrne par ~(T,e)~, kjer je ~T~ začetna točka odbitega žarka in ~e~ smerni vektor, ki kaže v smeri odbitega žarka in
+je enake dolžine kot ~e0~.
+
+Poltrak je podan kot par ~p = (T0,e0)~, kjer je ~T0~ začetna točka, ~e0~ pa smerni vektor.
+Ravnina je podano kot četvorka koeficientov ~R = (a,b,c,d)~ enačbe ravnine $ax+by+cz=d$. Če
+poltrak ne zadene ravnine, naj funkcija vrne ~None~.
+
+Primer
+
+#+BEGIN_SRC python
+
+    >>> odboj(((0,0,1), (1,0,-1)), (0,0,1,0))
+    ((1,0,0),(1,0,1))
+    >>> odboj(((0,0,1), (-1,0,1)), (0,0,1,0)) # poltrak ne seka ravnine
+    None
+
+#+END_SRC
+**** Rešitev
+#+BEGIN_SRC python
+
+def dot(x,y):
+    "Funkcija izračuna skalarni produkt dveh vektorjev."
+    return sum(x[i]*y[i] for i in range(len(x)))
+
+def odboj(p, R):
+    T0, e0 = p
+    n = R[0:3]
+    d = R[3]
+    # enacba poltraka rT = rT0 + t*e0
+    # enacba ravnine n.(rT) = n.(rT0 + t*e0) = n.rT0 + t*(n.e0) = d
+    # t = (d - n.rT0)/(n.e0)
+    cos = dot(n,e0)
+    if cos == 0:
+        # poltrak in ravnina sta vzporedni
+        return None
+    t = (d - dot(n,T0))/cos
+    if t<0:
+        #poltrak ne seka ravnine
+        return None
+    # Presecisce poltraka in ravnine
+    T = tuple(T0[i] + t*e0[i] for i in range(len(T0)))
+    # odbojni smerni vektor je enak e0 - 2*proj_n(e0)
+    proj = cos/dot(n,n)
+    e = tuple(e0[i] - 2*proj*n[i] for i in range(len(n)))
+    return (T,e)
+
+#+END_SRC
+#+BEGIN_SRC python
+
+Check.part()
+Check.equal('odboj(((0,0,1),(1,0,-1)), (0,0,1,0))', ((1,0,0),(1,0,1)))
+Check.equal('odboj(((0,0,1),(-1,0,1)), (0,0,1,0))', None)
+Check.secret(odboj(((0,1,1),(1,-1,0)), (1,1,1,0)))
+Check.secret(odboj(((0,1,0),(1,-1,0)), (0,2,1,2)))
+Check.secret(odboj(((2,1,0),(1,-1,5)), (0,3,1,-3)))
+Check.secret(odboj(((1,0,-3),(1,1,4)), (0,4,1,-5)))
+Check.secret(odboj(((0,1,3),(-1,-1,3)), (0,5,1,1)))
+Check.secret(odboj(((0,1,1),(-2,-1,2)), (1,6,1,1)))
+
+#+END_SRC
 **** Ali točka leži na trikotniku?
 *** Večkratni odboji
 * Matrike in sistemi enačb
