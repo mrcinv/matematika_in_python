@@ -887,7 +887,233 @@ for x in xi:
 #+END_SRC
 
 ** Avtomatsko odvajanje
-*** Program kot matematična funkcija
+Naloge ilustrirajo, kako deluje [[https://en.wikipedia.org/wiki/Automatic_differentiation][avtomatsko odvajanje]] računalniških programov.
+*** Preprosta funkcija
+Funkcija $f$ je podana s Python definicijo
+#+BEGIN_SRC python
+def f(x):
+    y = x**2
+    return y
+#+END_SRC
+Sestavite funkcijo ~df(x)~, ki vrne vrednost odvoda funkcije f
+izračunanega v točki ~x~.
+Na primer:
+
+    >>> df(1)
+    2
+    >>> df(2)
+    4
+**** Rešitev
+#+BEGIN_SRC python
+def df(x):
+    return 2*x
+#+END_SRC
+**** Testi
+#+BEGIN_SRC python
+
+Check.part()
+Check.equal('df(3)', 6)
+Check.equal('df(0.2)', 2*0.2)
+Check.equal('df(-1)', -2)
+Check.secret(df(42))
+Check.secret(df(-123))
+
+#+END_SRC
+*** Malce bolj zapletena funkcija
+# =====================================================================@009547=
+# Funkcija g je podana s Python definicijo
+# 
+#     def g(x):
+#       y = x**2
+#       y = x*(1/y+y)
+#       return y
+# 
+# Sestavite funkcijo ~dg(x)~, ki vrne vrednost odvoda ~g'(x)~ funkcije ~g~
+# izračunanega v točki ~x~. Končni rezultat zaokrožite z ~round(y,10)~,
+# preden ga funkcija ~dg~ vrne.
+# 
+# Na primer:
+# 
+#     >>> dg(1)
+#     2
+#     >>> dg(2)
+#     11.75
+# =============================================================================
+# definicija z odvajanjem kode
+def dg(x):
+    dy = 2*x
+    y = x**2
+    dy = (1/y+y)+x*(1-1/y**2)*dy
+    y = x*(1/y+y)
+    return round(dy,10)
+# Definicija s formulo
+def dg_formula(x):
+    return round(x**2 + x*(2*x - 2/x**3) + x**(-2),10)
+
+Check.part()
+Check.equal('dg(-1)', 2)
+try:
+    dg(0)
+    Check.error("Klic dg(0) mora javiti napako!")
+except:
+    pass
+# Testi za dg
+#Testi za dg
+cases = [(0.5, -3.25), (-0.5, -3.25), (1, 2.0), (-1, 2.0), (2, 11.75), (-2, 11.75), (4, 47.9375), (-4, 47.9375)]
+for case in cases:
+    x,dgv = case
+    Check.equal('dg(%f)'% x, dgv)
+Check.equal('dg(0.5)',-3.25)
+Check.equal('dg(-4)', 47.9375)
+Check.secret(dg(42))
+for x in range(2,30,3):
+    Check.secret(dg(x))
+*** For zanka
+# =====================================================================@009548=
+# Funkcija h je podana s Python definicijo
+# 
+#     def h(x):
+#       y = 1
+#       for n in range(10):
+#         y = (x/y+y)/2
+#       return y
+# 
+# Sestavite funkcijo ~dh(x)~, ki vrne vrednost odvoda funkcije g
+# izračunanega v točki ~x~. Končni rezultat zaokrožite z ~round(y,10)~.
+# 
+# Na primer:
+# 
+#     >>> dh(1)
+#     0.5
+#     >>> dh(4)
+#     0.25
+# 
+# *Namig*: Predelajte kodo za funkcijo ~h~ tako, da hkrati s
+# funkcijo računate še njen odvod. Vsaki vrstici kode dodajte
+# vrstico v kateri posodobite vrednost odvoda.
+# Katera pravila za odvajanje morate uporabiti?
+# =============================================================================
+def dh(x):
+    y = 1
+    dy = 0
+    for n in range(10):
+        dy = ((1*y-dy*x)/y**2+dy)/2
+        y = (x/y+y)/2
+    return round(dy,10)
+
+# funkcija h v resnici računa x^(1/2) z Haronovim obrazcem (tangentno metodo)
+def dh_aprox(x):
+    return round(x**(-0.5)/2,10)
+
+Check.part()
+# Testi za dh
+cases =  [(2, 0.3535533906, 0.7071067812),
+          (3, 0.2886751346, 0.8660254038),
+          (4, 0.25, 1.0),
+          (5, 0.2236067977, 1.1180339887),
+          (6, 0.2041241452, 1.2247448714),
+          (7, 0.1889822365, 1.3228756555),
+          (8, 0.1767766953, 1.4142135624),
+          (9, 0.1666666667, 1.5)]
+for case in cases:
+    x,dh1,dh2 = case
+    Check.equal('dh(%d)'% x, dh1)
+    Check.equal('dh(1/%d)'% x,dh2)
+for x in range(1,30,3):
+    Check.secret(dh(x/10))
+*** Kompozitum funkcij
+# =====================================================================@009549=
+# Funkcija ~k~ je podana s pomožno funkcijo ~r(x)~
+# 
+#         def r(x):
+#             y = 1
+#             for i in range(1,10):
+#                 y = x+y
+#                 y = 1/(i*y)
+#             return y
+#         def k(x):
+#             y = x
+#             for i in range(5):
+#                 y = x*r(y)**2
+#             return y
+# 
+# Sestavite funkcijo ~dr(x)~ za ki izračuna odvod ~r'(x)~ in
+# ~dk(x)~, ki vrne vrednost odvoda ~k'(x)~
+# izračunanega v točki ~x~.
+# Končni rezultat zaokrožite z ~round(y,10)~.
+# 
+# Na primer:
+# 
+#     >>> dr(10)
+#     -0.001106963
+#     >>> dk(4)
+#     -0.0034362142
+# 
+# *Namig*: V ~dk(x)~ uporabite funkcijo ~dr(x)~ in verižno pravilo.
+# =============================================================================
+def r(x):
+    y = 1
+    for i in range(1,10):
+        y = x+y
+        y = 1/(i*y)
+    return y
+def k(x):
+    y = x
+    for i in range(5):
+        y = x*r(y)**2
+    return y
+def dr(x):
+    y = 1
+    dy = 0
+    for i in range(1,10):
+        dy = 1+dy
+        y = x+y
+        dy = -(i*y)**(-2)*i*dy
+        y = 1/(i*y)
+    return round(dy,10)
+
+def dk(x):
+    y = x
+    dy = 1
+    for i in range(5):
+        z = r(y)
+        dy = z**2+x*2*z*dr(y)*dy
+        y = x*z**2
+    return round(dy,10)
+
+Check.part()
+def drsym(x):
+    return round(-(1625702400*x**16 + 3251404800*x**15 + 9852917760*x**14 + 13203025920*x**13 + 20623343616*x**12 + 19717742592*x**11 + 19865630592*x**10 + 13868455680*x**9 + 9604790272*x**8 + 4865480192*x**7 + 2321094784*x**6 + 820537216*x**5 + 256614880*x**4 + 57572480*x**3 + 10056136*x**2 + 898800*x + 240360)/(14631321600*x**18 + 29262643200*x**17 + 94163005440*x**16 + 129800724480*x**15 + 218471779584*x**14 + 221236075008*x**13 + 246177055872*x**12 + 188496315648*x**11 + 149388195600*x**10 + 86951121696*x**9 + 50053354416*x**8 + 21790548000*x**7 + 8964450216*x**6 + 2790466560*x**5 + 772383960*x**4 + 155310120*x**3 + 24824025*x**2 + 2485350*x + 99225),10)
+
+def dk_fd(x):
+    # finite diference method for derivative
+    h = 2**(-20)
+    dy = -k(x+2*h)+8*k(x+h)-8*k(x-h)+k(x-2*h)
+    dy = dy/12/h
+    return round(dy,10)
+
+try:
+    dr(-1)
+    Check.error("Klic dr(-1) bi moral javiti napako!")
+except:
+    pass
+Check.equal('dk(4)',-0.0034362142)
+
+# Testi za dr in dk
+cases =  [(0, -2.4223733938, 0.0557006013),
+          (2, -0.025432294, 0.0892606704),
+          (3, -0.0118554566, 0.0981358769),
+          (5, -0.004378945, 0.1103474705),
+          (6, -0.0030546628, 0.1148118927),
+          (9, -0.0013654262, 0.12455767)]
+for case in cases:
+    x, drv, dkv = case
+    Check.equal('dr(%d)'%x, drv)
+    Check.equal('dk(1/%d)'%(x+1),dkv)
+for x in range(1,30,3):
+    Check.secret(dk(x/10))
+    Check.secret(dr(x/10))
+
 *** Program kot zaporedje(kompozitum) preprostih operacij
 ** Numerično odvajanje
 ** Tangenta in normala
@@ -1021,7 +1247,6 @@ Check.equal('odvisni([1,0,0],[0,1,1],[0,1,-1])', False)
 Check.secret(odvisni([1,1,1],[1,2,3],[0,0,0]))
 Check.secret(odvisni([1,1,1],[1,1,2],[0,1,0]))
 #+END_SRC
-
 
 ** Premica in ravnina v 3D
 *** Razred za ravnino v prostoru
