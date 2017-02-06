@@ -480,8 +480,412 @@ Funkcijo iz prejšnje naloge razširi na vsa realna števila. Uporabi periodičn
 in simetrije funkcij $\sin$ in $\cos$.
 * Odvod
 ** Simbolično odvajanje
-*** RPN prestavitev računskih izrazov
-*** Odvod RPN zapisa
+
+Naloga ilustrira kako deluje simbolično odvajanje.
+Napisati želimo funkcijo v Pythonu, ki izračuna odvod dane funkcije f.
+Pri tem se omejimo le na funkcije, ki jih je mogoče izraziti z
+osnovnimi operacijami ~+~, ~-~, ~*~, ~/~, s potenco ~a^b~ in funkcijami
+~sin~, ~cos~, ~exp~ in ~log~.
+Da bo programiranje lažje, bomo funkcijo zapisali v
+[[http://sl.wikipedia.org/wiki/Obrnjeni_poljski_zapis][obrnjeni poljki notaciji]]([[http://en.wikipedia.org/wiki/Reverse_Polish_notation][uporabili bomo angleško kratico RPN]]).
+*** RPN
+Napiši razred ~RPN~, ki predstavlja funkcijo spremenljivke ~x~
+podano v RPN obliki.
+Razred naj ima atribut ~izraz~, ki naj bo niz oblike
+
+#+BEGIN_EXAMPLE
+    'arg1 arg2 op1 arg3 ... argn funk',
+#+END_EXAMPLE
+
+sestavljen iz besed, ločenih s presledki, ki so
+
+ - argumenti: število ali ~'x'~,
+ - operacije: ~'+'~, ~'-'~, ~'*'~, ~'/'~ ali ~'^'~
+ - funkcije: ~'sin'~, ~'cos'~, ~'exp'~ ali ~'log'~.
+
+Osnovne operacije zapišemo s 3 besedami
+
+#+BEGIN_EXAMPLE
+    1 + 1   -> '1 1 +'
+    1 - 2   -> '1 2 -'
+    2 * 3   -> '2 3 *'
+    2 / 3   -> '2 3 /'
+    2 ^ 3   -> '2 3 ^'
+#+END_EXAMPLE
+Funkcije ~sin~, ~cos~, ~exp~, ~log~ pa zapišemo z dvema besedama:
+
+#+BEGIN_EXAMPLE
+    sin(3.14) -> '3.14 sin'
+    e^2.5     -> '2.5 exp'
+#+END_EXAMPLE
+Primeri
+#+BEGIN_EXAMPLE
+    1 + 2 + 3       -> '1 2 3 + +' ali '1 2 + 3 +'
+    sin(2x)         -> '2 x * sin'
+    sqrt(x)         -> 'x 0.5 ^'
+    (x+1)/(x-1)     -> 'x 1 + x 1 - /'
+    x^2+2x-1        -> 'x 2 ^ 2 x * -1 + +'
+    log(sin(2/x+1)) -> '2 x / 1 + sin log'
+#+END_EXAMPLE
+Razred naj ima metodo ~__init__(izraz)~, ki inicializira atribut ~izraz~ in
+metodo ~vrednost(arg)~, ki naj vrne vrednost izraza, če spremenljivko ~x~
+zamenjamo z dano vrednostjo ~arg~.
+
+Primer:
+
+    >>> f = RPM('1 x +')
+    >>> f.vrednost(1)
+    2.0
+**** Rešitev
+#+BEGIN_SRC python
+
+import operator as op
+from math import sin,cos,exp,log
+class RPN:
+    # slovarja s ključi, ki so imeni operacij in funkcij in vrednostmi, ki so
+    # Python funkcije za te operacije.
+    operacije = {'+': op.add,'-': op.sub,'*': op.mul, '/': op.truediv, '^': op.pow}
+    funkcije = {'sin':sin,'cos':cos,'exp':exp,'log':log}
+    def __init__(self,izraz):
+        self.izraz = izraz
+    def vrednost(self,arg):
+        sklad = [] # sklad, kjer hranimo delno izračunane vrednosti
+        for beseda in self.izraz.split(' '):
+            # ali smo prišli do opreracije
+            if beseda in self.operacije.keys():
+                b = sklad.pop()
+                a = sklad.pop()
+                rezultat = self.operacije[beseda](a,b)
+                sklad.append(rezultat)
+            # ali smo prišli do funkcije
+            elif beseda in self.funkcije.keys():
+                a = sklad.pop()
+                rezultat = self.funkcije[beseda](a)
+                sklad.append(rezultat)
+            elif beseda == 'x':
+                sklad.append(arg)
+            else:
+                sklad.append(float(beseda))
+        # na koncu dobimo v skladu le še končni rezultat
+        return sklad.pop()
+
+#+END_SRC
+**** Testi
+#+BEGIN_SRC python
+Check.part()
+from math import sin
+Check.equal("RPN('2 x *').vrednost(3)", 6)
+Check.equal("RPN('2 x *').vrednost(-3)", -6)
+Check.equal("RPN('1 x 2 ^ sin +').vrednost(3)", 1+sin(3**2))
+Check.equal("RPN('1 x 2 ^ sin +').vrednost(3.14)", 1+sin(3.14**2))
+f = RPN('x 1 + x 2 ^ / 3 x * 4 -')
+g = RPN('x log sin cos exp')
+for x in range(3):
+    Check.secret(f.vrednost(x/4+1))
+    Check.secret(g.vrednost(x/3+1))
+#+END_SRC
+*** Prikaz RPN izraza  
+Razredu ~RPN~ dodaj metodo ~__str__~, ki vrne izraz zapisan klasično z
+oklepaji in operatorji.
+Primer:
+
+    >>> f = RPM.new('3 x 2 x ^ + /')
+    >>> print(str(f))
+    (3/(x+(2^x)))
+**** Rešitev
+#+BEGIN_SRC python
+
+import operator as op
+from math import sin,cos,exp,log
+class RPN:
+    # slovarja s ključi, ki so imeni operacij in funkcij in vrednostmi, ki so
+    # Python funkcije za te operacije.
+    operacije = {'+': op.add,'-': op.sub,'*': op.mul, '/': op.truediv, '^': op.pow}
+    funkcije = {'sin':sin,'cos':cos,'exp':exp,'log':log}
+    def __init__(self,izraz):
+        self.izraz = izraz
+    def vrednost(self,arg):
+        sklad = [] # sklad, kjer hranimo delno izračunane vrednosti
+        for beseda in self.izraz.split(' '):
+            # ali smo prišli do opreracije
+            if beseda in self.operacije.keys():
+                b = sklad.pop()
+                a = sklad.pop()
+                rezultat = self.operacije[beseda](a,b)
+                sklad.append(rezultat)
+            # ali smo prišli do funkcije
+            elif beseda in self.funkcije.keys():
+                a = sklad.pop()
+                rezultat = self.funkcije[beseda](a)
+                sklad.append(rezultat)
+            elif beseda == 'x':
+                sklad.append(arg)
+            else:
+                sklad.append(float(beseda))
+        # na koncu dobimo v skladu le še končni rezultat
+        return sklad.pop()
+    def __str__(self):
+        sklad = []
+        for beseda in self.izraz.split(' '):
+            if beseda in self.operacije.keys():
+                b = sklad.pop()
+                a = sklad.pop()
+                rezultat = '(' + str(a) + beseda + str(b) + ')'
+                sklad.append(rezultat)
+            elif beseda in self.funkcije.keys():
+                a = sklad.pop()
+                rezultat = beseda + '(' + str(a) + ')'
+                sklad.append(rezultat)
+            else:
+                sklad.append(str(beseda))
+        return sklad.pop()
+
+#+END_SRC
+**** Testi
+#+BEGIN_SRC python
+
+Check.part()
+Check.equal("str(RPN('2 x *'))", '(2*x)')
+Check.equal("str(RPN('2 x x 3 ^ + *'))", '(2*(x+(x^3)))')
+Check.equal("str(RPN('2 sin x x 3 ^ + *'))",'(sin(2)*(x+(x^3)))')
+Check.secret(str(RPN('1 x cos x ^ sin +')))
+Check.secret(str(RPN('1 log x / sin x +')))
+
+#+END_SRC
+*** Odvod RPN
+Razredu ~RPN~ dodaj metodo ~odvod~, ki vrne objekt istega razreda, ki vsebuje
+izraz za odvod po spremenljivki ~x~.
+
+Primer:
+
+    >>> f = RPM.new('1 x +')
+    >>> df = f.odvod()
+    >>> print(df.vrednost(1))
+    1.0
+
+Testnih primerov ne bomo navajali, ker je možno nalogo rešiti na več načinov,
+pri katerih bo izraz za odvod različen (čeprav pravilen).
+Za ilustracijo si poglejmo izraze
+
+#+BEGIN_EXAMPLE
+    '1 x +', 'x 1 +' in '1 x 1 + *',
+#+END_EXAMPLE
+
+ki oba predstavljajo isto funkcijo ~f(x)=x+1~.
+Testirmo tako, da izračunamo vrednost odvoda v nekaj naključno izbranih
+fiksnih točkah, s čimer pravilnost odvoda precej dobro preverimo.
+
+Dovolj je, da metoda ~odvod~ deluje za izraze, ki ne vsebujejo potence ~'^'~.
+
+**** Rešitev
+#+BEGIN_SRC python
+
+import operator as op
+from math import sin,cos,exp,log
+class RPN:
+    # slovarja s ključi, ki so imeni operacij in funkcij in vrednostmi, ki so
+    # Python funkcije za te operacije.
+    operacije = {'+': op.add,'-': op.sub,'*': op.mul, '/': op.truediv, '^': op.pow}
+    funkcije = {'sin':sin,'cos':cos,'exp':exp,'log':log}
+    fodvod = {'sin': 'cos','cos':'sin -1 *','exp':'exp','log':'-1 ^'}
+    def __init__(self,izraz):
+        self.izraz = izraz
+    def vrednost(self,arg):
+        sklad = [] # sklad, kjer hranimo delno izračunane vrednosti
+        for beseda in self.izraz.split(' '):
+            # ali smo prišli do opreracije
+            if beseda in self.operacije.keys():
+                b = sklad.pop()
+                a = sklad.pop()
+                rezultat = self.operacije[beseda](a,b)
+                sklad.append(rezultat)
+            # ali smo prišli do funkcije
+            elif beseda in self.funkcije.keys():
+                a = sklad.pop()
+                rezultat = self.funkcije[beseda](a)
+                sklad.append(rezultat)
+            elif beseda == 'x':
+                sklad.append(arg)
+            else:
+                sklad.append(float(beseda))
+        # na koncu dobimo v skladu le še končni rezultat
+        return sklad.pop()
+    def __str__(self):
+        sklad = []
+        for beseda in self.izraz.split(' '):
+            if beseda in self.operacije.keys():
+                b = sklad.pop()
+                a = sklad.pop()
+                rezultat = '(' + str(a) + beseda + str(b) + ')'
+                sklad.append(rezultat)
+            elif beseda in self.funkcije.keys():
+                a = sklad.pop()
+                rezultat = beseda + '(' + str(a) + ')'
+                sklad.append(rezultat)
+            else:
+                sklad.append(str(beseda))
+        return sklad.pop()
+    def odvod(self):
+        dfsklad = []
+        fsklad = []
+        for beseda in self.izraz.split(' '):
+            if beseda in self.operacije.keys():
+                df = dfsklad.pop()
+                dg = dfsklad.pop()
+                f = fsklad.pop()
+                g = fsklad.pop()
+                if beseda in ['+','-']:
+                    # (f+g)' = f'+g'
+                    df = ' '.join((df, dg, beseda))
+                elif beseda == '*':
+                    # (f*g)' = f'g + g'f
+                    df = ' '.join((dg, f, '*', df, g, '* +'))
+                elif beseda == '/':
+                    df = ' '.join((g, df, '*', f, dg,'* -', g, '2 ^ /'))
+                dfsklad.append(df)
+                fsklad.append(' '.join((f, g, beseda)))
+            elif beseda in self.funkcije.keys():
+                # verižno pravilo (f(g(x)) = f'(x)*g'(x))
+                df = dfsklad.pop()
+                f = fsklad.pop()
+                df = ' '.join((df,f,self.fodvod[beseda],'*'))
+                dfsklad.append(df)
+                fsklad.append(' '.join((f,beseda)))
+            elif beseda == 'x':
+                dfsklad.append('1')
+                fsklad.append('x')
+            else:
+                dfsklad.append('0')
+                fsklad.append(beseda)
+        return RPN(dfsklad.pop())
+
+#+END_SRC
+**** Testi
+#+BEGIN_SRC python
+
+Check.part()
+from math import log,sin,cos
+izraz = "RPN('x cos x log *').odvod()"
+xi = (1.2,2.3,5,10.1,0.876,22.9876)
+for x in xi:
+    Check.equal(izraz + '.vrednost(%f)'%x ,cos(x)/x-log(x)*sin(x))
+    Check.secret(RPN('x sin x cos /').odvod().vrednost(x))
+    Check.secret(RPN('1 x sin + x 2 * log /').odvod().vrednost(x))
+
+#+END_SRC
+*** Odvod potence
+Dopolni metodo ~odvod~, da deluje tudi za izraze, ki vsebujejo potenco ~^~
+
+Primer:
+
+    >>> f = RPM('x 2 ^')
+    >>> df = f.odvod()
+    >>> print(df.vrednost(1))
+    2.0
+    >>> RPN('2 x ^').odvod().vrednost(0) # vrniti mora log(2)
+    0.6931471805599453
+**** Rešitev
+#+BEGIN_SRC python
+
+import operator as op
+from math import sin,cos,exp,log
+class RPN:
+    # slovarja s ključi, ki so imeni operacij in funkcij in vrednostmi, ki so
+    # Python funkcije za te operacije.
+    operacije = {'+': op.add,'-': op.sub,'*': op.mul, '/': op.truediv, '^': op.pow}
+    funkcije = {'sin':sin,'cos':cos,'exp':exp,'log':log}
+    fodvod = {'sin': 'cos','cos':'sin -1 *','exp':'exp','log':'-1 ^'}
+    def __init__(self,izraz):
+        self.izraz = izraz
+    def vrednost(self,arg):
+        sklad = [] # sklad, kjer hranimo delno izračunane vrednosti
+        for beseda in self.izraz.split(' '):
+            # ali smo prišli do opreracije
+            if beseda in self.operacije.keys():
+                b = sklad.pop()
+                a = sklad.pop()
+                rezultat = self.operacije[beseda](a,b)
+                sklad.append(rezultat)
+            # ali smo prišli do funkcije
+            elif beseda in self.funkcije.keys():
+                a = sklad.pop()
+                rezultat = self.funkcije[beseda](a)
+                sklad.append(rezultat)
+            elif beseda == 'x':
+                sklad.append(arg)
+            else:
+                sklad.append(float(beseda))
+        # na koncu dobimo v skladu le še končni rezultat
+        return sklad.pop()
+    def __str__(self):
+        sklad = []
+        for beseda in self.izraz.split(' '):
+            if beseda in self.operacije.keys():
+                b = sklad.pop()
+                a = sklad.pop()
+                rezultat = '(' + str(a) + beseda + str(b) + ')'
+                sklad.append(rezultat)
+            elif beseda in self.funkcije.keys():
+                a = sklad.pop()
+                rezultat = beseda + '(' + str(a) + ')'
+                sklad.append(rezultat)
+            else:
+                sklad.append(str(beseda))
+        return sklad.pop()
+    def odvod(self):
+        dfsklad = []
+        fsklad = []
+        for beseda in self.izraz.split(' '):
+            if beseda in self.operacije.keys():
+                dg = dfsklad.pop()
+                df = dfsklad.pop()
+                g = fsklad.pop()
+                f = fsklad.pop()
+                if beseda in ['+','-']:
+                    # (f+g)' = f'+g'
+                    df = ' '.join((df, dg, beseda))
+                elif beseda == '*':
+                    # (f*g)' = f'g + g'f
+                    df = ' '.join((dg, f, '*', df, g, '* +'))
+                elif beseda == '/':
+                    df = ' '.join((g, df, '*', f, dg,'* -', g, '2 ^ /'))
+                elif beseda == '^':
+                    # f(x)^g(x)' =f(x)^(g(x)-1)*(f(x)*log(f(x)*g'(x))+g(x)*f'(x))
+                    df = ' '.join((f, g, '1 - ^', dg, f, f, 'log * *', df, g, '* + *'))
+                dfsklad.append(df)
+                fsklad.append(' '.join((f, g, beseda)))
+            elif beseda in self.funkcije.keys():
+                # verižno pravilo (f(g(x)) = f'(x)*g'(x))
+                df = dfsklad.pop()
+                f = fsklad.pop()
+                df = ' '.join((df,f,self.fodvod[beseda],'*'))
+                dfsklad.append(df)
+                fsklad.append(' '.join((f,beseda)))
+            elif beseda == 'x':
+                dfsklad.append('1')
+                fsklad.append('x')
+            else:
+                dfsklad.append('0')
+                fsklad.append(beseda)
+        return RPN(dfsklad.pop())
+
+#+END_SRC
+**** Testi
+
+#+BEGIN_SRC python
+Check.part()
+from math import log,sin,cos
+x = 1.2
+xi = (0.1,1.2,2.3,1.1398,1.87,2.9876)
+izraz1 = "RPN('x 1 + x log ^').odvod()"
+izraz2 = "RPN('x x ^').odvod()"
+
+for x in xi:
+    Check.equal(izraz1 + '.vrednost(%f)'%x,(x+1)**log(x)*(log(x)/(x+1)+log(x+1)/x))
+    Check.equal(izraz2 + '.vrednost(%f)'%x, x**x*(log(x)+1))
+    Check.secret(RPN("1 x + x x * ^").odvod().vrednost(x))
+#+END_SRC
+
 ** Avtomatsko odvajanje
 *** Program kot matematična funkcija
 *** Program kot zaporedje(kompozitum) preprostih operacij
