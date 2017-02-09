@@ -926,25 +926,27 @@ Check.secret(df(-123))
 
 #+END_SRC
 *** Malce bolj zapletena funkcija
-# =====================================================================@009547=
-# Funkcija g je podana s Python definicijo
-# 
-#     def g(x):
-#       y = x**2
-#       y = x*(1/y+y)
-#       return y
-# 
-# Sestavite funkcijo ~dg(x)~, ki vrne vrednost odvoda ~g'(x)~ funkcije ~g~
-# izračunanega v točki ~x~. Končni rezultat zaokrožite z ~round(y,10)~,
-# preden ga funkcija ~dg~ vrne.
-# 
-# Na primer:
-# 
-#     >>> dg(1)
-#     2
-#     >>> dg(2)
-#     11.75
-# =============================================================================
+Funkcija ~g(x)~ je podana s Python definicijo
+#+BEGIN_SRC python
+    def g(x):
+      y = x**2
+      y = x*(1/y+y)
+      return y
+#+END_SRC
+
+Sestavite funkcijo ~dg(x)~, ki vrne vrednost odvoda ~g'(x)~ funkcije ~g~
+izračunanega v točki ~x~. Končni rezultat zaokrožite z ~round(y,10)~,
+preden ga funkcija ~dg~ vrne.
+
+Na primer:
+#+BEGIN_SRC python
+    >>> dg(1)
+    2
+    >>> dg(2)
+    11.75
+#+END_SRC
+**** Rešitev
+#+BEGIN_SRC python
 # definicija z odvajanjem kode
 def dg(x):
     dy = 2*x
@@ -952,11 +954,15 @@ def dg(x):
     dy = (1/y+y)+x*(1-1/y**2)*dy
     y = x*(1/y+y)
     return round(dy,10)
+#+END_SRC
+**** Testi
+#+BEGIN_SRC python
 # Definicija s formulo
 def dg_formula(x):
     return round(x**2 + x*(2*x - 2/x**3) + x**(-2),10)
+#+END_SRC
+#+BEGIN_SRC python
 
-Check.part()
 Check.equal('dg(-1)', 2)
 try:
     dg(0)
@@ -974,31 +980,35 @@ Check.equal('dg(-4)', 47.9375)
 Check.secret(dg(42))
 for x in range(2,30,3):
     Check.secret(dg(x))
+#+END_SRC
 *** For zanka
-# =====================================================================@009548=
-# Funkcija h je podana s Python definicijo
-# 
-#     def h(x):
-#       y = 1
-#       for n in range(10):
-#         y = (x/y+y)/2
-#       return y
-# 
-# Sestavite funkcijo ~dh(x)~, ki vrne vrednost odvoda funkcije g
-# izračunanega v točki ~x~. Končni rezultat zaokrožite z ~round(y,10)~.
-# 
-# Na primer:
-# 
-#     >>> dh(1)
-#     0.5
-#     >>> dh(4)
-#     0.25
-# 
-# *Namig*: Predelajte kodo za funkcijo ~h~ tako, da hkrati s
-# funkcijo računate še njen odvod. Vsaki vrstici kode dodajte
-# vrstico v kateri posodobite vrednost odvoda.
-# Katera pravila za odvajanje morate uporabiti?
-# =============================================================================
+Funkcija ~h(x)~ je podana s Python definicijo
+#+BEGIN_SRC python
+
+    def h(x):
+      y = 1
+      for n in range(10):
+        y = (x/y+y)/2
+      return y
+#+END_SRC
+
+Sestavite funkcijo ~dh(x)~, ki vrne vrednost odvoda funkcije g
+izračunanega v točki ~x~. Končni rezultat zaokrožite z ~round(y,10)~.
+
+Na primer:
+#+BEGIN_SRC python
+    >>> dh(1)
+    0.5
+    >>> dh(4)
+    0.25
+#+END_SRC
+**** Namig
+Predelajte kodo za funkcijo ~h~ tako, da hkrati s
+funkcijo računate še njen odvod. Vsaki vrstici kode dodajte
+vrstico v kateri posodobite vrednost odvoda.
+Katera pravila za odvajanje morate uporabiti?
+**** Rešitev
+#+BEGIN_SRC python
 def dh(x):
     y = 1
     dy = 0
@@ -1006,11 +1016,14 @@ def dh(x):
         dy = ((1*y-dy*x)/y**2+dy)/2
         y = (x/y+y)/2
     return round(dy,10)
-
+#+END_SRC
+**** Testi
+#+BEGIN_SRC python
 # funkcija h v resnici računa x^(1/2) z Haronovim obrazcem (tangentno metodo)
 def dh_aprox(x):
     return round(x**(-0.5)/2,10)
-
+#+END_SRC
+#+BEGIN_SRC python
 Check.part()
 # Testi za dh
 cases =  [(2, 0.3535533906, 0.7071067812),
@@ -1027,36 +1040,41 @@ for case in cases:
     Check.equal('dh(1/%d)'% x,dh2)
 for x in range(1,30,3):
     Check.secret(dh(x/10))
+#+END_SRC
 *** Kompozitum funkcij
-# =====================================================================@009549=
-# Funkcija ~k~ je podana s pomožno funkcijo ~r(x)~
-# 
-#         def r(x):
-#             y = 1
-#             for i in range(1,10):
-#                 y = x+y
-#                 y = 1/(i*y)
-#             return y
-#         def k(x):
-#             y = x
-#             for i in range(5):
-#                 y = x*r(y)**2
-#             return y
-# 
-# Sestavite funkcijo ~dr(x)~ za ki izračuna odvod ~r'(x)~ in
-# ~dk(x)~, ki vrne vrednost odvoda ~k'(x)~
-# izračunanega v točki ~x~.
-# Končni rezultat zaokrožite z ~round(y,10)~.
-# 
-# Na primer:
-# 
-#     >>> dr(10)
-#     -0.001106963
-#     >>> dk(4)
-#     -0.0034362142
-# 
-# *Namig*: V ~dk(x)~ uporabite funkcijo ~dr(x)~ in verižno pravilo.
-# =============================================================================
+Funkcija ~k~ je podana s pomožno funkcijo ~r(x)~
+#+BEGIN_SRC python
+        def r(x):
+            y = 1
+            for i in range(1,10):
+                y = x+y
+                y = 1/(i*y)
+            return y
+        def k(x):
+            y = x
+            for i in range(5):
+                y = x*r(y)**2
+            return y
+#+END_SRC
+
+Sestavite funkcijo ~dr(x)~ za ki izračuna odvod ~r'(x)~ in
+~dk(x)~, ki vrne vrednost odvoda ~k'(x)~
+izračunanega v točki ~x~.
+Končni rezultat zaokrožite z ~round(y,10)~.
+
+Na primer:
+#+BEGIN_SRC python
+    >>> dr(10)
+    -0.001106963
+    >>> dk(4)
+    -0.0034362142
+#+END_SRC
+
+**** Namig
+V ~dk(x)~ uporabite funkcijo ~dr(x)~ in verižno pravilo.
+**** Rešitev
+#+BEGIN_SRC python
+
 def r(x):
     y = 1
     for i in range(1,10):
@@ -1086,6 +1104,10 @@ def dk(x):
         dy = z**2+x*2*z*dr(y)*dy
         y = x*z**2
     return round(dy,10)
+
+#+END_SRC
+**** Testi
+#+BEGIN_SRC python 
 
 Check.part()
 def drsym(x):
@@ -1119,19 +1141,150 @@ for case in cases:
 for x in range(1,30,3):
     Check.secret(dk(x/10))
     Check.secret(dr(x/10))
-
+#+END_SRC
 *** Program kot zaporedje(kompozitum) preprostih operacij
 ** Numerično odvajanje
 ** Tangenta in normala
-# #+INCLUDE: "./funkcije.org" :minlevel 1
-
-
-# #+INCLUDE: "./integral.org" :minlevel 1
 * Integral
 ** Nedoločeni integral
 *** Integral polinoma
+Napiši funkcijo ~integral(p)~, ki izračuna integral polinoma ~p~. Polinom 
+$$p(x) = a_n x^n + a_{n-1}x^{n-1}+\ldots + a_1 + a_0$
+naj bo podan s seznamom koeficientov ~p~ $=[a_n,a_{n-1},\ldots a_0]$.
+
+Primer:
+
+#+BEGIN_SRC python :exports both :results output
+<<integral>>
+p = [4,3,2,1] # polinom x^3 + 2 x^2 +3x +4
+print(integral(p))
+#+END_SRC
+
+#+RESULTS:
+: [1.0, 1.0, 1.0, 1.0, 0]
+
+**** Rešitev
+#+name: integral
+#+BEGIN_SRC python
+  def integral(p):
+      n = len(p)
+      return [p[i]/(n-i) for i in range(n)] + [0]
+#+END_SRC
 ** Določeni integral
 *** Trapezna in Simpsonova metoda
+Napiši funkcijo ~trapez(f,a,b,n)~, ki izračuna približek integrala
+$$\int_a^bf(x)dx.$$ kot vsoto ploščin trapezov, ki jih dobimo, če interval
+$[a,b]$ razdelimo na podintervale $[x_i,x_{i+1}]$ enake dolžine in povežemo
+točke $(x_i,0)$, $(x_{i+1},0)$, $(x_{i+1},f(x_{i+1}))$ in $(x_i,f(x_i))$ (glej
+sliko).
+
+#+header: :imagemagick yes :iminoptions -density 1000 :imoutoptions -geometry 600 
+#+header: :exports results :file trapez.png
+#+header: :packages '(("" "pgfplots")) :border 1em :results raw
+#+header: :header '("\\pgfplotsset{compat=newest}")
+#+BEGIN_SRC latex
+\pgfplotsset{
+    integral axis/.style={
+        axis lines=middle,
+        enlarge y limits=upper,
+        axis equal image, width=12cm,
+        xlabel=$x$, ylabel=$y$,
+        ytick=\empty,
+        xticklabel style={font=\small, text height=1.5ex, anchor=north},
+        samples=100
+    },
+    integral/.style={
+            domain=2:10,
+            samples=5
+    },
+    integral fill/.style={
+            integral,
+            draw=none, fill=#1,
+            %on layer=axis background
+        },
+        integral fill/.default=gray!10,
+        integral line/.style={
+            integral,
+            very thick,
+            draw=#1
+        },
+        integral line/.default=black
+}
+
+
+\begin{tikzpicture}[
+    % The function that is used for all the plots
+    declare function={f=(2*x^3-33*x^2+144*x)/50;}
+]
+\begin{axis}[
+    integral axis,
+    ymin=0,
+    xmin=0.75, xmax=11.25,
+    domain=1.5:10.5,
+    xtick={2,...,10},
+    xticklabels={$a$,,$\ldots$,,$x_{i}$,,$x_{i+1}$,,$b$},
+    axis on top
+]
+% The filled area under the approximate integral
+\addplot [integral fill=gray!15] {f} \closedcycle;
+
+% The highlighted segment
+\addplot [integral fill=gray!35, domain=6:8, samples=2] {f} \closedcycle;
+
+% The function
+\addplot [very thick, blue!75] {f} node [anchor=south] {$y=f(x)$};
+
+% The approximate integral
+\addplot [integral line=black] {f};
+
+% The vertical lines between the segments
+\addplot [integral, ycomb] {f};
+
+\end{axis}
+\end{tikzpicture}
+#+END_SRC
+
+#+RESULTS:
+[[file:trapez.png]]
+Primer:
+#+BEGIN_SRC python :results output :exports both
+  <<trapez>>
+  f = lambda x: x**2 
+  print(trapez(f,0,1,1))
+#+END_SRC
+
+#+RESULTS:
+: 0.5
+**** Matematična izpeljava
+Če interval $[a,b]$ razdelimo na $n$ enakih delov, lahko krajišča podintervalov
+izračunamo kot $x_i = a+i*h$, kjer je $h=\frac{b-a}{n}$ dolžina podintervala.
+Ploščina trapeza z oglišči $(x_i,0)$, $(x_{i+1},0)$, $(x_{i+1},f(x_{i+1}))$ in
+$(x_i,f(x_i))$ je enaka
+$$(x_{i+1}-x_i)\frac{f(x_i)+f(x_{i+1})}{2}=h\frac{f(x_i)+f(x_{i+1})}{2}.$$
+Integral lahko torej približno ocenimo z vsoto 
+ 
+ $$\int_a^bf(x) dx \simeq \sum_{i=0}^{n-1} h\frac{f(x_{i+1})+f(x_i))}{2}
+= \frac{h}{2}\sum_{i=0}^{n-1}(f(x_i)+f(x_{i+1})).$$ 
+Vsoto lahko preuredimo
+\begin{multline*}
+\frac{h}{2}\sum_{i=0}^{n-1}\left(f(x_i)+f(x_{i+1})\right)=\frac{h}{2}\left(\sum_{i=0}^{n-1}f(x_i)+\sum_{i=0}^{n-1}f(x_{i+1})\right)=\\
+\frac{h}{2}\left(\sum_{i=0}^{n-1} f(x_i) + \sum_{i=1}^{n}f(x_i)\right) = 
+\frac{h}{2}\left(f(a)+2\sum_{i=1}^{n-1}f(x_i)+f(b)\right),
+\end{multline*}
+tako, da se vrednost $f(x_i)$ pojavi le enkrat. Tako dobimo 
+/sestavljeno trapezno pravilo/ za izračun integrala
+$$
+\int_a^bf(x)dx \simeq \frac{h}{2}\left(f(a)+2\sum_{i=1}^{n-1}f(x_i)+f(b)\right).
+$$
+ 
+**** Rešitev
+#+name: trapez
+#+BEGIN_SRC python
+  def trapez(f,a,b,n):
+      h = (b-a)/n
+      return h/2*(f(a)+2*sum(f(a+(i+1)*h) for i in range(n-1))+f(b))
+#+END_SRC
+
 * Vektorji v ravnini in prostoru
 ** Vektorji
 
@@ -1939,6 +2092,9 @@ Check.secret(odboj(((0,1,1),(-2,-1,2)), (1,6,1,1)))
 ** Matrike
 *** Python razred za matrike
 ** Gaussova eliminacija
+*** Polinomska interpolacija
+*** Maksimum funkcije podane s tabelo
+Napišite funkcijo ~maksimum(x,y)~, ki poišče približno vrednost 
 * Licenca 
 #+BEGIN_EXPORT html
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
