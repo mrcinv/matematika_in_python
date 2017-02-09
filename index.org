@@ -1255,6 +1255,15 @@ Primer:
 
 #+RESULTS:
 : 0.5
+**** Namig
+Velja
+$$\int_{x_i}^{x_{i+1}}f(x)dx=\int_{a}^{x_{1}}f(x)dx+\int_{x_1}^{x_{2}}f(x)dx+\ldots
+\int_{x_{n-1}}^{b}f(x)dx,$$
+S formulo za izračun ploščine trapeza
+$$P=v\frac{a+b}{2}$$ izpeljite približek za integral
+$$\int_{x_i}^{x_{i+1}}f(x)dx$$
+in formulo za integral na intervalu $[a,b]$ dobite kot vsoto ploščin posameznih
+trapezov. 
 **** Matematična izpeljava
 Če interval $[a,b]$ razdelimo na $n$ enakih delov, lahko krajišča podintervalov
 izračunamo kot $x_i = a+i*h$, kjer je $h=\frac{b-a}{n}$ dolžina podintervala.
