@@ -66,7 +66,7 @@ sprehodimo po elementih seznama in izvedemo zaporedje ukazov. Najbližje pojmu
 neskončnega zaporedja sta [[https://wiki.python.org/moin/Iterator][iterator]] in [[https://wiki.python.org/moin/Generators][generator]], ki predstavljata posplošitev
 kolekcij elementov, po katerih se lahko sprehajamo s ~for~ zanko. 
 
-*** Naloga
+*** Zaporedje podano s formulo
     :PROPERTIES:
     :HTML_CONTAINER_CLASS: naloga
     :END:
@@ -104,7 +104,7 @@ Zapiši približne vrednosti prvih 15 členov zaporedja $a_n=\frac{n-1}{n+1}$
     0.8666666666666667
 #+end_example
 
-*** Naloga
+*** Rekurzivno zaporedje
     :PROPERTIES:
     :HTML_CONTAINER_CLASS: naloga
     :END:
@@ -215,7 +215,7 @@ Kljub temu, da smo se z enim rekurzivnim klicem funkcije izognili eksponentni
 precej odvečnih izračunov. Ob vsakem zaporednem klicu funkcije ponovno
 izračunamo vse člene od prvega naprej. Časovna zahtevnost ~for~ zanke je tako
 kvadratična, medtem ko je pri prejšnjih rešitvah časovna zahtevnost linearna. 
-*** Naloga
+*** Konvergenca
     :PROPERTIES:
     :HTML_CONTAINER_CLASS: naloga
     :END:
@@ -1171,7 +1171,7 @@ print(integral(p))
       return [p[i]/(n-i) for i in range(n)] + [0]
 #+END_SRC
 ** Določeni integral
-*** Trapezna in Simpsonova metoda
+*** Trapezna formula za določeni integral
 Napiši funkcijo ~trapez(f,a,b,n)~, ki izračuna približek integrala
 $$\int_a^bf(x)dx.$$ kot vsoto ploščin trapezov, ki jih dobimo, če interval
 $[a,b]$ razdelimo na podintervale $[x_i,x_{i+1}]$ enake dolžine in povežemo
@@ -1266,7 +1266,7 @@ in formulo za integral na intervalu $[a,b]$ dobite kot vsoto ploščin posamezni
 trapezov. 
 **** Matematična izpeljava
 Če interval $[a,b]$ razdelimo na $n$ enakih delov, lahko krajišča podintervalov
-izračunamo kot $x_i = a+i*h$, kjer je $h=\frac{b-a}{n}$ dolžina podintervala.
+izračunamo kot $x_i = a+ih$, kjer je $h=\frac{b-a}{n}$ dolžina podintervala.
 Ploščina trapeza z oglišči $(x_i,0)$, $(x_{i+1},0)$, $(x_{i+1},f(x_{i+1}))$ in
 $(x_i,f(x_i))$ je enaka
 $$(x_{i+1}-x_i)\frac{f(x_i)+f(x_{i+1})}{2}=h\frac{f(x_i)+f(x_{i+1})}{2}.$$
@@ -1294,11 +1294,223 @@ $$
       return h/2*(f(a)+2*sum(f(a+(i+1)*h) for i in range(n-1))+f(b))
 #+END_SRC
 
+**** Testi
+*** Dolžina loka krivulje
+Napiši funkcijo ~dolzina(f,a,b,n)~, ki izračuna dolžino loka grafa funkcije
+$f(x)$ kot vsoto dolžin daljic, ki jih dobimo, če razdelimo interval $[a,b]$ na
+podintervale $[x_i,x_{i+1}]$ enake dolžine in povežemo točke
+$$(x_i,f(x_i))$ (glej sliko). 
+
+Rezultat primerjaj s približkom, ki ga dobiš, če
+uporabiš formulo za dolžino loka
+$$l=\int_a^b \sqrt{1+f'(x)^2}dx$$
+in trapezno formulo za izračun integrala.
+
+#+header: :imagemagick yes :iminoptions -density 1000 :imoutoptions -geometry 600 
+#+header: :exports results :file dolzina.png
+#+header: :packages '(("" "pgfplots")) :border 1em :results raw
+#+header: :header '("\\pgfplotsset{compat=newest}")
+#+BEGIN_SRC latex
+\pgfplotsset{
+    integral axis/.style={
+        axis lines=middle,
+        enlarge y limits=upper,
+        axis equal image, width=12cm,
+        xlabel=$x$, ylabel=$y$,
+        ytick=\empty,
+        xticklabel style={font=\small, text height=1.5ex, anchor=north},
+        samples=100
+    },
+    integral/.style={
+            domain=2:10,
+            samples=5
+    },
+    integral fill/.style={
+            integral,
+            draw=none, fill=#1,
+            %on layer=axis background
+        },
+        integral fill/.default=gray!10,
+        integral line/.style={
+            integral,
+            very thick,
+            draw=#1
+        },
+        integral line/.default=black
+}
+
+
+\begin{tikzpicture}[
+    % The function that is used for all the plots
+    declare function={f=(2*x^3-33*x^2+144*x)/50;}
+]
+\begin{axis}[
+    integral axis,
+    ymin=0,
+    xmin=0.75, xmax=11.25,
+    domain=2:10,
+    xtick={2,...,10},
+    xticklabels={$a$,,$\ldots$,,$x_{i}$,,$x_{i+1}$,,$b$},
+    axis on top
+]
+% The filled area under the approximate integral
+% \addplot [integral fill=gray!15] {f} \closedcycle;
+
+% The highlighted segment
+% \addplot [integral fill=gray!35, domain=6:8, samples=2] {f} \closedcycle;
+
+% The function
+\addplot [very thick, blue!75] {f} node [anchor=south] {$y=f(x)$};
+
+% The approximate integral
+\addplot [integral line=black] {f};
+
+% The vertical lines between the segments
+% \addplot [integral, ycomb] {f};
+
+\end{axis}
+\end{tikzpicture}
+#+END_SRC
+
+#+RESULTS:
+[[file:dolzina.png]]
+
+Primer:
+#+BEGIN_SRC python :exports both :results output 
+<<trapez>>
+<<dolzina>>
+f = lambda x: x**2
+print(dolzina(f,0,1,1))
+#+END_SRC
+
+#+RESULTS:
+: 1.4142135623730951
+#+BEGIN_SRC python :exports both :results output 
+  <<trapez>>
+  <<dolzina>>
+  f = lambda x: x**2
+  for n in range(5):
+      print(dolzina(f,0,1,2**(2*n)))
+#+END_SRC
+
+#+RESULTS:
+: 1.4142135623730951
+: 1.4742804757093162
+: 1.4786516869545336
+: 1.4789246603146189
+: 1.4789417202213675
+Primerjamo še s trapezno formulo
+#+BEGIN_SRC python :exports both :results output 
+  <<trapez>>
+  <<dolzina>>
+  dl = lambda x: (1+4*x**2)**0.5
+  for n in range(5):
+      print(trapez(dl,0,1,2**(2*n)))
+#+END_SRC
+
+#+RESULTS:
+: 1.618033988749895
+: 1.4882642944012199
+: 1.479525185093328
+: 1.478979251951247
+: 1.4789451321908484
+**** Namig
+Dolžina daljice med točkama $(x_0,y_0)$ in $(x_1,y_1)$ je enaka
+$$\sqrt{(x_1-x_0)^2+(y_1-y_0)^2}.$$
+**** Rešitev
+Označimo s $h=x_{i+1}-x_i$ dolžino podintervalov. Razdalja med $(x_i,f(x_i))$ in
+$(x_{i+1},f(x_{i+1}))$ je tako enaka
+$$ \sqrt{h^2+(f(x_{i+1})-f(x_i))^2}.$$
+#+name: dolzina
+#+BEGIN_SRC python
+  def dolzina(f,a,b,n):
+      h = (b-a)/n
+      d = 0
+      for i in range(n):
+          dy = f(a+(i+1)*h) - f(a+i*h)
+          d += (h**2 + dy**2)**0.5
+      return d
+#+END_SRC
 * Vektorji v ravnini in prostoru
 ** Vektorji
-
 *** Python razred za vektorje
+Razširi razred ~Vektor~, ki predstavlja vektorje kot $n$-terica števil z
+naslednjimi metodami 
+- ~__add__~
+- ~__sub__~
+- ~__mul__~
+- ~__rmul__~
+ki predstavljajo osnovne operacije med vektorji.
+#+name: Vektor
+#+BEGIN_SRC python
+  class Vektor:
+      def __init__(self, *vred):
+          if len(vred)==1 and hasattr(vred,'__getitem__'):
+              self.vrednosti = tuple(vred[0])
+          else:
+              self.vrednosti = tuple(vred)
+      def __getitem__(self, k):
+          return self.vrednosti[k]
+      def __setitem__(self, k, vrednost):
+          self.vrednosti[k] = vrednost
+      def __iter__(self):
+          self.vrednosti.itervalues()
+      def __len__(self):
+          return len(self.vrednosti)
+      def __str__(self):
+          return str(self.vrednosti)
+#+END_SRC
+
+Primer
+
+#+BEGIN_SRC python :results output
+<<Vektor>>
+<<Vektor_osnove>>
+a = Vektor(1,2,3)
+b = Vektor(3,2,1)
+print(a+b, a-b, 2*a,b*0.5)
+#+END_SRC
+
+#+RESULTS:
+: (4, 4, 4) (-2, 0, 2) (2, 4, 6) (1.5, 1.0, 0.5)
+
+**** Rešitev
+#+name: Vektor_osnove
+#+BEGIN_SRC python
+  def __add__(self,b):
+      n = len(self)
+      return Vektor(self[i]+b[i] for i in range(n))
+  def __sub__(self,b):
+      n = len(self)
+      return Vektor(self[i]-b[i] for i in range(n))
+  def __mul__(self,alfa):
+      n = len(self)
+      return Vektor(alfa*self[i] for i in range(n))
+  def __rmul__(self,alfa):
+      return self.__mul__(alfa)
+
+  setattr(Vektor, '__add__', __add__)
+  setattr(Vektor, '__rmul__', __rmul__)
+  setattr(Vektor, '__sub__', __sub__)
+  setattr(Vektor, '__mul__', __mul__)
+#+END_SRC
 *** Skalarni in vektorski produkt
+Definiraj funkciji ~dot(a,b)~ in ~cross(a,b)~, ki izračuna skalarni in vektorski
+produkt vektorjev ~a~ in ~b~.
+#+name: dot_cross¸
+#+BEGIN_SRC python
+  def dot(a,b):
+      return sum(a[i]*b[i] for i in range(len(a)))
+  def cross(a,b):
+      return Vektor(a[1]*b[2]-a[2]*b[1],
+                    a[2]*b[0]-a[0]*b[2],
+                    a[0]*b[1]-a[1]*b[0])
+
+#+END_SRC
+
+#+RESULTS:
+: None
+
 *** Enakost, kolinearnost in koplanarnost vektorjev
  Npiši funkcijo ~kolinearna(a,b)~, ki preveri ali sta dva vektorja ~a~ in ~b~
  kolinearna in vrne ~True~, če sta kolinearna in ~False~, če nista.
@@ -2100,7 +2312,8 @@ Check.secret(odboj(((0,1,1),(-2,-1,2)), (1,6,1,1)))
 * Matrike in sistemi enačb
 ** Matrike
 *** Python razred za matrike
-** Gaussova eliminacija
+** Sistemi enačb
+*** Gaussova eliminacija
 *** Polinomska interpolacija
 *** Maksimum funkcije podane s tabelo
 Napišite funkcijo ~maksimum(x,y)~, ki poišče približno vrednost 
