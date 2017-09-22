@@ -14,7 +14,7 @@
 #+CREATOR: Emacs 25.1.1 (Org mode 9.0.3)
 #+PROPERTY: header-args  :results output 
 #+PROPERTY: header-args  :noweb strip-export 
-* Uvod 
+* TODO Uvod 
 Pred vami je priročnik o tem, kako uporabiti znanje matematike pri
 programiranju. Priročnik je nastal kot dopolnilno gradivo pri predmetu
 Matematika na Fakulteti za računalništvo in informatiko, Univerze v Ljubljani.
@@ -22,14 +22,14 @@ Matematika na Fakulteti za računalništvo in informatiko, Univerze v Ljubljani.
 Priročnik spremljajo tudi naloge na portalu [[https://www.projekt-tomo.si/course/15/][projekt Tomo]], kjer lahko vsebino te
 knjige tudi praktično preskusite. Z reševanjem teh nalog boste pridobili tako
 znanje programiranja, kot tudi boljše razumevanje matematičnih pojmov. Obvezno
-za vse, ki hočejo od predmeta nekaj več. Vabljeni ste tudi, da dodate
+za vse, ki hočejo od predmeta nehttps://www.booking.com/searchresults.sl.html?aid=318615&label=New_English_EN_SI_27034554505-1rVfFD1JEcnh1S83ixwtIgS112436927905%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap1t1%comedy central the daily show3Aneg%3Afi%3Atidsa-206305369705%3Alp9062551%3Ali%3Adec%3Adm&sid=ce0c7a70880dc9e6ad21237e55ce1188&age=10&age=6&checkin_monthday=25&checkin_year_month=2017-02&checkout_monthday=28&checkout_year_month=2017-02&class_interval=1&dest_id=-116829&dest_type=city&dtdisc=0&from_history=1&group_adults=2&group_children=2&hlrd=0&hyb_red=0&inac=0&label_click=undef&mcs=0&mih=0&nha_red=0&no_rooms=1&postcard=0&raw_dest_type=city&redirected_from_city=0&redirected_from_landmark=0&redirected_from_region=0&req_age=10&req_age=6&room1=A%2CA%2C10%2C6&sb_price_type=total&sh_position=2&si=ai&si=ci&si=co&si=di&si=la&si=re&ss_all=0&ssb=empty&sshis=0&rows=20&offset=20kaj več. Vabljeni ste tudi, da dodate
 predme Matematika med svoje predmete, tako da kliknete na zvezdico nad imen Symbol’s value as variable is void: org-export-use-babelom
 predmeta. 
 
 Poleg tega so na voljo tudi kratki vide Symbol’s value as variable is void: org-export-use-babeli na YouTube kanalu.
 
 ** Kako brati to knjigo
-Vsekakor priporočamo, da naloge poskusite rešiti povsem samostojno. Rešitve so 
+Vsekakor priporočamo, da naloge poskusite rešiti phttps://www.booking.com/searchresults.sl.html?aid=318615&label=New_English_EN_SI_27034554505-1rVfFD1JEcnh1S83ixwtIgS112436927905%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap1t1%3Aneg%3Afi%3Atidsa-206305369705%3Alp9062551%3Ali%3Adec%3Adm&sid=ce0c7a70880dc9e6ad21237e55ce1188&age=10&age=6&checkin_monthday=25&checkin_year_month=2017-02&checkout_monthday=28&checkout_year_month=2017-02&class_interval=1&dest_id=-116829&dest_type=city&dtdisc=0&from_history=1&group_adults=2&group_children=2&hlrd=0&hyb_red=0&inac=0&label_click=undef&mcs=0&mih=0&nha_red=0&no_rooms=1&postcard=0&raw_dest_type=city&redirected_from_city=0&redirected_from_landmark=0&redirected_from_region=0&req_age=10&req_age=6&room1=A%2CA%2C10%2C6&sb_price_type=total&sh_position=2&si=ai&si=ci&si=co&si=di&si=la&si=re&ss_all=0&ssb=empty&sshis=0&rows=20&offset=20ovsem samostojno. Rešitve so 
 v začetku skrite, da vas ne bi premamile. Če se vam zatakne, si poglejte najprej
 splošna, matematična navodila za rešitev naloge in poskusite vsaj programerski
 del rešiti sami. Če tudi to ne gre, si le poglejte rešitev. Rešitve ne
@@ -44,8 +44,8 @@ Knjiga je na voljo v različnih formatih
 - [[http:index.org][izvorna koda]] v obliki  [[https://orgmode.org][Org-mode]] za urejevalnik [[https://www.gnu.org/software/emacs/][Emacs]]
  
 
-* Zaporedja in vrste
-** Zaporedja
+* TODO Zaporedja in vrste
+** TODO Zaporedja
 V vsakdanjem življenju pojem zaporedja pogosto pomeni seznam elementov, pri
 katerem je pomemben vrstni red. Na primer zaporedje plesnih korakov v
 koreografiji, zaporedje števil pri lotu ali pa zaporedje postajališč na liniji
@@ -59,14 +59,15 @@ ki vsakemu naravnemu številu $n$
 priredi nek element $a_n=a(n)$ množice $A$. Element $a_n$ imenujemo $n$ - ti
 člen zaporedja. 
 
-V računalništvu nas velikokrat zanimajo le končna zaporedja. V Python-u so
-končna zaporedja najpogosteje predstavljena s podatkovnim tipom ~list~, ki
-predstavlja končni seznam elementov. Z zankami ~for~ in ~while~ se lahko
-sprehodimo po elementih seznama in izvedemo zaporedje ukazov. Najbližje pojmu
-neskončnega zaporedja sta [[https://wiki.python.org/moin/Iterator][iterator]] in [[https://wiki.python.org/moin/Generators][generator]], ki predstavljata posplošitev
-kolekcij elementov, po katerih se lahko sprehajamo s ~for~ zanko. 
+V računalništvu si želimo, da se programi končajo, zato nas velikokrat zanimajo
+le končna zaporedja. V Python-u so končna zaporedja najpogosteje predstavljena s
+podatkovnim tipom ~list~, ki predstavlja končni seznam elementov. Z zankami
+~for~ in ~while~ se lahko sprehodimo po elementih seznama in izvedemo zaporedje
+ukazov. Najbližje pojmu neskončnega zaporedja sta [[https://wiki.python.org/moin/Iterator][iterator]] in [[https://wiki.python.org/moin/Generators][generator]], ki
+predstavljata posplošitev kolekcij elementov, po katerih se lahko sprehajamo s
+~for~ zanko.
 
-*** Zaporedje podano s formulo
+*** TODO Zaporedje podano s formulo
     :PROPERTIES:
     :HTML_CONTAINER_CLASS: naloga
     :END:
@@ -75,7 +76,7 @@ Zapiši približne vrednosti prvih 15 členov zaporedja $a_n=\frac{n-1}{n+1}$
      :PROPERTIES:
      :HTML_CONTAINER_CLASS: resitev
      :END:
-    Uporabi zanko ~for n in range(100):~.
+    Uporabi zanko ~for n in range(15):~.
 **** Rešitev 
      :PROPERTIES:
      :HTML_CONTAINER_CLASS: resitev
@@ -104,7 +105,7 @@ Zapiši približne vrednosti prvih 15 členov zaporedja $a_n=\frac{n-1}{n+1}$
     0.8666666666666667
 #+end_example
 
-*** Rekurzivno zaporedje
+*** TODO Rekurzivno zaporedje
     :PROPERTIES:
     :HTML_CONTAINER_CLASS: naloga
     :END:
@@ -215,7 +216,7 @@ Kljub temu, da smo se z enim rekurzivnim klicem funkcije izognili eksponentni
 precej odvečnih izračunov. Ob vsakem zaporednem klicu funkcije ponovno
 izračunamo vse člene od prvega naprej. Časovna zahtevnost ~for~ zanke je tako
 kvadratična, medtem ko je pri prejšnjih rešitvah časovna zahtevnost linearna. 
-*** Konvergenca
+*** TODO Konvergenca
     :PROPERTIES:
     :HTML_CONTAINER_CLASS: naloga
     :END:
@@ -272,11 +273,91 @@ ukaza ~yield~, ki je zelo podoben ukazu ~return~, le da se ob
 
 ** Vrste
 
-* Funkcije
-** Ničle funkcij in enačbe
+*** TODO Delne vsote vrste
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: naloga
+    :END:
+Izpiši prvih 15 delnih vsot neskončne vrste 
+$$\sum_{n=1}^\infty \frac{1}{2^n}.$$
+Kateremu številu se zdi, da je enaka vsota neskončne vrste?
+
+**** Namig
+     :PROPERTIES:
+     :HTML_CONTAINER_CLASS: resitev
+     :END:
+  V zanki ~for n in range(1,16):~ prištevaj člene zaporedja eni spremenljivki, ki vsebuje delne
+  vsote.
+
+**** Rešitev    
+     :PROPERTIES:
+     :HTML_CONTAINER_CLASS: resitev
+     :END:
+ Uporabimo preprosto zanko ~for~
+ #+BEGIN_SRC python :results output
+   S = 0
+   for n in range(1,16):
+       S += 1/2**n
+       print(S)
+ #+END_SRC
+
+ #+RESULTS:
+ #+begin_example
+ 0.5
+ 0.75
+ 0.875
+ 0.9375
+ 0.96875
+ 0.984375
+ 0.9921875
+ 0.99609375
+ 0.998046875
+ 0.9990234375
+ 0.99951171875
+ 0.999755859375
+ 0.9998779296875
+ 0.99993896484375
+ 0.999969482421875
+ #+end_example
+
+*** Vsota vrste
+Za vrsto 
+$$4\sum_{n=0}^\infty\left(-1\right)^n \frac{1}{1+2n}$$
+je znano, da je njena vsota enaka številu $\pi$. Preveri, da delne vsote te
+vrste res konvergirajo k $\pi$. Napiši program (funkcijo), ki za poljuben $\varepsilon > 0$
+poišče $n$, od katerega so vse delne vsote za manj kot $\varepsilon$ oddaljene
+od $\pi$. Svoj program preskusite za $\varepsilon=10^{-4}$. Za kako majhen
+$\varepsilon$ se program izvede v manj kot nekaj sekundah (npr. 10s). 
+
+**** Namig
+Uporabite zanko ~while~, pri kateri preverite, če je trenutna delna vsota
+oddaljena za manj kot $\varepsilon$ oddaljena od $\pi$.
+
+**** Rešitev
+#+BEGIN_SRC python :results output
+  import time
+  from math import pi
+  def konvergenca(epsilon):
+      """Funkcija poišče najmanjši n , za katerega je n-ta delna vsota vrste s členi 1/n^2
+      za manj kot epsilon oddaljena od števila pi."""
+      S = 0
+      n = 0
+      while abs(S-pi) > epsilon:
+          S += (-1)**n*4/(1+2*n)
+          n += 1
+      return n-1
+  zacetek = time.time()
+  n = konvergenca(0.0001)
+  print("n=%d (v %f sekundah)" % (n, time.time()-zacetek))
+#+END_SRC
+
+#+RESULTS:
+: n=9999 (v 0.008709 sekundah)
+
+* TODO Funkcije
+** TODO Ničle funkcij in enačbe
 Preskusili boste različne metode za iskanje ničel funkcije. Ničla funkcije
 $f(x)$ je vrednost spremenljivke $x$ za katero $f(x)=0$.
-*** Ničle tabelirane funkcije
+*** TODO Ničle tabelirane funkcije
 Za zvezno funkcija poznamo le nekaj posameznih vrednosti. Podana imamo dva
 seznama enake dolžine ~x~ in ~y~, tako da velja ~y[i] == f(x[i])~.
 
@@ -383,7 +464,7 @@ S spodnjo kodo lahko preskusite pravilnost delovanja vaše funkcije
 
 #+RESULTS:
 
-*** Bisekcija
+*** TODO Bisekcija
 Če ima zvezna funkcija v krajiščih intervala različna predznaka, potem je na tem
 intervalu zagotovo vsaj ena ničla. To dejstvo uporabi metoda bisekcije, s katero
 lahko poiščemo ničle. 
@@ -442,6 +523,7 @@ ValueError: Na intervalu ni ničle.
 : None
 
 **** Testi
+
 #+BEGIN_SRC python
   <<bisekcija>>
   import unittest
@@ -451,8 +533,40 @@ ValueError: Na intervalu ni ničle.
             self.assertEqual(bisekcija(f,[1,2],0.3),[1.25,1.5])
 
   unittest.main()
-#+END
-*** Sekantna metoda
+#+END_SRC
+
+*** TODO Sekantna metoda
+S sekantno metodo konstruiramo zaporedje približkov, ki se približujejo ničli
+funkcije, tako da začnemo z dvema približkoma, izračunamo presečišče sekante
+skozi dve točki na grafu funkcije in
+
+Primer:
+#+BEGIN_SRC python :exports both :results output
+<<sekantna>>
+f = lambda x: x*x-2
+print(sekantna(f,1,2,1e-5))
+print(2**0.5)
+#+END_SRC
+
+#+RESULTS:
+: 1.4142135620573204
+: 1.4142135623730951
+
+**** Rešitev
+#+name: sekantna
+#+BEGIN_SRC python
+  def sekantna(f,a,b,eps, maxit=100):
+      for n in range(maxit):
+          fa, fb = f(a), f(b)
+          b, a = b - fb*(b-a)/(fb-fa), b
+          if abs(fb)<eps:
+              return b,n
+      return None,maxit
+#+END_SRC
+
+#+RESULTS: sekantna
+: None
+
 ** Izračun vrednosti polinoma
 *** Hornerjev algoritem
 ** Kotne funkcije
@@ -484,8 +598,8 @@ $$\sin(x)\simeq x\text{ in } \cos(x)\simeq 1;\quad |x|<10^{-1}.$$
 *** Sinus in kosinus 2
 Funkcijo iz prejšnje naloge razširi na vsa realna števila. Uporabi periodičnost
 in simetrije funkcij $\sin$ in $\cos$.
-* Odvod
-** Simbolično odvajanje
+* TODO Odvod
+** TODO Simbolično odvajanje
 
 Naloga ilustrira kako deluje simbolično odvajanje.
 Napisati želimo funkcijo v Pythonu, ki izračuna odvod dane funkcije f.
@@ -494,7 +608,7 @@ osnovnimi operacijami ~+~, ~-~, ~*~, ~/~, s potenco ~a^b~ in funkcijami
 ~sin~, ~cos~, ~exp~ in ~log~.
 Da bo programiranje lažje, bomo funkcijo zapisali v
 [[http://sl.wikipedia.org/wiki/Obrnjeni_poljski_zapis][obrnjeni poljki notaciji]]([[http://en.wikipedia.org/wiki/Reverse_Polish_notation][uporabili bomo angleško kratico RPN]]).
-*** RPN
+*** TODO RPN
 Napiši razred ~RPN~, ki predstavlja funkcijo spremenljivke ~x~
 podano v RPN obliki.
 Razred naj ima atribut ~izraz~, ki naj bo niz oblike
@@ -590,7 +704,7 @@ for x in range(3):
     Check.secret(f.vrednost(x/4+1))
     Check.secret(g.vrednost(x/3+1))
 #+END_SRC
-*** Prikaz RPN izraza  
+*** TODO Prikaz RPN izraza  
 Razredu ~RPN~ dodaj metodo ~__str__~, ki vrne izraz zapisan klasično z
 oklepaji in operatorji.
 Primer:
@@ -658,7 +772,7 @@ Check.secret(str(RPN('1 x cos x ^ sin +')))
 Check.secret(str(RPN('1 log x / sin x +')))
 
 #+END_SRC
-*** Odvod RPN
+*** TODO Odvod RPN
 Razredu ~RPN~ dodaj metodo ~odvod~, ki vrne objekt istega razreda, ki vsebuje
 izraz za odvod po spremenljivki ~x~.
 
@@ -779,7 +893,7 @@ for x in xi:
     Check.secret(RPN('1 x sin + x 2 * log /').odvod().vrednost(x))
 
 #+END_SRC
-*** Odvod potence
+*** TODO Odvod potence
 Dopolni metodo ~odvod~, da deluje tudi za izraze, ki vsebujejo potenco ~^~
 
 Primer:
@@ -892,9 +1006,9 @@ for x in xi:
     Check.secret(RPN("1 x + x x * ^").odvod().vrednost(x))
 #+END_SRC
 
-** Avtomatsko odvajanje
+** TODO Avtomatsko odvajanje
 Naloge ilustrirajo, kako deluje [[https://en.wikipedia.org/wiki/Automatic_differentiation][avtomatsko odvajanje]] računalniških programov.
-*** Preprosta funkcija
+*** TODO Preprosta funkcija
 Funkcija $f$ je podana s Python definicijo
 #+BEGIN_SRC python
 def f(x):
@@ -925,7 +1039,7 @@ Check.secret(df(42))
 Check.secret(df(-123))
 
 #+END_SRC
-*** Malce bolj zapletena funkcija
+*** TODO Malce bolj zapletena funkcija
 Funkcija ~g(x)~ je podana s Python definicijo
 #+BEGIN_SRC python
     def g(x):
@@ -981,7 +1095,7 @@ Check.secret(dg(42))
 for x in range(2,30,3):
     Check.secret(dg(x))
 #+END_SRC
-*** For zanka
+*** TODO For zanka
 Funkcija ~h(x)~ je podana s Python definicijo
 #+BEGIN_SRC python
 
@@ -1041,7 +1155,7 @@ for case in cases:
 for x in range(1,30,3):
     Check.secret(dh(x/10))
 #+END_SRC
-*** Kompozitum funkcij
+*** TODO Kompozitum funkcij
 Funkcija ~k~ je podana s pomožno funkcijo ~r(x)~
 #+BEGIN_SRC python
         def r(x):
@@ -1142,12 +1256,12 @@ for x in range(1,30,3):
     Check.secret(dk(x/10))
     Check.secret(dr(x/10))
 #+END_SRC
-*** Program kot zaporedje(kompozitum) preprostih operacij
-** Numerično odvajanje
-** Tangenta in normala
-* Integral
-** Nedoločeni integral
-*** Integral polinoma
+*** TODO Program kot zaporedje(kompozitum) preprostih operacij
+** TODO Numerično odvajanje
+** TODO Tangenta in normala
+* TODO Integral
+** TODO Nedoločeni integral
+*** TODO Integral polinoma
 Napiši funkcijo ~integral(p)~, ki izračuna integral polinoma ~p~. Polinom 
 $$p(x) = a_n x^n + a_{n-1}x^{n-1}+\ldots + a_1 + a_0$
 naj bo podan s seznamom koeficientov ~p~ $=[a_n,a_{n-1},\ldots a_0]$.
@@ -1170,8 +1284,8 @@ print(integral(p))
       n = len(p)
       return [p[i]/(n-i) for i in range(n)] + [0]
 #+END_SRC
-** Določeni integral
-*** Trapezna formula za določeni integral
+** TODO Določeni integral
+*** TODO Trapezna formula za določeni integral
 Napiši funkcijo ~trapez(f,a,b,n)~, ki izračuna približek integrala
 $$\int_a^bf(x)dx.$$ kot vsoto ploščin trapezov, ki jih dobimo, če interval
 $[a,b]$ razdelimo na podintervale $[x_i,x_{i+1}]$ enake dolžine in povežemo
@@ -1295,7 +1409,7 @@ $$
 #+END_SRC
 
 **** Testi
-*** Dolžina loka krivulje
+*** TODO Dolžina loka krivulje
 Napiši funkcijo ~dolzina(f,a,b,n)~, ki izračuna dolžino loka grafa funkcije
 $f(x)$ kot vsoto dolžin daljic, ki jih dobimo, če razdelimo interval $[a,b]$ na
 podintervale $[x_i,x_{i+1}]$ enake dolžine in povežemo točke
@@ -1431,9 +1545,9 @@ $$ \sqrt{h^2+(f(x_{i+1})-f(x_i))^2}.$$
           d += (h**2 + dy**2)**0.5
       return d
 #+END_SRC
-* Vektorji v ravnini in prostoru
-** Vektorji
-*** Python razred za vektorje
+* TODO Vektorji v ravnini in prostoru
+** TODO Vektorji
+*** TODO Python razred za vektorje
 Razširi razred ~Vektor~, ki predstavlja vektorje kot $n$-terica števil z
 naslednjimi metodami 
 - ~__add__~
@@ -1454,7 +1568,7 @@ ki predstavljajo osnovne operacije med vektorji.
       def __setitem__(self, k, vrednost):
           self.vrednosti[k] = vrednost
       def __iter__(self):
-          self.vrednosti.itervalues()
+          return self.vrednosti.__iter__()
       def __len__(self):
           return len(self.vrednosti)
       def __str__(self):
@@ -1478,14 +1592,11 @@ print(a+b, a-b, 2*a,b*0.5)
 #+name: Vektor_osnove
 #+BEGIN_SRC python
   def __add__(self,b):
-      n = len(self)
-      return Vektor(self[i]+b[i] for i in range(n))
+      return Vektor(ai + bi for ai,bi in zip(self,b))
   def __sub__(self,b):
-      n = len(self)
-      return Vektor(self[i]-b[i] for i in range(n))
+      return Vektor(ai - bi for ai,bi in zip(self,b))
   def __mul__(self,alfa):
-      n = len(self)
-      return Vektor(alfa*self[i] for i in range(n))
+      return Vektor(alfa*ai for ai in self)
   def __rmul__(self,alfa):
       return self.__mul__(alfa)
 
@@ -1494,13 +1605,13 @@ print(a+b, a-b, 2*a,b*0.5)
   setattr(Vektor, '__sub__', __sub__)
   setattr(Vektor, '__mul__', __mul__)
 #+END_SRC
-*** Skalarni in vektorski produkt
+*** TODO Skalarni in vektorski produkt
 Definiraj funkciji ~dot(a,b)~ in ~cross(a,b)~, ki izračuna skalarni in vektorski
 produkt vektorjev ~a~ in ~b~.
 #+name: dot_cross¸
 #+BEGIN_SRC python
   def dot(a,b):
-      return sum(a[i]*b[i] for i in range(len(a)))
+      return sum(ai*bi for ai, bi in zip(a,b))
   def cross(a,b):
       return Vektor(a[1]*b[2]-a[2]*b[1],
                     a[2]*b[0]-a[0]*b[2],
@@ -1511,7 +1622,7 @@ produkt vektorjev ~a~ in ~b~.
 #+RESULTS:
 : None
 
-*** Enakost, kolinearnost in koplanarnost vektorjev
+*** TODO Enakost, kolinearnost in koplanarnost vektorjev
  Npiši funkcijo ~kolinearna(a,b)~, ki preveri ali sta dva vektorja ~a~ in ~b~
  kolinearna in vrne ~True~, če sta kolinearna in ~False~, če nista.
  Vektorja ~a~ in ~b~ sta bodisi seznama tipa ~list~ ali n-terici tipa ~tuple~.
@@ -1557,7 +1668,7 @@ Check.equal('kolinearna([1,0], [1,0,0])', False)
 Check.secret(kolinearna([0,0,1],[0,0,2]))
 Check.secret(kolinearna([1,2],[-1,-2]))
 Check.secret(kolinearna([0,0,1],[0,1,-2]))
-*** Koplanarni vektorji 
+*** TODO Koplanarni vektorji 
 Npiši funkcijo ~koplanarni(a,b,c)~, ki preveri ali trije 3D vektorji ~a~, ~b~ in ~c~
 ležijo na isti ravnini in vrne ~True~, če ležijo in ~False~ sicer.
 Vektorji ~a~, ~b~ in ~c~ so bodisi seznama tipa ~list~ ali n-terici tipa ~tuple~.
@@ -1595,7 +1706,7 @@ Check.secret(koplanarni([1,1,2], [2,1,2],[1,2,1]))
 Check.secret(koplanarni([1,2,1], [1,1,1],[1,3,1]))
 Check.secret(koplanarni([2,2,2], [1,-2,1],[1,1,1]))
 Check.secret(koplanarni([1,1,0], [0,1,2],[1,-1,1]))
-*** Linearna odvisnost
+*** TODO Linearna odvisnost
 Napiši funkcijo ~odvisni(*vektorji)~, ki preveri ali so dani vektorji
 linearno odvisni in vrne ~True~, če so odvisni in ~False~, če niso.
 Vektorji so lahko poljubne dimenzije. Uporabiš
@@ -1628,8 +1739,8 @@ Check.secret(odvisni([1,1,1],[1,2,3],[0,0,0]))
 Check.secret(odvisni([1,1,1],[1,1,2],[0,1,0]))
 #+END_SRC
 
-** Premica in ravnina v 3D
-*** Razred za ravnino v prostoru
+** TODO Premica in ravnina v 3D
+*** TODO Razred za ravnino v prostoru
 Sestavite razred ~Ravnina~, ki predstavlja ravnino v prostoru.
 Razred naj ima metodo ~__init__(self,n,T)~, ki ravnino določi z normalo in točko
 in metodo ~vsebuje(self,T)~, ki preveri ali točka ~T~ leži na ravnini.
@@ -1684,7 +1795,7 @@ Check.secret('Ravnina([1,2,3],[1,2,3])==Ravnina([3,6,9],[14,0,0])')
 Check.secret('Ravnina([0,0,3],[1,2,3])==Ravnina([1,2,3],[14,0,0])')
 Check.secret('Ravnina([0,2,0],[1,2,3])==Ravnina([0,1,0],[1,2,3])')
 #+END_SRC
-*** Razred za premico v prostoru
+*** TODO Razred za premico v prostoru
 Sestavite razred ~Premica~, ki predstavlja premico v prostoru.
 Razred naj ima metodo ~__init__(self,e,T)~, ki premico določi
 s smernim vektorjem ~e~ in točko ~T~. Razred naj ima tudi metodo ~skozi_tocke(A,B)~, ki naj vrne premico skozi točki ~A~ in ~B~ in metodo
@@ -1733,7 +1844,7 @@ Check.secret('Premica([1,2,3],[1,2,3])==Premica([1,2,3],[1,2,-3])')
 Check.secret('Premica([1,2,3],[1,2,3])==Premica([1,2,3],[0,0,0])')
 #+END_SRC
 #+END_SRC
-*** Presečišče premice in ravnine
+*** TODO Presečišče premice in ravnine
 Napišite funkcijo ~presecisce(p,R)~, ki izračuna presečišče
 premice ~p~ in ravnine ~R~. če presečišča ni
 ali jih je neskončno naj funkcija javi napako tipa
@@ -1798,13 +1909,10 @@ for i in range(10):
 Check.secret('presecisce(Premica.skozi_tocke([1,2,3],[0,2,1]),Ravnina([-1,-2,-3],[0,-2,-3]))')
 #+END_SRC
 
-** Raytracing 
-*** Presečišče poltraka in ravnine
-*** Presečišče poltraka in krogle
-** Scena s kroglo in svetilom
+** TODO Raytracing: krogla in točkasto svetilo
 Pri tej nalogi bomo generirali sliko krogle osvetljene z enim točkastim svetilom 
 v praznem prostoru.
-*** Presečišče poltraka in ravnine
+*** TODO Presečišče poltraka in ravnine
 Napiši funkcijo ~presecisce(poltrak, krogla)~, ki izračuna prvo presečišče
 poltraka in krogle oziroma vrne ~None~, če presečišča ni. Poltrak naj bo podan
 kot par trojic ~(T0,e)~, kjer je ~T0~ začetna točka poltraka, ~e~ pa smerni
@@ -1858,7 +1966,7 @@ Check.secret(presecisce(((1,2,-1),(-1,2,2)),((2,3,1),3)))
 Check.secret(presecisce(((1,0,1),(1,2,1)),((2,1,-1),2)))
 Check.secret(presecisce(((1,0,1),(1,2,2)),((5,10,0),6)))
 
-*** Osvetljenost
+*** TODO Osvetljenost
 Napiši funkcijo ~osvetljenost(T, krogla, svetilo)~, ki določi osvetljenost točke ~T~ na obodu krogle ~krogla=(S,r)~,
 če kroglo osvetlimo s svetilom v točki ~S~. Osvetljenost izračunamo s formulo
 $$\frac{\cos{\alpha}}{r^2},$$
@@ -1895,7 +2003,7 @@ Check.equal('osvetljenost((1,0,0),((2,0,0),1),(0,3**0.5,0))', 0.125)
 Check.secret(osvetljenost((1,0,0),((2,0,0),1),(1,3**0.5,0)))
 Check.secret(osvetljenost((0,0,0),((2,0,0),2),(-1,3,0)))
 
-*** Krogla osvetljena s točkastim svetilom 
+*** TODO Krogla osvetljena s točkastim svetilom 
 Napiši funkcijo ~pogled(kamera,okvir, krogla, svetilo, slika)~, ki izdela sliko (~slika~ tipa ~PIL.Image~) ~krogle~ osvetljene s ~svetilom~,
 ki jo naredi ~kamera~ skozi dani ~okvir~.
 
@@ -2035,14 +2143,14 @@ Check.secret(slika.getpixel((100,125)))
 
 #+END_SRC
 
-** Scena s tetraedrom in svetilom
+** TODO Raytracing: tetraeder in točkasto svetilo
 
 Na Khan academy Pixar [[https://www.khanacademy.org/partner-content/pixar/rendering][prikazuje]], kako delajo risane filme.
 Pomemben del procesa, ki pripelje do končnega izdelka je tudi metoda 
 „sledenja žarkom“(angl. raytracing), ki omogoča verno poustvarjanje osvetlitve.
 Ta naloga ilustrira, kako deluje „raytracing“.
 
-*** Presečišče poltraka in ravnine
+*** TODO Presečišče poltraka in ravnine
 
 Definiraj funkcijo ~presek(p, R)~ ki vrne presečišče poltraka ~p~ in ravnine ~R~.
 Če presečišča ni, naj funkcija vrne ~None~. Poltrak je podan kot par dveh točk (trojice števil),
@@ -2102,7 +2210,7 @@ Check.secret(presek(((1,2,0),(1,1,0)),(3,0,1,-4)))
 
 #+END_SRC
 
-*** Na kateri strani ravnine leži točka?
+*** TODO Na kateri strani ravnine leži točka?
 
 Definiraj funkcijo ~stran(T,R)~, ki pove na kateri strani ravnine ~R~ leži točka ~T~. 
 Funkcija naj vrne ~1~, če točka leži nad ravnino (glede na smer normale), ~-1~, če točka leži pod ravnino
@@ -2155,7 +2263,7 @@ Check.secret(stran((0.5,-3,1),(2,2,1,6)))
 
 #+END_SRC
 
-*** Ali leži dana točka na trikotniku ABC?
+*** TODO Ali leži dana točka na trikotniku ABC?
 
 Večina modelov teles v 3D je sestavljena iz majhnih trikotnikov(triangulirana),
 zato mora program za raytracing vedeti, če svetlobni žarek zadene trikotnik in
@@ -2243,7 +2351,7 @@ Check.secret(na_trikotniku((1,-2,0), ((0,0,0), (3,1,2), (0,3,1))))
 Check.secret(na_trikotniku((0,0,0), ((1,-1,0), (3,-2,-1), (-2,3,-1))))
 Check.secret(na_trikotniku((1,1,2), ((0,0,0), (3,0,0), (0,3,0))))
 Check.secret(na_trikotniku((1,1,0.5), ((0,0,1.5), (3,0,0), (0,3,0))))
-*** Kam se odbije žarek
+*** TODO Kam se odbije žarek
 
 Definiraj funkcijo ~odboj(p, R)~, ki pove, kam se odbije svetlobni žarek, ki ga predstavlja poltrak ~p~, ko vpade na ravnino ~R~.
 
@@ -2308,14 +2416,14 @@ Check.secret(odboj(((0,1,1),(-2,-1,2)), (1,6,1,1)))
 
 #+END_SRC
 **** Ali točka leži na trikotniku?
-*** Večkratni odboji
-* Matrike in sistemi enačb
-** Matrike
-*** Python razred za matrike
-** Sistemi enačb
-*** Gaussova eliminacija
-*** Polinomska interpolacija
-*** Maksimum funkcije podane s tabelo
+*** TODO Večkratni odboji
+* TODO Matrike in sistemi enačb
+** TODO Matrike
+*** TODO Python razred za matrike
+** TODO Sistemi enačb
+*** TODO Gaussova eliminacija
+*** TODO Polinomska interpolacija
+*** TODO Maksimum funkcije podane s tabelo
 Napišite funkcijo ~maksimum(x,y)~, ki poišče približno vrednost 
 * Licenca 
 #+BEGIN_EXPORT html
