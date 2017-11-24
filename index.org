@@ -557,7 +557,7 @@ programov, si oglejte na [[https://en.wikipedia.org/wiki/Test-driven_development
 #+END_SRC
 
 #+RESULTS: nicle
-*** Reševanje enačb z bisekcijo
+** Reševanje enačb z bisekcijo
 Reševanje vsake enačbe lahko prevedemo na iskanje ničel funkcije.
 Preprosto prenesemo vse člene na eno stran enačbe.
   
@@ -581,7 +581,7 @@ print(bisekcija(f, (1,2), 0.3))
 
 #+RESULTS:
 : [1.25, 1.5]
-Primer, ko funkcija nima ničle.
+Primer, ko funkcija nima ničle:
 #+BEGIN_SRC python :results output :exports both :eval no-export
   <<bisekcija>>
   try:
@@ -594,30 +594,7 @@ Primer, ko funkcija nima ničle.
 #+RESULTS:
 : <class 'ValueError'>
 
-
-**** Rešitev
-#+name: bisekcija 
-#+BEGIN_SRC python :exports both :eval no-export
-  def bisekcija(f, interval, eps):
-      a,b = interval
-      fa, fb = (f(a),f(b))
-      if fa*fb > 0:
-          raise(ValueError("Vrednosti v krajiščih nimajo različnih predznakov"))
-      while abs(b-a) > eps:
-          c = (a+b)/2
-          fc = f(c)
-          if fa*fc < 0:
-              b, fb = c, fc
-          elif fb*fc <0:
-              a, fa = c, fc
-          elif fc == 0:
-              return [c,c]
-      return [a,b]
-#+END_SRC
-+RESULTS: bisekcija
-: None
-
-**** Testi
+*** Testi
 
 #+BEGIN_SRC python :exports both :eval no-export
   <<bisekcija>>
@@ -628,6 +605,30 @@ Primer, ko funkcija nima ničle.
             self.assertEqual(bisekcija(f,[1,2],0.3),[1.25,1.5])
 
   unittest.main()
+#+END_SRC
+
+
+**** Rešitev
+#+name: bisekcija 
+#+BEGIN_SRC python :exports both :eval no-export
+  def bisekcija(f, interval, eps):
+      """Poišče podinterval intervala interval, ki je dolžine največ eps in na
+      katerem ima funkcija f zagotovo ničlo z metodo bisekcije
+      """
+      a,b = interval
+      fa, fb = (f(a),f(b))
+      if fa*fb > 0:
+          raise(ValueError("Vrednosti v krajiščih nimata različnih predznakov"))
+      while abs(b-a) > eps:
+          c = (a+b)/2
+          fc = f(c)
+          if fa*fc < 0:
+              b, fb = c, fc
+          elif fb*fc <0:
+              a, fa = c, fc
+          elif fc == 0:
+              return [c,c]
+      return [a,b]
 #+END_SRC
 
 *** Sekantna metoda
