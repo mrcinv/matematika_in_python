@@ -15,73 +15,72 @@
 #+PROPERTY: header-args  :results output :exports both :eval no-export 
 #+PROPERTY: header-args  :noweb strip-export 
 * Uvod 
-Pred vami je priročnik o tem, kako uporabiti znanje matematike pri
-programiranju. Priročnik je nastal kot dopolnilno gradivo pri predmetu
-Matematika na Fakulteti za računalništvo in informatiko, Univerze v Ljubljani.
+Pred vami je priročnik, ki vam bo pomagal poglobiti in povezati znanje
+programiranja in matematike. Nastal kot dopolnilno gradivo pri predmetu
+Matematika za študente visokošolskega programa na Fakulteti za računalništvo in
+informatiko Univerze v Ljubljani in je namenjen vsem, ki si pri tem predmetu
+želijo naučiti malo več. Navezuje se na [[http://matematika.fri.uni-lj.si/mat/matvsp.pdf][učbenik]] in obsega naloge in primere s
+področja zaporedij, funkcij, odvoda in integrala, vektorjev in matrik.
 
-Vsebino lahko preskusite tako, da si namestite okolje za programski jezik
-[[https://www.python.org/][Python]]. Naloge so tudi na portalu [[https://www.projekt-tomo.si/course/15/][projekt Tomo]], kjer lahko izdelane rešitve tudi
-zelo enostavno preskusite. Z reševanjem teh nalog boste pridobili tako
-znanje programiranja, kot tudi boljše razumevanje matematičnih pojmov. Obvezno
-za vse, ki hočejo od predmeta nekaj več. Vabljeni ste tudi, da dodate
-predme Matematika med svoje predmete, tako da kliknete na zvezdico nad imen Symbol’s value as variable is void: org-export-use-babelom
-predmeta. 
+Naloge so rešene v programskem jeziku [[http://www.python.org][Python]], objavljene pa tudi na spletnem
+portalu [[https://www.projekt-tomo.si/course/15/][projekt Tomo]], kjer lahko svoje rešitve tudi enostavno preskusite. V
+pomoč pri reševanju nalog so na voljo tudi kratki videi na [[https://www.youtube.com/playlist?list=PLvmhvQsVlBOILqOi3rXooc016UlfcXC-T][YouTube kanalu
+Matematika]]. Priročnik je na voljo v več formatih:
 
-Poleg tega so na voljo tudi kratki vide Symbol’s value as variable is void: org-export-use-babeli na YouTube kanalu.
-
-** Kako brati to knjigo
-Vsekakor priporočamo, da naloge poskusite rešiti povsem samostojno. Rešitve so 
-v začetku skrite, da vas ne bi premamile. Če se vam zatakne, si poglejte najprej
-splošna, matematična navodila za rešitev naloge in poskusite vsaj programerski
-del rešiti sami. Če tudi to ne gre, si le poglejte rešitev. Rešitve ne
-kopirajte, ampak jo raje prepišete ali še bolje napišite sami. Tako bodo vaši
-možgani imeli več od tega.
-
-Knjiga je na voljo v različnih formatih
-
-- [[file:index.html][HTML spletna stran]]
-- [[file:index.pdf][PDF dokument]]
-- predmet [[https://www.projekt-tomo.si/course/15/][Matematika]] na portalu [[https://www.projekt-tomo.si/][Projekt Tomo]]
-- [[http:index.org][izvorna koda]] v obliki  [[https://orgmode.org][Org-mode]] za urejevalnik [[https://www.gnu.org/software/emacs/][Emacs]]
+- [[file:index.html][HTML spletna stran]],
+- [[file:index.pdf][PDF dokument]],
+- predmet [[https://www.projekt-tomo.si/course/15/][Matematika]] na portalu [[https://www.projekt-tomo.si/][Projekt Tomo]] in
+- [[http:index.org][izvorna koda]] v obliki  [[https://orgmode.org][Org-mode]] za urejevalnik [[https://www.gnu.org/software/emacs/][Emacs]].
  
+** Kako uporabljati priročnik
+Vsekakor najprej poskusite rešiti naloge povsem samostojno. Če se vam zatakne,
+si poglejte splošna matematična navodila in poskusite vsaj programerski del
+rešiti sami. Če tudi to ne gre, lahko pokukate v rešitev. Rešitve ne kopirajte,
+ampak jo raje prepišite ali še bolje napišite sami. Tako boste imeli
+več od tega.
+
+
 
 * Zaporedja in vrste
-** Zaporedja
-V vsakdanjem življenju pojem zaporedja pogosto pomeni seznam elementov, pri
-katerem je pomemben vrstni red. Na primer zaporedje plesnih korakov v
-koreografiji, zaporedje števil pri lotu ali pa zaporedje postajališč na liniji
-mestnega prometa. Matematike seveda zanima vse kar je povezano z neskončnostjo,
-zato si pod pojmom zaporedja predstavljamo neskončna zaporedja, ki jih formalno
-definiramo kot funkcijo 
+V vsakdanjem življenju pojem zaporedja pomeni seznam elementov, pri katerem je
+pomemben vrstni red. Na primer zaporedje plesnih korakov v koreografiji,
+zaporedje not v glasbenem zapisu ali zaporedje postajališč na liniji mestnega
+prometa. Ker pa matematike zanima vse, kar je povezano z neskončnostjo, si pod
+pojmom zaporedja predstavljamo neskončna zaporedja. Formalno jih definiramo
+kot funkcijo
 
 $$\mathbb{N}\to A,$$ 
 
 ki vsakemu naravnemu številu $n$
-priredi nek element $a_n=a(n)$ množice $A$. Element $a_n$ imenujemo $n$ - ti
-člen zaporedja. 
+priredi nek element $a_n=a(n)$ iz množice $A$. Element $a_n$ imenujemo $n$ - ti
+člen zaporedja.
 
-V računalništvu si želimo, da se programi končajo, zato nas velikokrat zanimajo
-le končna zaporedja. V Python-u so končna zaporedja najpogosteje predstavljena s
-podatkovnim tipom ~list~, ki predstavlja končni seznam elementov. Z zankami
+V računalništvu si želimo, da se programi končajo, zato nas navadno zanimajo
+le končna zaporedja. V Pythonu so končna zaporedja najpogosteje predstavljena s
+podatkovnim tipom ~list~, ki je končen seznam elementov. Z zankami
 ~for~ in ~while~ se lahko sprehodimo po elementih seznama in izvedemo zaporedje
-ukazov. Najbližje pojmu neskončnega zaporedja sta [[https://wiki.python.org/moin/Iterator][iterator]] in [[https://wiki.python.org/moin/Generators][generator]], ki
-predstavljata posplošitev kolekcij elementov, po katerih se lahko sprehajamo s
-~for~ zanko.
+ukazov.
 
-*** Zaporedje podano s formulo
+Kaj se zgodi, če vse člene zaporedja seštejemo? Dobimo *neskončno vrsto*.
+Neskončna vrsta je namreč po definiciji formalna neskončna vsota členov
+zaporedja. *Vsota neskončne vrste* je število, ki je enako limiti
+delnih vsot prvih $n$ členov zaporedja, ko gre $n$ proti neskončnosti:
+\[\sum_{n=0}^\infty a_n = \lim_{n\to\infty} \left(\sum_{k=0}^n a_k\right).\]   
+** Zaporedje, podano s formulo
+   :PROPERTIES:
+   :HTML_CONTAINER_CLASS: naloga
+   :END:
+Izpiši približne vrednosti prvih 15 členov zaporedja $a_n=\frac{n-1}{n+1}$,
+začenši z $n=0$.
+*** Namig
     :PROPERTIES:
-    :HTML_CONTAINER_CLASS: naloga
+    :HTML_CONTAINER_CLASS: resitev
     :END:
-Izpiši približne vrednosti prvih 15 členov zaporedja $a_n=\frac{n-1}{n+1}$.
-**** Namig
-     :PROPERTIES:
-     :HTML_CONTAINER_CLASS: resitev
-     :END:
-    Uporabi zanko ~for n in range(15):~.
-**** Rešitev 
-     :PROPERTIES:
-     :HTML_CONTAINER_CLASS: resitev
-     :END:
+   Uporabi zanko ~for n in range(15):~.
+*** Rešitev 
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: resitev
+    :END:
     #+BEGIN_SRC python :exports both :eval no-export 
       for n in range(15):
           print((n-1)/(n+1))
@@ -105,43 +104,48 @@ Izpiši približne vrednosti prvih 15 členov zaporedja $a_n=\frac{n-1}{n+1}$.
     0.8571428571428571
     0.8666666666666667
 #+end_example
-*** Seznam členov zaporedja
-    :PROPERTIES:
-    :HTML_CONTAINER_CLASS: naloga
-    :END:
+** Seznam členov zaporedja
+   :PROPERTIES:
+   :HTML_CONTAINER_CLASS: naloga
+   :END:
 V spremenljivko ~a~ zapiši seznam (tipa ~list~) približnih vrednosti prvih 15 členov zaporedja
-$a_n=\frac{n-1}{n+1}$ za $n\in 1,2,\ldots$. Iz seznama izpiši člene $a_1$, $a_5$
+$a_n=\frac{n-1}{n+1}$ za $n\in 0,1,2\ldots$ Iz seznama izpiši člene $a_1$, $a_5$
 in $a_{14}$.
-**** Namig
-     :PROPERTIES:
-     :HTML_CONTAINER_CLASS: resitev
-     :END:
-    Uporabi zanko ~for n in range(15):~ in metodo ~append~.
-**** Rešitev 
-     :PROPERTIES:
-     :HTML_CONTAINER_CLASS: resitev
-     :END:
-    #+BEGIN_SRC python :results output :exports both :eval no-export
-      a = []
-      for n in range(1,16):
-          a.append((n-1)/(n+1))
-      # izpišemo elemente seznama. Pazimo na to, da se indeksi začnejo z 0
-      print("a_1 = %f, a_5 = %f, a_14 = %f" % (a[0], a[4], a[-2]))
-    #+END_SRC
-
-    #+RESULTS:
-    : a_1=0.000000, a_5=0.666667, a_14=0.866667
-
-*** Rekurzivno zaporedje
+*** Namig
     :PROPERTIES:
-    :HTML_CONTAINER_CLASS: naloga
+    :HTML_CONTAINER_CLASS: resitev
     :END:
+   Uporabi zanko ~for n in range(15):~ in metodo ~append~.
+*** Rešitev 
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: resitev
+    :END:
+   #+BEGIN_SRC python :results output :exports both
+     a = []
+     for n in range(15):
+         a.append((n-1)/(n+1))
+     #izpišemo elemente seznama. Pazimo na to, da je prvi element seznama a[0].
+     print("a_1 = %f, a_5 = %f, a_14 = %f" % (a[1], a[5], a[-1]))
+   #+END_SRC
+
+   #+RESULTS:
+   : a_1=0.000000, a_5=0.666667, a_14=0.866667
+
+** Rekurzivno zaporedje
+   :PROPERTIES:
+   :HTML_CONTAINER_CLASS: naloga
+   :END:
 Zaporedje je podano z rekurzivno formulo $$a_{n+1}=\frac{2a_n^3+2}{3a_n^2}$$ in
-začetnim členom $a_0=3$. Zapiši prvih 10 členov zaporedja. Kaj opaziš? 
-**** Rešitev
-     :PROPERTIES:
-     :HTML_CONTAINER_CLASS: resitev
-     :END:
+začetnim členom $a_0=2$. Zapiši prvih 10 členov zaporedja. Kaj opaziš?
+*** Namig
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: resitev
+    :END:
+Nalogo lahko rešiš na dva načina: s ~for~ zanko ali z ~rekurzivno funkcijo~.
+*** Rešitev
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: resitev
+    :END:
 #+BEGIN_SRC python :results output :exports both :eval no-export
   an = 2
   print(an)
@@ -164,62 +168,26 @@ začetnim členom $a_0=3$. Zapiši prvih 10 členov zaporedja. Kaj opaziš?
 1.2599210498948732
 #+end_example
 
-Opazimo, da se členi zaporedja po 5. členu začnejo ponavljati. Zaporedje je verjetno
-*konvergentno*. Zadnjih nekaj členov je zelo dobrih približkov za *limito*.
-**** Rešitev z generatorjem (napredno)
-     :PROPERTIES:
-     :HTML_CONTAINER_CLASS: resitev
-     :END:
-Za ilustracijo nalogo rešimo še z *generatorjem*. Generator je funkcija, ki je
-posebne vrste *iteratorja*. *Iterator* je vsak objekt v Pythonu, ki pozna metodo ~next()~
-in ga lahko uporabimo v ~for~ zanki. Funkcijo spremenimo v *generator* z uporabo
-ukaza ~yield~, ki je zelo podoben ukazu ~return~, le da se ob njegovem klicu
-izvajanje funkcije zamrzne do naslednjega klica metode ~next()~. Z generatorjem
-na ta način lahko definiramo tudi neskončna zaporedja oziroma zaporedja
-poljubnih dolžin.
-
-#+BEGIN_SRC python :results output :exports both :eval no-export
-  def prvih_n_clenov(n):
-      "Generator za prvih n členov zaporedja an"
-      an = 2
-      while n>0:
-          yield an
-          an = (2*an**3+2)/(3*an**2)
-          n -= 1
-  for clen in prvih_n_clenov(10):
-      print(clen)
-#+END_SRC
-
-#+RESULTS:
-#+begin_example
-2
-1.5
-1.2962962962962963
-1.2609322247417485
-1.2599218605659261
-1.2599210498953948
-1.259921049894873
-1.2599210498948732
-1.259921049894873
-1.2599210498948732
-#+end_example
-**** Rešitev z rekurzijo
-     :PROPERTIES:
-     :HTML_CONTAINER_CLASS: resitev
-     :END:
-Zaporedje $a_n$ lahko definiramo tudi z rekurzivno funkcijo. Paziti moramo le,
-da znotraj funkcije opravimo le en klic na isto funkcijo, sicer časovna
-zahtevnost eksponentno narašča.
+Opazimo, da se členi zaporedja po 5. členu začnejo ponavljati. Tako zaporedje je
+zato zelo verjetno *konvergentno*, zadnji izpisani členi pa so zelo dober približek
+za *limito* zaporedja.
+*** Rešitev z rekurzivno funkcijo
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: resitev
+    :END:
+Zaporedje $a_n$ lahko definiramo tudi z *rekurzivno funkcijo*. Paziti moramo le,
+da znotraj funkcije opravimo le en klic funkcije same nase, sicer časovna
+zahtevnost eksponentno narašča z naraščajočim $n$.
 #+BEGIN_SRC python :results output :exports both :eval no-export
   def clen(n):
-      """Rekurzivna funkcija, ki vrne n-ti člen zaporedja podanega z rekurzivno fomulo
-      a(n+1) = (2*a(n)^3 + 2)/(3*a(n)^2)
+      """Rekurzivna funkcija, ki vrne n-ti člen zaporedja, podanega z rekurzivno
+      formulo a(n+1) = (2*a(n)^3 + 2)/(3*a(n)^2).
       """
       if n<=0:
           return 2
       else:
           an = clen(n-1)
-          return (2*an**3 + 2)/(3*an**2) 
+          return (2*an**3 + 2)/(3*an**2)
 
   for n in range(10):
       print(clen(n))
@@ -239,48 +207,93 @@ zahtevnost eksponentno narašča.
 1.2599210498948732
 #+end_example
 
-Kljub temu, da smo se z enim rekurzivnim klicem funkcije izognili eksponentni
-časovni odvisnosti, je pri večkratnih klicih funkcije ~clen~ še vedno
-precej izračunov, ki se vedno znova ponovijo. Ob vsakem zaporednem klicu funkcije ponovno
-izračunamo vse člene od prvega naprej. Časovna zahtevnost ~for~ zanke je tako
-kvadratična, medtem ko je pri prejšnjih rešitvah časovna zahtevnost linearna. 
-*** Konvergenca
+Kljub temu da smo se z enim rekurzivnim klicem funkcije izognili eksponentni
+časovni odvisnosti, je pri večkratnih klicih funkcije ~clen~ še vedno precej
+izračunov, ki se vedno znova ponavljajo. Ob vsakem zaporednem klicu funkcije
+namreč izračunamo vse člene od prvega do tistega, ki ga iščemo. Časovna
+zahtevnost ~for~ zanke je tako kvadratična, medtem ko je pri prejšnji rešitvi
+časovna zahtevnost linearna.
+*** *Rešitev z neskončnim generatorjem
     :PROPERTIES:
-    :HTML_CONTAINER_CLASS: naloga
+    :HTML_CONTAINER_CLASS: resitev
     :END:
-Za zaporedje $$a_n=\frac{n^2+n-1}{1-2n^2},$$ poišči prvi člen $a_n$, ki se za
+Za ilustracijo nalogo rešimo še z *generatorjem*. Generator je funkcija, ki je
+posebne vrste *iteratorja*. *Iterator* je vsak objekt v Pythonu, ki pozna metodo ~next()~
+in ga lahko uporabimo v ~for~ zanki. Funkcijo spremenimo v generator z uporabo
+ukaza ~yield~, ki je zelo podoben ukazu ~return~, le da se ob njegovem klicu
+izvajanje funkcije zamrzne do naslednjega klica metode ~next()~. Na ta način
+lahko z generatorjem definiramo tudi neskončna zaporedja oziroma zaporedja,
+katerih dolžin ne poznamo vnaprej.
+
+Napisali bomo neskončen generator, zato moramo v zanki posebej poskrbeti, da se
+le ta ustavi. To storimo tako, da s stavkom ~if~ preverimo, ali moramo izvajanje
+zaključiti (z ukazom ~break~).
+
+#+BEGIN_SRC python :results output :exports both :eval no-export
+  def generator_clenov():
+      "Generator za prvih n členov zaporedja an"
+      an = 2
+      while True:
+          yield an
+          an = (2*an**3+2)/(3*an**2)
+  n = 0
+  for clen in generator_clenov:
+      print(clen)
+      if n>9:
+          break
+      n += 1
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+2
+1.5
+1.2962962962962963
+1.2609322247417485
+1.2599218605659261
+1.2599210498953948
+1.259921049894873
+1.2599210498948732
+1.259921049894873
+1.2599210498948732
+#+end_example
+** Konvergenca zaporedja
+   :PROPERTIES:
+   :HTML_CONTAINER_CLASS: naloga
+   :END:
+Za zaporedje $$a_n=\frac{n^2+n-1}{1-2n^2}$$ poišči prvi člen $a_n$, ki se za
 manj kot
-$\varepsilon=\frac{1}{100}$ razlikuje od limite.
-**** Namig
-     :PROPERTIES:
-     :HTML_CONTAINER_CLASS: resitev
-     :END:
+$\varepsilon=0,01$ razlikuje od limite zaporedja $a_n$. Na ta način lahko
+ugotovimo, kako „hitro“ dano zaporedje konvergira oziroma, pri katerem $n$ se
+členi prvič približajo limiti na manj kot $\varepsilon$. 
+*** Namig
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: resitev
+    :END:
 Poišči najmanjše naravno število $n$, da bo $|a_n-a|<\varepsilon$, kjer je  
 $$a=\lim_{n\to\infty}a_n=-\frac{1}{2}.$$ Uporabi zanko ~while~.
-**** Rešitev
-     :PROPERTIES:
-     :HTML_CONTAINER_CLASS: resitev
-     :END:
+*** Rešitev
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: resitev
+    :END:
 #+BEGIN_SRC python :results output :exports both :eval no-export
   n = 0
   a = -0.5
   eps = 0.01
   while abs((n**2+n-1)/(1-2*n**2)-a)>eps:
       n += 1
-  print(n)
+  print("n = %d" % n)
 #+END_SRC
 
 #+RESULTS:
-: 50
-**** Rešitev z generatorjem
-     :PROPERTIES:
-     :HTML_CONTAINER_CLASS: resitev
-     :END:
-Za ilustracijo nalogo rešimo še z *generatorjem*. Napisali bomo neskončen
-generator, zato moramo v zanki posebej poskrbeti, da se le ta ustavi.
-
+: n = 50
+*** *Rešitev z neskončnim generatorjem
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: resitev
+    :END:
+Za ilustracijo nalogo rešimo še z generatorjem. 
 #+BEGIN_SRC python :results output :exports both :eval no-export
-  def zaporedje():
+  def generator_clenov():
       n = 0
       while True:
           yield n, (n**2+n-1)/(1-2*n**2)
@@ -288,7 +301,7 @@ generator, zato moramo v zanki posebej poskrbeti, da se le ta ustavi.
   a = -0.5
   eps = 0.01
 
-  for n, clen in zaporedje():
+  for n, clen in generator_clenov():
       if abs(clen-a)<eps:
           print("n = %d" % n)
           break
@@ -297,68 +310,70 @@ generator, zato moramo v zanki posebej poskrbeti, da se le ta ustavi.
 #+RESULTS:
 : n = 50
 
-** Vrste
-
-*** Delne vsote vrste
-    :PROPERTIES:
-    :HTML_CONTAINER_CLASS: naloga
-    :END:
+** Delne vsote vrste
+   :PROPERTIES:
+   :HTML_CONTAINER_CLASS: naloga
+   :END:
 Izpiši prvih 15 delnih vsot neskončne vrste 
 $$\sum_{n=1}^\infty \frac{1}{2^n}.$$
 Kaj se ti zdi, kateremu številu je enaka vsota neskončne vrste?
 
-**** Namig
-     :PROPERTIES:
-     :HTML_CONTAINER_CLASS: resitev
-     :END:
-  V zanki ~for n in range(1,16):~ prištevaj člene zaporedja izbrani
-  spremenljivki, ki jo pred zanko postaviš na 0.
+*** Namig
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: resitev
+    :END:
+ V zanki ~for n in range(1,16):~ prištevaj člene zaporedja izbrani
+ spremenljivki, ki jo pred zanko postaviš na 0.
 
-**** Rešitev    
-     :PROPERTIES:
-     :HTML_CONTAINER_CLASS: resitev
-     :END:
- Uporabimo preprosto zanko ~for~
- #+BEGIN_SRC python :results output :exports both :eval no-export
-   S = 0
-   for n in range(1,16):
-       S += 1/2**n
-       print(S)
- #+END_SRC
+*** Rešitev    
+    :PROPERTIES:
+    :HTML_CONTAINER_CLASS: resitev
+    :END:
+#+BEGIN_SRC python :results output :exports both :eval no-export
+  S = 0
+  for n in range(1,16):
+      S += 1/2**n
+      print(S)
+#+END_SRC
 
- #+RESULTS:
- #+begin_example
- 0.5
- 0.75
- 0.875
- 0.9375
- 0.96875
- 0.984375
- 0.9921875
- 0.99609375
- 0.998046875
- 0.9990234375
- 0.99951171875
- 0.999755859375
- 0.9998779296875
- 0.99993896484375
- 0.999969482421875
- #+end_example
+#+RESULTS:
+#+begin_example
+0.5
+0.75
+0.875
+0.9375
+0.96875
+0.984375
+0.9921875
+0.99609375
+0.998046875
+0.9990234375
+0.99951171875
+0.999755859375
+0.9998779296875
+0.99993896484375
+0.999969482421875
+#+end_example
 
-*** Vsota vrste
-Za vrsto $$4\sum_{n=0}^\infty\left(-1\right)^n \frac{1}{1+2n}$$ je znano, da je
-njena vsota enaka številu $\pi$. Preveri, da delne vsote te vrste res
-konvergirajo k $\pi$. Napiši program (funkcijo) ~konvergenca~, ki za poljuben
-$\varepsilon > 0$ poišče $n$, od katerega so vse delne vsote za manj kot
-$\varepsilon$ oddaljene od $\pi$. Svoj program preskusi za
-$\varepsilon=10^{-4}$. Kako majhen je lahko $\varepsilon$, da se program izvede v manj kot
-nekaj sekundah (npr. 10s). 
+** Vsota vrste
+Že v 17. stoletju sta James Gregory in Gottfried Leibniz uporabila vrsto
+$$4\sum_{n=0}^\infty\left(-1\right)^n \frac{1}{1+2n}$$ za izračun števila $\pi$.
+Vrsto sta izpeljala iz zapisa $\arctan(x)$ s potenčno vrsto. 
 
-**** Namig
-Uporabite zanko ~while~, pri kateri preverite, če je trenutna delna vsota
-oddaljena za manj kot $\varepsilon$ oddaljena od $\pi$.
+Napiši program (funkcijo) ~konvergenca~, ki za poljuben $\varepsilon > 0$ poišče
+$n$, od katerega naprej so vse delne vsote za manj kot $\varepsilon$ oddaljene
+od $\pi$ in tako pokaži, da vrsta res konvergira k $\pi$. 
+Svoj program preskusi za $\varepsilon=10^{-4}$. 
 
-**** Rešitev
+Koliko pravilnih decimalk števila $\pi$ lahko tvoj program izračuna v manj 
+kot 10 sekundah? Pri tem se moramo zavedati, da je čas izvajanja programa
+odvisen od hitrosti in zasedenosti procesorja.
+
+*** Namig
+Uporabi zanko ~while~, v kateri preveri, ali je trenutna delna vsota za manj kot
+$\varepsilon$ oddaljena od $\pi$. Čas lahko meriš s funkcijo ~time~ modula ~time~.
+
+*** Rešitev
 #+BEGIN_SRC python :results output :exports both :eval no-export
   import time
   from math import pi
@@ -372,47 +387,70 @@ oddaljena za manj kot $\varepsilon$ oddaljena od $\pi$.
           S += (-1)**n*4/(1 + 2*n)
           n += 1
       return n-1
-  zacetek = time.time() 
-  n = konvergenca(0.0001)
-  print("n=%d (v %f sekundah)" % (n, time.time() - zacetek))
+  zacetek = time.time()
+  eps = 0.0001 
+  n = konvergenca(eps)
+  print("eps = %f, n = %d (v %f sekundah)" % (eps, n, time.time() - zacetek))
+  # v manj kot 10 s lahko izračunamo 7 pravilnih decimalk števila pi.
+  zacetek = time.time()
+  eps =  0.00000005
+  n = konvergenca(eps)
+  print("eps = %f, n = %d (v %f sekundah)" % (eps, n, time.time() - zacetek))
 #+END_SRC
 
 #+RESULTS:
 : n=9999 (v 0.008709 sekundah)
 
-* TODO Funkcije
-** TODO Ničle funkcij in enačbe
-Preskusili boste različne metode za iskanje ničel funkcije. Ničla funkcije
-$f(x)$ je vrednost spremenljivke $x$ za katero $f(x)=0$.
-*** TODO Ničle tabelirane funkcije
-Za zvezno funkcija poznamo le nekaj posameznih vrednosti. Podana imamo dva
-seznama enake dolžine ~x~ in ~y~, tako da velja ~y[i] == f(x[i])~.
+* Funkcije
+Funkcija $f$ je predpis, ki vsakemu številu $x$ iz izbrane množice priredi določeno
+število $f(x)$. Številu $x$, ki ga vstavimo v $f$, pravimo *argument*, številu
+$f(x)$ pa *vrednost funkcije* $f$ pri argumentu $x$.
 
-Napišite funkcijo ~nicle(x,y)~, ki izračuna približne vrednosti ničel, tako da
-funkcijo nadomesti z /linearnim zlepkom/ in izračuna ničle zlepka. Linearni zlepek
-dobimo tako, da graf funkcije $f(x)$
-nadomestimo z daljicami (linearno funkcijo $y=kx+n$) med točkami, ki so podane s
-seznamoma ~x~ in ~y~.
+Tudi funkcije, kot jih poznamo v Pythonu, so neke vrste predpisi, ki za vhodne
+argumentom vrne določeno vrednost. Seveda pa funkcije v Pythonu lahko delajo
+tudi druge stvari, npr. izpisujejo obvestila, shranjujejo rezultate v datoteke,
+itd.
 
-Funkcija ~nicle(x,y)~ naj vrne seznam približkov za ničle, urejenih po velikosti. Primer:
+V tem poglavju bomo spoznali različne metode za iskanje ničel funkcij, hornerjev
+algoritem za računanje vrednosti polinoma in postopek za računanje vrednosti
+kotnih funkcij. 
+** Ničle tabelirane funkcije
+Ničla funkcije $f(x)$ je vrednost spremenljivke $x$, za katero
+velja $f(x)=0$. 
 
-#+BEGIN_SRC python :noweb strip-export :exports both :exports both :eval no-export
+Naj bo zvezna funkcija $f(x)$ znana le v nekaj diskretnih vrednostih $x$. Podana
+imamo torej dva seznama enake dolžine ~x~ in ~y~, tako da velja ~y[i] == f(x[i])~.
+
+Napiši funkcijo ~nicle(x,y)~, ki izračuna približne vrednosti ničel funkcije
+$f(x)$, tako da funkcijo nadomesti z *linearnim zlepkom* in izračuna ničle
+zlepka. Linearni zlepek dobimo tako, da graf funkcije $f(x)$ nadomestimo z
+daljicami (linearno funkcijo $y=kx+n$) med točkami, ki so podane s seznamoma ~x~
+in ~y~.
+
+Funkcija ~nicle(x,y)~ naj vrne seznam približkov za ničle. Približki naj bodo
+urejeni po velikosti. 
+
+Primer vhodnih podatkov in klica funkcije:
+
+#+BEGIN_SRC python :noweb strip-export :exports both :exports both
 <<nicle>>
 x = [-1, 0, 1, 2, 3]
 y = [1, -1, 1, 2, 3]
-print(nicle(x,y))
+x0 = nicle(x, y)
+print(x0)
 #+END_SRC
 
 #+RESULTS:
 : [-0.5, 0.5]
-**** Matematična izpeljava
+*** Matematična izpeljava
 Označimo z $x_1,x_2,\ldots,x_n$ in z $y_1,y_2,\ldots, y_n$ vrednosti v tabelah
 ~x~ in ~y~. Za neznano zvezno funkcijo $f$ velja 
 $$y_i=f(x_i).$$
 
-Ker je $f4 zvezna, lahko z gotovostjo trdimo, da je ničla na intervalu
-$[x_i,x_{i+1}]$, kjer sta $y_i$ in $y_{i+1}$ različnega predznaka. Najprej mora
-funkcija ~nicle~ poiskati intervale, kjer se to zgodi.
+Pri tem smo privzeli, da so vrednosti $x_i$ urejene po velikosti. Sicer jih
+najprej uredimo. Ker je $f$ zvezna, lahko z gotovostjo trdimo, da je ničla na intervalu
+$[x_i,x_{i+1}]$, če sta $y_i$ in $y_{i+1}$ različnega predznaka. Torej mora
+funkcija ~nicle~ najprej poiskati intervale, kjer se to zgodi.
 
 Denimo, da je na intervalu $[x_i,x_{i+1}]$ ničla. Enačbo za odsek linearnega
 zlepka na tem intervalu dobimo tako, da poiščemo enačbo premice skozi točki na
@@ -462,10 +500,54 @@ trikotniki:
 
 #+RESULTS:
 [[file:zlepek.png]]
+*** Test 
+S testi preverimo pravilnost delovanja napisanih programov. Python ponuja
+različne možnosti za pisanje testov. Za začetek bomo uporabili najpreprostejši
+način, to je z uporabo ukaza ~assert~.
+
+Napisano funkcijo najprej shranimo v datoteko, npr. ~nicle.py~. V datoteko
+shranimo tudi testno kodo, npr. ~test_nicle.py~. Potem poženemo ~test_nicle.py~
+z ukazom
+#+BEGIN_SRC shell
+python test_nicle.py
+#+END_SRC
+Če test ne izpiše ničesar, je koda uspešno prestala test. V nasprotnem primeru
+program javi napako tipa ~AssertionError~.
+
+Delovanje funkcije je smiselno preveriti na več različnih podatkih, po možnosti
+naključno generiranih. Zato je v programu ~test_nicle.py~ več vrstic z ukazom
+~assert~, ki funkcijo ~nicle~ preverijo na različne načine. Več o testiranju
+programov, si oglejte na [[https://en.wikipedia.org/wiki/Test-driven_development][Wikipedii]].
+
+#+BEGIN_SRC python :noweb strip-export :exports both :eval no-export :tangle test_nicle.py
+  import random
+
+  from nicle import nicle
+  assert(nicle([-1, 0, 1, 2, 3], [1, -1, 1, 2, 3]) == [-0.5, 0.5])
+  assert(nicle([1, 2, 3], [1, 1, 1]) == [])
+  assert(nicle([2, 1, 3], [-1, -1, 1]) == [2.5])
+  x = [random.random() for i in range(3)]
+  y = [random.random() - 0.5 for i in range(3)] 
+  x0 = nicle(x, y)
+  m = min(x)
+  M = max(x)
+  for nicla in x0:
+    assert(nicla < M) # preverimo, ali je rezultat manjši od največjega x
+    assert(m < nicla)
+#+END_SRC
+
+#+RESULTS:
+
 **** Rešitev
 #+name: nicle
-#+BEGIN_SRC python  :exports both :eval no-export
+#+BEGIN_SRC python  :exports both :eval no-export :tangle nicle.py
   def nicle(x, y):
+      # x-e najprej uredimo po velikosti
+      x_in_indeksi = sorted(enumerate(x), key=lambda x: x[1])
+      x = [element[1] for element in x_in_indeksi]
+      # v istem vrstnem redu premešamo tudi y-ne
+      indeksi = [element[0] for element in x_in_indeksi]
+      y = [y[indeks] for indeks in indeksi] 
       x_n = []
       for i in range(len(x)-1):
           if y[i]*y[i+1]<0:
@@ -475,32 +557,19 @@ trikotniki:
 #+END_SRC
 
 #+RESULTS: nicle
-**** Testi 
-S spodnjo kodo lahko preskusite pravilnost delovanja vaše funkcije
-#+BEGIN_SRC python :noweb strip-export :exports both :eval no-export
-  <<nicle>>
-  import unittest
-  import random
+*** Reševanje enačb z bisekcijo
+Reševanje vsake enačbe lahko prevedemo na iskanje ničel funkcije.
+Preprosto prenesemo vse člene na eno stran enačbe.
+  
+[[https://en.wikipedia.org/wiki/Bisection_method][Metoda bisekcije]] temelji na dejstvu, da ima vsaka zvezna funkcija, ki ima v
+krajiščih intervala različna predznaka, na tem intervalu zagotovo vsaj
+eno ničlo. 
 
-  class NicleTest(unittest.TestCase):
-      def test_primer(self):
-          self.assertEqual(nicle([-1, 0, 1, 2, 3], [1, -1, 1, 2, 3]), [-0.5, 0.5])
-
-  unittest.main()
-#+END_SRC
-
-#+RESULTS:
-
-*** TODO Bisekcija
-Če ima zvezna funkcija v krajiščih intervala različna predznaka, potem je na tem
-intervalu zagotovo vsaj ena ničla. To dejstvo uporabi metoda bisekcije, s katero
-lahko poiščemo ničle. 
-
-Napišite funkcijo ~bisekcija(f, interval, eps)~, ki z bisekcijo poišče interval
-dolžine največ eps, na katerem je ničla funkcije $f$. Krajišči začetnega intervala
-sta podani v seznamu ~interval~. Funkcija naj vrne seznam s krajišči intervala. Če
-vrednosti na intervalu nimajo različnega predznaka, naj funkcija javi napako
-tipa ~ValueError~. 
+Napišite funkcijo ~bisekcija(f, interval, eps)~, ki z bisekcijo poišče interval,
+krajši od ~eps~, na katerem zagotovo leži ničla funkcije $f$. Krajišči začetnega
+intervala sta podani v seznamu ~interval~. Funkcija naj vrne seznam s krajišči
+iskanega intervala. Če vrednosti na intervalu nimajo različnega predznaka, naj
+funkcija javi napako tipa ~ValueError~.
 
 Primer:
 
@@ -512,20 +581,19 @@ print(bisekcija(f, (1,2), 0.3))
 
 #+RESULTS:
 : [1.25, 1.5]
-
+Primer, ko funkcija nima ničle.
 #+BEGIN_SRC python :results output :exports both :eval no-export
   <<bisekcija>>
   try:
     f = lambda x: x**2-2
     bisekcija(f,(2,3),0.3)
   except ValueError as err:
-    print(err)
+    print(type(err))
 #+END_SRC
 
 #+RESULTS:
-: Vrednosti v krajiščih nimajo različnih predznakov
+: <class 'ValueError'>
 
-ValueError: Na intervalu ni ničle.
 
 **** Rešitev
 #+name: bisekcija 
@@ -562,22 +630,47 @@ ValueError: Na intervalu ni ničle.
   unittest.main()
 #+END_SRC
 
-*** TODO Sekantna metoda
-S sekantno metodo konstruiramo zaporedje približkov, ki se približujejo ničli
-funkcije, tako da začnemo z dvema približkoma, izračunamo presečišče sekante
-skozi dve točki na grafu funkcije in
+*** Sekantna metoda
+S [[https://sl.wikipedia.org/wiki/Sekantna_metoda][sekantno metodo]] konstruiramo zaporedje približkov, ki se približujejo ničli
+funkcije, tako da začnemo z dvema približkoma za ničlo. Nato izračunamo sekanto
+skozi dve točki na grafu funkcije, ki ustrezata izbranima približkoma. Nov
+približek dobimo kot presečišče sekante in x-osi. Postopek ponovimo z novim
+približkom in enim od začetnih. Postopek nato ponavljamo, dokler vrednost
+funkcije $f(x_n)$ v zadnjem približku $x_n$ ni manjši od vnaprej predpisanega
+števila $\varepsilon$.
 
-Primer:
+Napiši funkcijo ~x0, iteracije = sekantna(f,a,b,eps,maxit=100)~, ki za Python
+funkcijo ~f~ poišče približek za ničlo s sekantno metodo. Argumenta ~a~ in ~b~
+sta začetna približka, ~eps~ je število $\varepsilon$, ki določi, kdaj smo našli
+ničlo \[|f(x_n)|<\varepsilon,\] ~maxit~ pa je največje število iteracij, preden
+prekinemo program, če ne najdemo ničle.
+
+Funkcija ~sekantna~ naj vrne dve vrednosti. Prva vrednost naj bo približek za
+ničlo ali ~None~, če ničle ne najdemo. Druga vrednost, ki naj jo ~sekantna~ vrne
+naj bo število korakov sekantne metode, ki smo jih potrebovali, da smo prišli do
+približka.
+
+Primer enačbe $x^2-2=0$, katere rešitev je $\sqrt(2)$:
 #+BEGIN_SRC python :exports both :results output :exports both :eval no-export
 <<sekantna>>
 f = lambda x: x*x-2
 print(sekantna(f,1,2,1e-5))
-print(2**0.5)
+print("%f: Vrednost 2^0.5, ki jo vrne Python" % 2**0.5)
 #+END_SRC
 
 #+RESULTS:
-: 1.4142135620573204
-: 1.4142135623730951
+: (1.4142135620573204, 4)
+: 1.414214: Vrednost 2^0.5, ki jo vrne Python
+
+Še en primer za enačbo, ki nima ničel ($x^2+2=0$):
+#+BEGIN_SRC python :exports both :results output :exports both :eval no-export
+<<sekantna>>
+f = lambda x: x*x+2
+print(sekantna(f,1,2,1e-5))
+#+END_SRC
+
+#+RESULTS:
+: (None, 100)
 
 **** Rešitev
 #+name: sekantna
@@ -594,9 +687,9 @@ print(2**0.5)
 #+RESULTS: sekantna
 : None
 
-** Izračun vrednosti polinoma
+** Izračun vrednosti polinoma 
 *** Hornerjev algoritem
-** Kotne funkcije
+** Kotne funkcije 
 *** Tabela kotnih funkcij
 Napiši program, ki generira tabeli kotnih funkcij $\sin$ in $\cos$ na intervalu
 $[0,2\pi]$  v točkah $$x_i=i\frac{\pi}{100};\quad i=0,\ldots, 200.$$ Uporabi
@@ -625,17 +718,17 @@ $$\sin(x)\simeq x\text{ in } \cos(x)\simeq 1;\quad |x|<10^{-1}.$$
 *** Sinus in kosinus 2
 Funkcijo iz prejšnje naloge razširi na vsa realna števila. Uporabi periodičnost
 in simetrije funkcij $\sin$ in $\cos$.
-* TODO Odvod
-** TODO Simbolično odvajanje
+* Odvod
+** Simbolično odvajanje
 
-Naloga ilustrira kako deluje simbolično odvajanje.
+Naslednje naloge ilustrirajo, kako deluje simbolično odvajanje.
 Napisati želimo funkcijo v Pythonu, ki izračuna odvod dane funkcije f.
 Pri tem se omejimo le na funkcije, ki jih je mogoče izraziti z
 osnovnimi operacijami ~+~, ~-~, ~*~, ~/~, s potenco ~a^b~ in funkcijami
 ~sin~, ~cos~, ~exp~ in ~log~.
 Da bo programiranje lažje, bomo funkcijo zapisali v
 [[http://sl.wikipedia.org/wiki/Obrnjeni_poljski_zapis][obrnjeni poljki notaciji]]([[http://en.wikipedia.org/wiki/Reverse_Polish_notation][uporabili bomo angleško kratico RPN]]).
-*** TODO RPN
+*** RPN
 Napiši razred ~RPN~, ki predstavlja funkcijo spremenljivke ~x~
 podano v RPN obliki.
 Razred naj ima atribut ~izraz~, ki naj bo niz oblike
@@ -644,7 +737,7 @@ Razred naj ima atribut ~izraz~, ki naj bo niz oblike
     'arg1 arg2 op1 arg3 ... argn funk',
 #+END_EXAMPLE
 
-sestavljen iz besed, ločenih s presledki, ki so
+sestavljen iz besed, ločenih s presledki. Besede so lahko
 
  - argumenti: število ali ~'x'~,
  - operacije: ~'+'~, ~'-'~, ~'*'~, ~'/'~ ali ~'^'~
@@ -717,7 +810,7 @@ class RPN:
         return sklad.pop()
 
 #+END_SRC
-**** Testi
+**** TODO Testi                                                    :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 Check.part()
 from math import sin
@@ -731,7 +824,7 @@ for x in range(3):
     Check.secret(f.vrednost(x/4+1))
     Check.secret(g.vrednost(x/3+1))
 #+END_SRC
-*** TODO Prikaz RPN izraza  
+*** Prikaz RPN izraza  
 Razredu ~RPN~ dodaj metodo ~__str__~, ki vrne izraz zapisan klasično z
 oklepaji in operatorji.
 Primer:
@@ -788,7 +881,7 @@ class RPN:
         return sklad.pop()
 
 #+END_SRC
-**** Testi
+**** TODO Testi :noexport:
 #+BEGIN_SRC python
 
 Check.part()
@@ -799,16 +892,17 @@ Check.secret(str(RPN('1 x cos x ^ sin +')))
 Check.secret(str(RPN('1 log x / sin x +')))
 
 #+END_SRC
-*** TODO Odvod RPN
+*** Odvod RPN
 Razredu ~RPN~ dodaj metodo ~odvod~, ki vrne objekt istega razreda, ki vsebuje
 izraz za odvod po spremenljivki ~x~.
 
 Primer:
-
+#+BEGIN_EXAMPLE
     >>> f = RPM.new('1 x +')
     >>> df = f.odvod()
     >>> print(df.vrednost(1))
     1.0
+#+END_EXAMPLE
 
 Testnih primerov ne bomo navajali, ker je možno nalogo rešiti na več načinov,
 pri katerih bo izraz za odvod različen (čeprav pravilen).
@@ -818,11 +912,11 @@ Za ilustracijo si poglejmo izraze
     '1 x +', 'x 1 +' in '1 x 1 + *',
 #+END_EXAMPLE
 
-ki oba predstavljajo isto funkcijo ~f(x)=x+1~.
-Testirmo tako, da izračunamo vrednost odvoda v nekaj naključno izbranih
+ki predstavljajo isto funkcijo ~f(x)=x+1~.
+Testiramo tako, da izračunamo vrednost odvoda v nekaj naključno izbranih
 fiksnih točkah, s čimer pravilnost odvoda precej dobro preverimo.
 
-Dovolj je, da metoda ~odvod~ deluje za izraze, ki ne vsebujejo potence ~'^'~.
+Za začetek je dovolj, da metoda ~odvod~ deluje za izraze, ki ne vsebujejo potence ~'^'~.
 
 **** Rešitev
 #+BEGIN_SRC python :exports both :eval no-export
@@ -907,7 +1001,7 @@ class RPN:
         return RPN(dfsklad.pop())
 
 #+END_SRC
-**** Testi
+**** TODO Testi                                                    :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 
 Check.part()
@@ -920,17 +1014,19 @@ for x in xi:
     Check.secret(RPN('1 x sin + x 2 * log /').odvod().vrednost(x))
 
 #+END_SRC
-*** TODO Odvod potence
-Dopolni metodo ~odvod~, da deluje tudi za izraze, ki vsebujejo potenco ~^~
+*** Odvod potence
+Dopolni metodo ~odvod~, da deluje tudi za izraze, ki vsebujejo potenco ~^~.
 
 Primer:
 
+#+BEGIN_EXAMPLE
     >>> f = RPM('x 2 ^')
     >>> df = f.odvod()
     >>> print(df.vrednost(1))
     2.0
     >>> RPN('2 x ^').odvod().vrednost(0) # vrniti mora log(2)
     0.6931471805599453
+#+END_EXAMPLE
 **** Rešitev
 #+BEGIN_SRC python :exports both :eval no-export
 
@@ -1017,7 +1113,7 @@ class RPN:
         return RPN(dfsklad.pop())
 
 #+END_SRC
-**** Testi
+**** TODO Testi                                                    :noexport:
 
 #+BEGIN_SRC python :exports both :eval no-export
 Check.part()
@@ -1033,29 +1129,36 @@ for x in xi:
     Check.secret(RPN("1 x + x x * ^").odvod().vrednost(x))
 #+END_SRC
 
-** TODO Avtomatsko odvajanje
+** Avtomatsko odvajanje
 Naloge ilustrirajo, kako deluje [[https://en.wikipedia.org/wiki/Automatic_differentiation][avtomatsko odvajanje]] računalniških programov.
-*** TODO Preprosta funkcija
+Računalniški program je le zaporedje osnovnih računskih operacij. Kontrolne
+strukture, kot so ~if~ stavek pa le odločijo, katero zaporedje računskih
+operacij se bo izvedlo. Zato lahko programe odvajamo kot kompozitume funkcij. 
+*** Preprosta funkcija
 Funkcija $f$ je podana s Python definicijo
 #+BEGIN_SRC python :exports both :eval no-export
-def f(x):
-    y = x**2
-    return y
+  def f(x):
+      "Funkcija f(x) = x^2"
+      y = x**2
+      return y
 #+END_SRC
-Sestavite funkcijo ~df(x)~, ki vrne vrednost odvoda funkcije f
+Sestavite funkcijo ~df(x)~, ki vrne vrednost odvoda funkcije $f$
 izračunanega v točki ~x~.
-Na primer:
 
+Na primer klic ~f(1)~ naj vrne vrednost odvoda $f$ v ~1~:
+#+BEGIN_EXAMPLE
     >>> df(1)
     2
     >>> df(2)
     4
+#+END_EXAMPLE
 **** Rešitev
 #+BEGIN_SRC python :exports both :eval no-export
-def df(x):
-    return 2*x
+  def df(x):
+      "Odvod funkcije x^2"
+      return 2*x
 #+END_SRC
-**** Testi
+**** TODO Testi                                                    :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 
 Check.part()
@@ -1066,13 +1169,14 @@ Check.secret(df(42))
 Check.secret(df(-123))
 
 #+END_SRC
-*** TODO Malce bolj zapletena funkcija
+*** Malce bolj zapletena funkcija
 Funkcija ~g(x)~ je podana s Python definicijo
 #+BEGIN_SRC python :exports both :eval no-export
     def g(x):
+      "Malce bolj zapletena funkcija."
       y = x**2
       y = x*(1/y+y)
-      return y
+      return round(y, 10)
 #+END_SRC
 
 Sestavite funkcijo ~dg(x)~, ki vrne vrednost odvoda ~g'(x)~ funkcije ~g~
@@ -1087,16 +1191,23 @@ Na primer:
     11.75
 #+END_SRC
 **** Rešitev
+Paziti moramo na vrstni red. Končni rezultat lahko zapišemo kot kompozitum
+dveh $y_2(x)=x(\frac{1}{y_1(x)}+y_1(x))$, kjer je $y_1(x)=x^2$. Zanima nas
+vrednost $y_2'(x)$. Uporabimo pravilo za produkt in verižno pravilo in dobimo, da je 
+\[y_2'(x) = (\frac{1}{y_1(x)}+y_1(x))+x(-\frac{1}{y_1(x)^2}y_1'(x) + y_1'(x))\],
+pri čemer je $y_1'(x)=2x$. Vrednost odvoda $y_2$ moramo izračunati, preden
+povozimo vrednosti funkcije $y_1$ v spremenljivki ~y~ z novo vrednostjo.   
 #+BEGIN_SRC python :exports both :eval no-export
 # definicija z odvajanjem kode
 def dg(x):
+    "Odvod malce bolj zapletene funkcije"
     dy = 2*x
     y = x**2
     dy = (1/y+y)+x*(1-1/y**2)*dy
     y = x*(1/y+y)
     return round(dy,10)
 #+END_SRC
-**** Testi
+**** TODO Testi                                                    :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 # Definicija s formulo
 def dg_formula(x):
@@ -1122,43 +1233,46 @@ Check.secret(dg(42))
 for x in range(2,30,3):
     Check.secret(dg(x))
 #+END_SRC
-*** TODO For zanka
+*** For zanka
 Funkcija ~h(x)~ je podana s Python definicijo
 #+BEGIN_SRC python
-
     def h(x):
+      "Funkcija s for zanko."
       y = 1
       for n in range(10):
         y = (x/y+y)/2
-      return y
+      return round(y,10)
 #+END_SRC
 
-Sestavite funkcijo ~dh(x)~, ki vrne vrednost odvoda funkcije g
+Sestavite funkcijo ~dh(x)~, ki vrne vrednost odvoda funkcije ~h(x)~
 izračunanega v točki ~x~. Končni rezultat zaokrožite z ~round(y,10)~.
 
 Na primer:
-#+BEGIN_SRC python
+
+#+BEGIN_EXAMPLE
     >>> dh(1)
     0.5
     >>> dh(4)
     0.25
-#+END_SRC
+#+END_EXAMPLE
+
 **** Namig
 Predelajte kodo za funkcijo ~h~ tako, da hkrati s
 funkcijo računate še njen odvod. Vsaki vrstici kode dodajte
-vrstico v kateri posodobite vrednost odvoda.
+vrstico v kateri posodobite vrednost odvoda. Pazite na vrstni red!
 Katera pravila za odvajanje morate uporabiti?
 **** Rešitev
 #+BEGIN_SRC python :exports both :eval no-export
 def dh(x):
-    y = 1
+    "Odvod funkcije s for zanko"
     dy = 0
+    y = 1
     for n in range(10):
         dy = ((1*y-dy*x)/y**2+dy)/2
         y = (x/y+y)/2
     return round(dy,10)
 #+END_SRC
-**** Testi
+**** TODO Testi :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 # funkcija h v resnici računa x^(1/2) s Haronovim obrazcem (tangentno metodo)
 def dh_aprox(x):
@@ -1182,16 +1296,18 @@ for case in cases:
 for x in range(1,30,3):
     Check.secret(dh(x/10))
 #+END_SRC
-*** TODO Kompozitum funkcij
+*** Kompozitum funkcij
 Funkcija ~k~ je podana s pomožno funkcijo ~r(x)~
 #+BEGIN_SRC python
         def r(x):
+            "Pomožna funkcija."
             y = 1
             for i in range(1,10):
                 y = x+y
                 y = 1/(i*y)
             return y
         def k(x):
+            "Funkcija, ki kliče drugo funkcijo."
             y = x
             for i in range(5):
                 y = x*r(y)**2
@@ -1247,7 +1363,7 @@ def dk(x):
     return round(dy,10)
 
 #+END_SRC
-**** Testi
+**** TODO Testi                                                    :noexport:
 #+BEGIN_SRC python  :exports both :eval no-export
 
 Check.part()
@@ -1283,14 +1399,14 @@ for x in range(1,30,3):
     Check.secret(dk(x/10))
     Check.secret(dr(x/10))
 #+END_SRC
-*** TODO Program kot zaporedje(kompozitum) preprostih operacij
-** TODO Numerično odvajanje
+*** TODO Program kot zaporedje(kompozitum) preprostih operacij     :noexport:
+** Numerično odvajanje
 *** Deljene diference za prvi odvoda
 *** Deljene diference za drugi odvod
-** TODO Tangenta in normala
-* TODO Integral
-** TODO Nedoločeni integral
-*** TODO Integral polinoma
+** Tangenta in normala
+* Integral 
+** Nedoločeni integral
+*** Integral polinoma
 Napiši funkcijo ~integral(p)~, ki izračuna integral polinoma ~p~. Polinom 
 $$p(x) = a_n x^n + a_{n-1}x^{n-1}+\ldots + a_1 + a_0$
 naj bo podan s seznamom koeficientov ~p~ $=[a_n,a_{n-1},\ldots a_0]$.
@@ -1299,12 +1415,12 @@ Primer:
 
 #+BEGIN_SRC python :exports both :results output :exports both :eval no-export
 <<integral>>
-p = [4,3,2,1] # polinom x^3 + 2 x^2 +3x +4
+p = [1,1,1,1] # polinom x^3 +  x^2 + x + 4
 print(integral(p))
 #+END_SRC
 
 #+RESULTS:
-: [1.0, 1.0, 1.0, 1.0, 0]
+: [0.25, 0.3333333333333333, 0.5, 1.0, 0]
 
 **** Rešitev
 #+name: integral
@@ -1313,8 +1429,8 @@ print(integral(p))
       n = len(p)
       return [p[i]/(n-i) for i in range(n)] + [0]
 #+END_SRC
-** TODO Določeni integral
-*** TODO Trapezna formula za določeni integral
+** Določeni integral
+*** Trapezna formula za določeni integral
 Napiši funkcijo ~trapez(f,a,b,n)~, ki izračuna približek integrala
 $$\int_a^bf(x)dx.$$ kot vsoto ploščin trapezov, ki jih dobimo, če interval
 $[a,b]$ razdelimo na podintervale $[x_i,x_{i+1}]$ enake dolžine in povežemo
@@ -1438,7 +1554,7 @@ $$
 #+END_SRC
 
 **** Testi
-*** TODO Dolžina loka krivulje
+*** Dolžina loka krivulje
 Napiši funkcijo ~dolzina(f,a,b,n)~, ki izračuna dolžino loka grafa funkcije
 $f(x)$ kot vsoto dolžin daljic, ki jih dobimo, če razdelimo interval $[a,b]$ na
 podintervale $[x_i,x_{i+1}]$ enake dolžine in povežemo točke
@@ -1567,6 +1683,8 @@ $$ \sqrt{h^2+(f(x_{i+1})-f(x_i))^2}.$$
 #+name: dolzina
 #+BEGIN_SRC python :exports both :eval no-export
   def dolzina(f,a,b,n):
+      """Izračuna približek za dolžine loka grafa funkcije f na intervalu [a,b],
+      tako da krivuljo aproksimira z lomljenko sestavljeno iz n daljic."""
       h = (b-a)/n
       d = 0
       for i in range(n):
@@ -1574,16 +1692,10 @@ $$ \sqrt{h^2+(f(x_{i+1})-f(x_i))^2}.$$
           d += (h**2 + dy**2)**0.5
       return d
 #+END_SRC
-* TODO Vektorji v ravnini in prostoru
-** TODO Vektorji
-*** TODO Python razred za vektorje
-Razširi razred ~Vektor~, ki predstavlja vektorje kot $n$-terica števil z
-naslednjimi metodami 
-- ~__add__~
-- ~__sub__~
-- ~__mul__~
-- ~__rmul__~
-ki predstavljajo osnovne operacije med vektorji.
+* Vektorji v ravnini in prostoru 
+** Vektorji
+*** Python razred za vektorje
+Spodaj napisani preprost razred ~Vektor~ predstavlja vektorje kot $n$-terice števil.
 #+name: Vektor
 #+BEGIN_SRC python :exports both :eval no-export
   class Vektor:
@@ -1594,8 +1706,6 @@ ki predstavljajo osnovne operacije med vektorji.
               self.vrednosti = tuple(vred)
       def __getitem__(self, k):
           return self.vrednosti[k]
-      def __setitem__(self, k, vrednost):
-          self.vrednosti[k] = vrednost
       def __iter__(self):
           return self.vrednosti.__iter__()
       def __len__(self):
@@ -1604,7 +1714,14 @@ ki predstavljajo osnovne operacije med vektorji.
           return str(self.vrednosti)
 #+END_SRC
 
-Primer
+Razred ~Vektor~ razširi z naslednjimi metodami 
+- ~__add__~
+- ~__sub__~
+- ~__mul__~
+- ~__rmul__~
+ki predstavljajo osnovne operacije med vektorji oziroma med vektorji in števili.
+
+Primer:
 
 #+BEGIN_SRC python :results output :exports both :eval no-export
 <<Vektor>>
@@ -1634,9 +1751,9 @@ print(a+b, a-b, 2*a,b*0.5)
   setattr(Vektor, '__sub__', __sub__)
   setattr(Vektor, '__mul__', __mul__)
 #+END_SRC
-*** TODO Skalarni in vektorski produkt
+*** Skalarni in vektorski produkt
 Definiraj funkciji ~dot(a,b)~ in ~cross(a,b)~, ki izračuna skalarni in vektorski
-produkt vektorjev ~a~ in ~b~.
+produkt dveh vektorjev ~a~ in ~b~.
 #+name: dot_cross¸
 #+BEGIN_SRC python :exports both :eval no-export
   def dot(a,b):
@@ -1651,7 +1768,7 @@ produkt vektorjev ~a~ in ~b~.
 #+RESULTS:
 : None
 
-*** TODO Enakost, kolinearnost in koplanarnost vektorjev
+*** Enakost, kolinearnost in koplanarnost vektorjev
  Npiši funkcijo ~kolinearna(a,b)~, ki preveri ali sta dva vektorja ~a~ in ~b~
  kolinearna in vrne ~True~, če sta kolinearna in ~False~, če nista.
  Vektorja ~a~ in ~b~ sta bodisi seznama tipa ~list~ ali n-terici tipa ~tuple~.
@@ -1689,7 +1806,7 @@ kolinearna([3,2], [6,4]), kolinearna((0,0,1), (1,0,0))
 
 #+RESULTS: kolinearna
 
-**** Testi
+**** TODO Testi                                                    :noexport:
 Check.part()
 Check.equal('kolinearna([1,2,3], [2,4,6])', True)
 Check.equal('kolinearna([0,0,0,0], [1,2,3,4])', True)
@@ -1697,7 +1814,7 @@ Check.equal('kolinearna([1,0], [1,0,0])', False)
 Check.secret(kolinearna([0,0,1],[0,0,2]))
 Check.secret(kolinearna([1,2],[-1,-2]))
 Check.secret(kolinearna([0,0,1],[0,1,-2]))
-*** TODO Koplanarni vektorji 
+*** Koplanarni vektorji 
 Npiši funkcijo ~koplanarni(a,b,c)~, ki preveri ali trije 3D vektorji ~a~, ~b~ in ~c~
 ležijo na isti ravnini in vrne ~True~, če ležijo in ~False~ sicer.
 Vektorji ~a~, ~b~ in ~c~ so bodisi seznama tipa ~list~ ali n-terici tipa ~tuple~.
@@ -1723,7 +1840,7 @@ def koplanarni(a, b, c):
     # pri koplanarnih vektorjih je mešani produkt enak 0
     return dot(a,cross(b,c)) == 0
 #+END_SRC
-**** Testi
+**** TODO Testi                                                    :noexport:
 Check.part()
 Check.equal('koplanarni([1,2,0], [2,4,0],[-2,3,0])', True)
 Check.equal('koplanarni([1,0,0], [0,1,0],[0,0,1])', False)
@@ -1735,7 +1852,7 @@ Check.secret(koplanarni([1,1,2], [2,1,2],[1,2,1]))
 Check.secret(koplanarni([1,2,1], [1,1,1],[1,3,1]))
 Check.secret(koplanarni([2,2,2], [1,-2,1],[1,1,1]))
 Check.secret(koplanarni([1,1,0], [0,1,2],[1,-1,1]))
-*** TODO Linearna odvisnost
+*** Linearna odvisnost
 Napiši funkcijo ~odvisni(*vektorji)~, ki preveri ali so dani vektorji
 linearno odvisni in vrne ~True~, če so odvisni in ~False~, če niso.
 Vektorji so lahko poljubne dimenzije. Uporabiš
@@ -1757,7 +1874,7 @@ def odvisni(*vektorji):
     matrika = np.array(vektorji)
     return np.linalg.matrix_rank(matrika)<len(vektorji)
 #+END_SRC
-**** Testi
+**** TODO Testi                                                    :noexport:
 
 #+BEGIN_SRC python :exports both :eval no-export
 Check.part()
@@ -1768,8 +1885,8 @@ Check.secret(odvisni([1,1,1],[1,2,3],[0,0,0]))
 Check.secret(odvisni([1,1,1],[1,1,2],[0,1,0]))
 #+END_SRC
 
-** TODO Premica in ravnina v 3D
-*** TODO Razred za ravnino v prostoru
+** Premica in ravnina v 3D
+*** Razred za ravnino v prostoru
 Sestavite razred ~Ravnina~, ki predstavlja ravnino v prostoru.
 Razred naj ima metodo ~__init__(self,n,T)~, ki ravnino določi z normalo in točko
 in metodo ~vsebuje(self,T)~, ki preveri ali točka ~T~ leži na ravnini.
@@ -1806,7 +1923,7 @@ class Ravnina:
         # preverimo, če sta vektorja koeficientov kolinearna (ne najbolj optimalno)
         return a*f == b*e and a*g==c*e and b*g==c*f and a*h==d*e and b*h==d*f and c*h==d*g
 #+END_SRC
-**** Testi
+**** TODO Testi                                                    :noexport:
 
 #+BEGIN_SRC python :exports both :eval no-export
 Check.part()
@@ -1824,7 +1941,7 @@ Check.secret('Ravnina([1,2,3],[1,2,3])==Ravnina([3,6,9],[14,0,0])')
 Check.secret('Ravnina([0,0,3],[1,2,3])==Ravnina([1,2,3],[14,0,0])')
 Check.secret('Ravnina([0,2,0],[1,2,3])==Ravnina([0,1,0],[1,2,3])')
 #+END_SRC
-*** TODO Razred za premico v prostoru
+*** Razred za premico v prostoru
 Sestavite razred ~Premica~, ki predstavlja premico v prostoru.
 Razred naj ima metodo ~__init__(self,e,T)~, ki premico določi
 s smernim vektorjem ~e~ in točko ~T~. Razred naj ima tudi metodo ~skozi_tocke(A,B)~, ki naj vrne premico skozi točki ~A~ in ~B~ in metodo
@@ -1860,7 +1977,7 @@ class Premica:
         r,s,t = T0T
         return a*s == b*r and a*t==c*r and b*t==c*s and a*e == b*d and a*f==c*d and b*f==c*e
 #+END_SRC
-**** Testi
+**** TODO Testi                                                    :noexport:
 #+BEGIN_SRC python
 
 Check.part()
@@ -1873,7 +1990,7 @@ Check.secret('Premica([1,2,3],[1,2,3])==Premica([1,2,3],[1,2,-3])')
 Check.secret('Premica([1,2,3],[1,2,3])==Premica([1,2,3],[0,0,0])')
 #+END_SRC
 #+END_SRC
-*** TODO Presečišče premice in ravnine
+*** Presečišče premice in ravnine
 Napišite funkcijo ~presecisce(p,R)~, ki izračuna presečišče
 premice ~p~ in ravnine ~R~. če presečišča ni
 ali jih je neskončno naj funkcija javi napako tipa
@@ -1918,7 +2035,7 @@ def presecisce(p,R):
 
 #+END_SRC
 
-**** Testi
+**** TODO Testi                                                    :noexport:
 
 #+BEGIN_SRC python :exports both :eval no-export
 Check.part()
@@ -1938,10 +2055,10 @@ for i in range(10):
 Check.secret('presecisce(Premica.skozi_tocke([1,2,3],[0,2,1]),Ravnina([-1,-2,-3],[0,-2,-3]))')
 #+END_SRC
 
-** TODO Raytracing: krogla in točkasto svetilo
+** Raytracing: krogla in točkasto svetilo
 Pri tej nalogi bomo generirali sliko krogle osvetljene z enim točkastim svetilom 
 v praznem prostoru.
-*** TODO Presečišče poltraka in ravnine
+*** Presečišče poltraka in ravnine
 Napiši funkcijo ~presecisce(poltrak, krogla)~, ki izračuna prvo presečišče
 poltraka in krogle oziroma vrne ~None~, če presečišča ni. Poltrak naj bo podan
 kot par trojic ~(T0,e)~, kjer je ~T0~ začetna točka poltraka, ~e~ pa smerni
@@ -1995,7 +2112,7 @@ Check.secret(presecisce(((1,2,-1),(-1,2,2)),((2,3,1),3)))
 Check.secret(presecisce(((1,0,1),(1,2,1)),((2,1,-1),2)))
 Check.secret(presecisce(((1,0,1),(1,2,2)),((5,10,0),6)))
 
-*** TODO Osvetljenost
+*** Osvetljenost
 Napiši funkcijo ~osvetljenost(T, krogla, svetilo)~, ki določi osvetljenost točke ~T~ na obodu krogle ~krogla=(S,r)~,
 če kroglo osvetlimo s svetilom v točki ~S~. Osvetljenost izračunamo s formulo
 $$\frac{\cos{\alpha}}{r^2},$$
@@ -2032,7 +2149,7 @@ Check.equal('osvetljenost((1,0,0),((2,0,0),1),(0,3**0.5,0))', 0.125)
 Check.secret(osvetljenost((1,0,0),((2,0,0),1),(1,3**0.5,0)))
 Check.secret(osvetljenost((0,0,0),((2,0,0),2),(-1,3,0)))
 
-*** TODO Krogla osvetljena s točkastim svetilom 
+*** Krogla osvetljena s točkastim svetilom 
 Napiši funkcijo ~pogled(kamera,okvir, krogla, svetilo, slika)~, ki izdela sliko (~slika~ tipa ~PIL.Image~) ~krogle~ osvetljene s ~svetilom~,
 ki jo naredi ~kamera~ skozi dani ~okvir~.
 
@@ -2148,7 +2265,7 @@ def pogled(camera, okvir, krogla, svetilo, slika):
 
 #+END_SRC
 
-**** Testi 
+**** TODO Testi                                                    :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 
 Check.part()
@@ -2172,14 +2289,14 @@ Check.secret(slika.getpixel((100,125)))
 
 #+END_SRC
 
-** TODO Raytracing: tetraeder in točkasto svetilo
+** Raytracing: tetraeder in točkasto svetilo
 
 Na Khan academy Pixar [[https://www.khanacademy.org/partner-content/pixar/rendering][prikazuje]], kako delajo risane filme.
 Pomemben del procesa, ki pripelje do končnega izdelka je tudi metoda 
 „sledenja žarkom“(angl. raytracing), ki omogoča verno poustvarjanje osvetlitve.
 Ta naloga ilustrira, kako deluje „raytracing“.
 
-*** TODO Presečišče poltraka in ravnine
+*** Presečišče poltraka in ravnine
 
 Definiraj funkcijo ~presek(p, R)~ ki vrne presečišče poltraka ~p~ in ravnine ~R~.
 Če presečišča ni, naj funkcija vrne ~None~. Poltrak je podan kot par dveh točk (trojice števil),
@@ -2223,7 +2340,7 @@ def presek(p, R):
 
 #+END_SRC
 
-**** Testi
+**** TODO Testi                                                    :noexport:
 
 #+BEGIN_SRC python :exports both :eval no-export
 
@@ -2239,7 +2356,7 @@ Check.secret(presek(((1,2,0),(1,1,0)),(3,0,1,-4)))
 
 #+END_SRC
 
-*** TODO Na kateri strani ravnine leži točka?
+*** Na kateri strani ravnine leži točka?
 
 Definiraj funkcijo ~stran(T,R)~, ki pove na kateri strani ravnine ~R~ leži točka ~T~. 
 Funkcija naj vrne ~1~, če točka leži nad ravnino (glede na smer normale), ~-1~, če točka leži pod ravnino
@@ -2275,7 +2392,7 @@ def stran(T, R):
 
 #+END_SRC
 
-**** Točke
+**** TODO Testi                                                    :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 
 Check.part()
@@ -2292,7 +2409,7 @@ Check.secret(stran((0.5,-3,1),(2,2,1,6)))
 
 #+END_SRC
 
-*** TODO Ali leži dana točka na trikotniku ABC?
+*** Ali leži dana točka na trikotniku ABC?
 
 Večina modelov teles v 3D je sestavljena iz majhnih trikotnikov(triangulirana),
 zato mora program za raytracing vedeti, če svetlobni žarek zadene trikotnik in
@@ -2380,7 +2497,7 @@ Check.secret(na_trikotniku((1,-2,0), ((0,0,0), (3,1,2), (0,3,1))))
 Check.secret(na_trikotniku((0,0,0), ((1,-1,0), (3,-2,-1), (-2,3,-1))))
 Check.secret(na_trikotniku((1,1,2), ((0,0,0), (3,0,0), (0,3,0))))
 Check.secret(na_trikotniku((1,1,0.5), ((0,0,1.5), (3,0,0), (0,3,0))))
-*** TODO Kam se odbije žarek
+*** Kam se odbije žarek
 
 Definiraj funkcijo ~odboj(p, R)~, ki pove, kam se odbije svetlobni žarek, ki ga predstavlja poltrak ~p~, ko vpade na ravnino ~R~.
 
@@ -2445,15 +2562,20 @@ Check.secret(odboj(((0,1,1),(-2,-1,2)), (1,6,1,1)))
 
 #+END_SRC
 **** Ali točka leži na trikotniku?
-*** TODO Večkratni odboji
-* TODO Matrike in sistemi enačb
-** TODO Matrike
-*** TODO Python razred za matrike
-** TODO Sistemi enačb
-*** TODO Gaussova eliminacija
-*** TODO Polinomska interpolacija
-*** TODO Maksimum funkcije podane s tabelo
-Napišite funkcijo ~maksimum(x,y)~, ki poišče približno vrednost 
+*** TODO Večkratni odboji :noexport:
+* Matrike in sistemi enačb 
+** Matrike
+*** Python razred za matrike
+** Sistemi enačb
+*** Gaussova eliminacija
+Napišite funkcijo, ki izvede Gaussovo eliminacijo na matriki podani kot dvojni
+seznam.
+*** Polinomska interpolacija
+Napišite funkcijo ~f = interpoliraj(x,y)~, ki vrne funkcijo ~f~, ki izračuna vrednosti
+interpolacijskega polinoma, ki interpolira podatke ~x~ in ~y~.
+*** Maksimum funkcije podane s tabelo
+Napišite funkcijo ~maksimum(x,y)~, ki poišče približno vrednost lokacije
+maksimuma in vrednosti maksima s pomočjo kvadratne interpolacije.  
 * Licenca 
 #+BEGIN_EXPORT html
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
