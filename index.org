@@ -42,7 +42,8 @@ več od tega.
 
 
 
-* TODO Zaporedja in vrste
+* DONE Zaporedja in vrste
+  CLOSED: [2017-11-27 pon 09:42]
 V vsakdanjem življenju pojem zaporedja pomeni seznam elementov, pri katerem je
 pomemben vrstni red. Na primer zaporedje plesnih korakov v koreografiji,
 zaporedje not v glasbenem zapisu ali zaporedje postajališč na liniji mestnega
@@ -262,6 +263,13 @@ zaključiti (z ukazom ~break~).
    :PROPERTIES:
    :HTML_CONTAINER_CLASS: naloga
    :END:
+*Limita* zaporedja je število $a$ s posebno lastnostjo, da so vsi členi
+zaporedja $a_m$ za $m>n$ poljubno blizu *limite*, če je le $n$ dovolj velik. 
+Zaporedje je *konvergentno*, če ima limito. Bolj natančno: $a$ je limita
+zaporedja $a_n$, če za vsak $\varepsilon>0$ obstaja $n$, tako da velja
+\[a - \varepsilon < a_m < a + \varepsilon\] 
+za vse indekse $m$, ki so večji od $n$.
+
 Za zaporedje $$a_n=\frac{n^2+n-1}{1-2n^2}$$ poišči prvi člen $a_n$, ki se za
 manj kot
 $\varepsilon=0,01$ razlikuje od limite zaporedja $a_n$. Na ta način lahko
