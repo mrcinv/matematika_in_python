@@ -417,8 +417,8 @@ Funkcija $f$ je predpis, ki vsakemu številu $x$ iz izbrane množice priredi dol
 število $f(x)$. Številu $x$, ki ga vstavimo v $f$, pravimo *argument*, številu
 $f(x)$ pa *vrednost funkcije* $f$ pri argumentu $x$.
 
-Tudi funkcije, kot jih poznamo v Pythonu, so neke vrste predpisi, ki za vhodne
-argumentom vrne določeno vrednost. Seveda pa funkcije v Pythonu lahko delajo
+Tudi funkcije, kot jih poznamo v Pythonu, so neke vrste predpisi, ki za dane vhodne
+argumente vrne določeno vrednost. Seveda pa funkcije v Pythonu lahko delajo
 tudi druge stvari, npr. izpisujejo obvestila, shranjujejo rezultate v datoteke,
 itd.
 
@@ -523,7 +523,8 @@ z ukazom
 python test_nicle.py
 #+END_SRC
 Če test ne izpiše ničesar, je koda uspešno prestala test. V nasprotnem primeru
-program javi napako tipa ~AssertionError~.
+program javi napako tipa ~AssertionError~ in prikaže mesto v testni kodi, kjer
+je prišlo do napake.
 
 Delovanje funkcije je smiselno preveriti na več različnih podatkih, po možnosti
 naključno generiranih. Zato je v programu ~test_nicle.py~ več vrstic z ukazom
@@ -549,7 +550,8 @@ programov, si oglejte na [[https://en.wikipedia.org/wiki/Test-driven_development
 
 #+RESULTS:
 
-**** Rešitev
+Datoteka s testi file:test_nicle.py
+*** Rešitev
 #+name: nicle
 #+BEGIN_SRC python  :exports both :eval no-export :tangle nicle.py
   def nicle(x, y):
@@ -566,15 +568,20 @@ programov, si oglejte na [[https://en.wikipedia.org/wiki/Test-driven_development
               x_n.append(nicla)
       return x_n
 #+END_SRC
-
 #+RESULTS: nicle
-** Reševanje enačb z bisekcijo
+Datoteka s programom file:nicle.py
+** DONE Reševanje enačb z bisekcijo
+   CLOSED: [2017-11-27 pon 11:12]
 Reševanje vsake enačbe lahko prevedemo na iskanje ničel funkcije.
-Preprosto prenesemo vse člene na eno stran enačbe.
+Preprosto prenesemo vse člene na eno stran enačbe. Zato se večina metod za
+reševanje enačb prevede na iskanje ničel funkcije.
   
 [[https://en.wikipedia.org/wiki/Bisection_method][Metoda bisekcije]] temelji na dejstvu, da ima vsaka zvezna funkcija, ki ima v
 krajiščih intervala različna predznaka, na tem intervalu zagotovo vsaj
-eno ničlo. 
+eno ničlo. Začnemo z intervalom, pri katerem ima funkcija na krajiščih različen
+predznak. Nato izračunamo vrednost funkcije na sredini in izberemo
+polovico intervala, kjer je predznak vrednosti funkcije različen. Postopek
+ponavljamo, dokler interval ni dovolj majhen.
 
 Napišite funkcijo ~bisekcija(f, interval, eps)~, ki z bisekcijo poišče interval,
 krajši od ~eps~, na katerem zagotovo leži ničla funkcije $f$. Krajišči začetnega
@@ -606,22 +613,43 @@ Primer, ko funkcija nima ničle:
 : <class 'ValueError'>
 
 *** Testi
+Testiranje z ukazom ~assert~ ima omejitve, zato se za testiranje programov
+uporablja knjižnice posebej namenjene pisanju testov. Poglejmo si uporabo
+knjižnice [[https://docs.python.org/3/library/unittest.html][unittest]], ki je na voljo skupaj s Pythonom. Za vsak testni primer,
+definiramo nov razred, ki je podrazred razreda ~unittest.TestCase~. Vse metode
+našega razreda, ki se začnejo na ~test~, se obravnavajo kot testi in bodo
+pognani ob klicu ~unittest.main()~. Lahko definiramo tudi druge pomožne metode, ki pa 
+#+BEGIN_SRC python :results output :exports both :eval no-export :tangle test_bisekcija.py
+from bisekcija import bisekcija
+import unittest
+class BisekcijaTest(unittest.TestCase):
+      def test_primer(self):
+          f1 = lambda x: x**2 - 2
+          interval = bisekcija(f1, [1, 2], 0.3)
+          self.assertEqual(interval, [1.25, 1.5])
+          # preverimo, če vrne napako
+          with self.assertRaises(ValueError):
+              f2 = lambda x: x**2 + 2
+              bisekcija(f2, [1, 2], 0.1)
+      def test_implicitno(self):
+          eps = 0.1
+          f3 = lambda x: x**3 - x - 2
+          interval = bisekcija(f3, [1, 2], eps)
+          # preverimo lastnosti pravilne rešitve
+          self.assertEqual(len(interval), 2)
+          self.assertTrue(self.f3(interval[0])*self.f3(interval[1]) < 0)
+          self.assertTrue(abs(interval[1] - interval[0]) < eps)
 
-#+BEGIN_SRC python :exports both :eval no-export
-  <<bisekcija>>
-  import unittest
-  class BisekcijaTest(unittest.TestCase):
-        def test_primer(self):
-            f = lambda x: x**-2
-            self.assertEqual(bisekcija(f,[1,2],0.3),[1.25,1.5])
-
-  unittest.main()
+unittest.main()
 #+END_SRC
 
+#+RESULTS:
 
-**** Rešitev
+Datoteka file:test_bisekcija.py
+
+*** Rešitev
 #+name: bisekcija 
-#+BEGIN_SRC python :exports both :eval no-export
+#+BEGIN_SRC python :exports both :eval no-export :tangle bisekcija.py
   def bisekcija(f, interval, eps):
       """Poišče podinterval intervala interval, ki je dolžine največ eps in na
       katerem ima funkcija f zagotovo ničlo z metodo bisekcije
@@ -642,14 +670,14 @@ Primer, ko funkcija nima ničle:
       return [a,b]
 #+END_SRC
 
-*** Sekantna metoda
-S [[https://sl.wikipedia.org/wiki/Sekantna_metoda][sekantno metodo]] konstruiramo zaporedje približkov, ki se približujejo ničli
-funkcije, tako da začnemo z dvema približkoma za ničlo. Nato izračunamo sekanto
-skozi dve točki na grafu funkcije, ki ustrezata izbranima približkoma. Nov
-približek dobimo kot presečišče sekante in x-osi. Postopek ponovimo z novim
-približkom in enim od začetnih. Postopek nato ponavljamo, dokler vrednost
-funkcije $f(x_n)$ v zadnjem približku $x_n$ ni manjši od vnaprej predpisanega
-števila $\varepsilon$.
+Datoteka [[file:test_bisekcija.py][bisekcija.py]]
+** Sekantna metoda
+S [[https://sl.wikipedia.org/wiki/Sekantna_metoda][sekantno metodo]] konstruiramo zaporedje približkov za ničlo funkcije, tako da
+začnemo z dvema približkoma. Nato izračunamo sekanto skozi točki na
+grafu funkcije, ki ustrezata izbranima približkoma. Nov približek dobimo kot
+presečišče sekante in x-osi. Postopek ponovimo z novim približkom in enim od
+začetnih. Postopek nato ponavljamo, dokler vrednost funkcije $f(x_n)$ v zadnjem
+približku $x_n$ ni manjša od vnaprej predpisanega števila $\varepsilon$.
 
 Napiši funkcijo ~x0, iteracije = sekantna(f,a,b,eps,maxit=100)~, ki za Python
 funkcijo ~f~ poišče približek za ničlo s sekantno metodo. Argumenta ~a~ in ~b~
@@ -664,15 +692,17 @@ približka.
 
 Primer enačbe $x^2-2=0$, katere rešitev je $\sqrt(2)$:
 #+BEGIN_SRC python :exports both :results output :exports both :eval no-export
-<<sekantna>>
-f = lambda x: x*x-2
-print(sekantna(f,1,2,1e-5))
-print("%f: Vrednost 2^0.5, ki jo vrne Python" % 2**0.5)
+  <<sekantna>>
+  f = lambda x: x*x-2
+  x, iteracij = sekantna(f, 1, 2, 1e-5)
+  print("Vrednost, ki jo dobimo s sekantno metodo po {} korakih: {}"
+        .format(iteracij, x))
+  print("Vrednost 2^0.5, ki jo vrne Python: {}".format(2**0.5))
 #+END_SRC
 
 #+RESULTS:
-: (1.4142135620573204, 4)
-: 1.414214: Vrednost 2^0.5, ki jo vrne Python
+: Vrednost, ki jo dobimo s sekantno metodo po 4 korakih: 1.4142135620573204
+: Vrednost 2^0.5, ki jo vrne Python: 1.4142135623730951
 
 Še en primer za enačbo, ki nima ničel ($x^2+2=0$):
 #+BEGIN_SRC python :exports both :results output :exports both :eval no-export
@@ -684,7 +714,7 @@ print(sekantna(f,1,2,1e-5))
 #+RESULTS:
 : (None, 100)
 
-**** Rešitev
+*** Rešitev
 #+name: sekantna
 #+BEGIN_SRC python :exports both :eval no-export
   def sekantna(f,a,b,eps, maxit=100):
