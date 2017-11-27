@@ -2,8 +2,8 @@
 #+SETUPFILE: org-bootstrap-document/setup.org
 #+OPTIONS: ':nil *:t -:t ::t <:t H:4 \n:nil ^:t arch:headline author:t
 #+OPTIONS: broken-links:nil c:nil creator:nil d:(not "LOGBOOK") date:t e:t
-#+OPTIONS: email:t f:t inline:t num:3 p:nil pri:nil prop:nil stat:t tags:t
-#+OPTIONS: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
+#+OPTIONS: email:t f:t inline:t num:2 p:nil pri:nil prop:nil stat:t tags:t
+#+OPTIONS: tasks:t tex:t timestamp:t title:t toc:t todo:nil |:t
 #+TITLE: Matematika skozi Python
 #+DATE: <2017-01-26 čet>
 #+AUTHOR: Martin Vuk
@@ -14,7 +14,8 @@
 #+CREATOR: Emacs 25.1.1 (Org mode 9.0.3)
 #+PROPERTY: header-args  :results output :exports both :eval no-export 
 #+PROPERTY: header-args  :noweb strip-export 
-* Uvod 
+* DONE Uvod 
+  CLOSED: [2017-11-26 ned 22:55]
 Pred vami je priročnik, ki vam bo pomagal poglobiti in povezati znanje
 programiranja in matematike. Nastal kot dopolnilno gradivo pri predmetu
 Matematika za študente visokošolskega programa na Fakulteti za računalništvo in
@@ -41,7 +42,7 @@ več od tega.
 
 
 
-* Zaporedja in vrste
+* TODO Zaporedja in vrste
 V vsakdanjem življenju pojem zaporedja pomeni seznam elementov, pri katerem je
 pomemben vrstni red. Na primer zaporedje plesnih korakov v koreografiji,
 zaporedje not v glasbenem zapisu ali zaporedje postajališč na liniji mestnega
@@ -374,6 +375,7 @@ Uporabi zanko ~while~, v kateri preveri, ali je trenutna delna vsota za manj kot
 $\varepsilon$ oddaljena od $\pi$. Čas lahko meriš s funkcijo ~time~ modula ~time~.
 
 *** Rešitev
+
 #+BEGIN_SRC python :results output :exports both :eval no-export
   import time
   from math import pi
@@ -390,16 +392,17 @@ $\varepsilon$ oddaljena od $\pi$. Čas lahko meriš s funkcijo ~time~ modula ~ti
   zacetek = time.time()
   eps = 0.0001 
   n = konvergenca(eps)
-  print("eps = %f, n = %d (v %f sekundah)" % (eps, n, time.time() - zacetek))
+  print("eps = {}, n = {} (v {} sekundah)".format(eps, n, time.time() - zacetek))
   # v manj kot 10 s lahko izračunamo 7 pravilnih decimalk števila pi.
   zacetek = time.time()
   eps =  0.00000005
   n = konvergenca(eps)
-  print("eps = %f, n = %d (v %f sekundah)" % (eps, n, time.time() - zacetek))
+  print("eps = {}, n = {} (v {} sekundah)".format(eps, n, time.time() - zacetek))
 #+END_SRC
 
 #+RESULTS:
-: n=9999 (v 0.008709 sekundah)
+: eps = 0.0001, n = 9999 (v 0.010877370834350586 sekundah)
+: eps = 5e-08, n = 19999991 (v 18.800929069519043 sekundah)
 
 * Funkcije
 Funkcija $f$ je predpis, ki vsakemu številu $x$ iz izbrane množice priredi določeno
