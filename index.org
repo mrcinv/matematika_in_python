@@ -1,3 +1,4 @@
+# -*- org-export-babel-evaluate: nil -*-
 # #+SETUPFILE: org-html-themes/setup/theme-readtheorg-local.setup
 #+SETUPFILE: org-bootstrap-document/setup.org
 #+OPTIONS: ':nil *:t -:t ::t <:t H:4 \n:nil ^:t arch:headline author:t
@@ -12,10 +13,12 @@
 #+SELECT_TAGS: export
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 25.1.1 (Org mode 9.0.3)
-#+PROPERTY: header-args  :results output :exports both :eval no-export 
-#+PROPERTY: header-args  :noweb strip-export 
+#+PROPERTY: header-args:python :exports both :noweb strip-export :results output replace 
 * DONE Uvod 
   CLOSED: [2017-11-26 ned 22:55]
+  :PROPERTIES:
+  :UNNUMBERED: t
+  :END:
 Pred vami je priročnik, ki vam bo pomagal poglobiti in povezati znanje
 programiranja in matematike. Nastal kot dopolnilno gradivo pri predmetu
 Matematika za študente visokošolskega programa na Fakulteti za računalništvo in
@@ -37,7 +40,7 @@ Matematika]]. Priročnik je na voljo v več formatih:
 Vsekakor najprej poskusite rešiti naloge povsem samostojno. Če se vam zatakne,
 si poglejte splošna matematična navodila in poskusite vsaj programerski del
 rešiti sami. Če tudi to ne gre, lahko pokukate v rešitev. Rešitve ne kopirajte,
-ampak jo raje prepišite ali še bolje napišite sami. Tako boste imeli
+ampak jo raje prepišite ali še bolje napišite sami. Tako bosMatematika skozi Pythonte imeli
 več od tega.
 
 
@@ -412,7 +415,8 @@ $\varepsilon$ oddaljena od $\pi$. Čas lahko meriš s funkcijo ~time~ modula ~ti
 : eps = 0.0001, n = 9999 (v 0.010877370834350586 sekundah)
 : eps = 5e-08, n = 19999991 (v 18.800929069519043 sekundah)
 
-* Funkcije
+* DONE Funkcije
+  CLOSED: [2017-11-28 tor 00:31]
 Funkcija $f$ je predpis, ki vsakemu številu $x$ iz izbrane množice priredi določeno
 število $f(x)$. Številu $x$, ki ga vstavimo v $f$, pravimo *argument*, številu
 $f(x)$ pa *vrednost funkcije* $f$ pri argumentu $x$.
@@ -425,7 +429,8 @@ itd.
 V tem poglavju bomo spoznali različne metode za iskanje ničel funkcij, hornerjev
 algoritem za računanje vrednosti polinoma in postopek za računanje vrednosti
 kotnih funkcij. 
-** Ničle tabelirane funkcije
+** DONE Ničle tabelirane funkcije
+   CLOSED: [2017-11-27 pon 14:24]
 Ničla funkcije $f(x)$ je vrednost spremenljivke $x$, za katero
 velja $f(x)=0$. 
 
@@ -443,7 +448,7 @@ urejeni po velikosti.
 
 Primer vhodnih podatkov in klica funkcije:
 
-#+BEGIN_SRC python :noweb strip-export :exports both :exports both
+#+BEGIN_SRC python :results output
 <<nicle>>
 x = [-1, 0, 1, 2, 3]
 y = [1, -1, 1, 2, 3]
@@ -589,7 +594,9 @@ intervala sta podani v seznamu ~interval~. Funkcija naj vrne seznam s krajišči
 iskanega intervala. Če vrednosti na intervalu nimajo različnega predznaka, naj
 funkcija javi napako tipa ~ValueError~.
 
-Primer:
+Primer enačbe $x^2 = 2$ z rešitvama $\pm \sqrt{2}$. Opazimo, da sekantna metoda
+poišče le eno rešitev. Katero rešitev bomo našli, je odvisno od začetnih
+približkov:
 
 #+BEGIN_SRC python :noweb strip-export :results output :exports both :exports both :eval no-export
 <<bisekcija>>
@@ -603,7 +610,7 @@ Primer, ko funkcija nima ničle:
 #+BEGIN_SRC python :results output :exports both :eval no-export
   <<bisekcija>>
   try:
-    f = lambda x: x**2-2
+    f = lambda x: x**2 + 2
     bisekcija(f,(2,3),0.3)
   except ValueError as err:
     print(type(err))
@@ -612,13 +619,20 @@ Primer, ko funkcija nima ničle:
 #+RESULTS:
 : <class 'ValueError'>
 
-*** Testi
+*** Test
 Testiranje z ukazom ~assert~ ima omejitve, zato se za testiranje programov
 uporablja knjižnice posebej namenjene pisanju testov. Poglejmo si uporabo
 knjižnice [[https://docs.python.org/3/library/unittest.html][unittest]], ki je na voljo skupaj s Pythonom. Za vsak testni primer,
 definiramo nov razred, ki je podrazred razreda ~unittest.TestCase~. Vse metode
 našega razreda, ki se začnejo na ~test~, se obravnavajo kot testi in bodo
-pognani ob klicu ~unittest.main()~. Lahko definiramo tudi druge pomožne metode, ki pa 
+pognani ob klicu ~unittest.main()~.
+
+Pri testiranju nimamo vedno na voljo pravilnega rezultata. Kljub temu lahko
+preverimo, če ima rešitev, ki jo vrne naš program, zahtevane lastnosti. V
+primeru bisekcije, mora program vrniti seznam dveh števil, za kateri velja, da
+je njuna razlika manjša od ~eps~ in da sta predznaka funkcije različna. Tudi, če
+ne poznamo prave ničle, lahko preverimo, da je rešitev, ki jo naš program vrne,
+pravilna.
 #+BEGIN_SRC python :results output :exports both :eval no-export :tangle test_bisekcija.py
 from bisekcija import bisekcija
 import unittest
@@ -637,7 +651,7 @@ class BisekcijaTest(unittest.TestCase):
           interval = bisekcija(f3, [1, 2], eps)
           # preverimo lastnosti pravilne rešitve
           self.assertEqual(len(interval), 2)
-          self.assertTrue(self.f3(interval[0])*self.f3(interval[1]) < 0)
+          self.assertTrue(f3(interval[0])*f3(interval[1]) < 0)
           self.assertTrue(abs(interval[1] - interval[0]) < eps)
 
 unittest.main()
@@ -673,11 +687,14 @@ Datoteka file:test_bisekcija.py
 Datoteka [[file:test_bisekcija.py][bisekcija.py]]
 ** Sekantna metoda
 S [[https://sl.wikipedia.org/wiki/Sekantna_metoda][sekantno metodo]] konstruiramo zaporedje približkov za ničlo funkcije, tako da
-začnemo z dvema približkoma. Nato izračunamo sekanto skozi točki na
-grafu funkcije, ki ustrezata izbranima približkoma. Nov približek dobimo kot
+začnemo z dvema približkoma. Nato izračunamo sekanto skozi točki na grafu
+funkcije, ki ustrezata izbranima približkoma. Nov približek dobimo kot
 presečišče sekante in x-osi. Postopek ponovimo z novim približkom in enim od
 začetnih. Postopek nato ponavljamo, dokler vrednost funkcije $f(x_n)$ v zadnjem
 približku $x_n$ ni manjša od vnaprej predpisanega števila $\varepsilon$.
+Prednost sekantne metode pred bisekcijo je v hitrosti konvergence. Slabost
+sekantne metode je, da ni nobenega zagotovila, za razliko od bisekcije, da bomo
+ničlo dejansko našli.
 
 Napiši funkcijo ~x0, iteracije = sekantna(f,a,b,eps,maxit=100)~, ki za Python
 funkcijo ~f~ poišče približek za ničlo s sekantno metodo. Argumenta ~a~ in ~b~
@@ -716,7 +733,7 @@ print(sekantna(f,1,2,1e-5))
 
 *** Rešitev
 #+name: sekantna
-#+BEGIN_SRC python :exports both :eval no-export
+#+BEGIN_SRC python :exports both :eval no-export :tangle sekantna.py
   def sekantna(f,a,b,eps, maxit=100):
       for n in range(maxit):
           fa, fb = f(a), f(b)
@@ -729,9 +746,81 @@ print(sekantna(f,1,2,1e-5))
 #+RESULTS: sekantna
 : None
 
-** Izračun vrednosti polinoma 
-*** Hornerjev algoritem
-** Kotne funkcije 
+** DONE Izračun vrednosti polinoma s Hornerjevim algoritmom
+   CLOSED: [2017-11-27 pon 21:30]
+Polinomi so zelo uporabne funkcije, saj njihove vrednosti lahko računamo zgolj z
+osnovnimi operacijami, to je množenjem in seštevanjem/odštevanjem. Najbolj
+učinkovit način za izračun vrednosti polinoma je
+[[https://en.wikipedia.org/wiki/Horner%2527s_method][Hornerjevim algoritmom]]. Ideja je preprosta, z izpostavljanjem spremenljivke $x$
+lahko  polinom $p(x) = a_n x^n+a_{n-1}x^{n-1}+\ldots a_1 x + a_0$ zapišemo kot
+\[a_n x^n+a_{n-1}x^{n-1}+\ldots a_1 x + a_0 = a_0 + x(a_1 + x(a_2 +\ldots
+x(a_{n-1}+xa_n)\ldots ).\]
+Za izračun zgornjega izraza potrebujemo $n$ množenj in $n+1$ seštevanj.
+
+Napiši funkcijo ~horner(p, x)~, ki izračuna vrednost polinoma s Hornerjevim
+algoritmom. Polinom ~p~ naj bo podan kot seznam koeficientov, začenši z
+vodilnim, ~x~ pa je vrednost neodvisne spremenljivke, v kateri želimo izračunati
+vrednost. Na primer polinomu $p(x)=x^2 + 3x + 3$, bi predstavili s seznamom
+~[1, 2, 3]~.
+
+Primer
+#+BEGIN_SRC python :results output
+<<horner>>
+y = horner([1, 2, 3], 1)
+print("Vrednost x^2 + 2x + 3 za x=1 je {}".format(y))
+#+END_SRC
+
+#+RESULTS:
+: Vrednost x^2 + 2x + 3 za x=1 je 6
+
+
+*** Namig 
+Izraz $a_0 + x(a_1 + x(a_2 +\ldots x(a_{n-1}+xa_n)\ldots)$ izračunaj od znotraj
+navzven. Postopek lahko izvedeš s ~for~ zanko, tako da na vsakem koraku prejšnji
+rezultat pomnožiš z $x$ in prišteješ naslednji koeficient.
+
+*** Test
+Pri testiranju lahko kombiniramo različne pristope. Za majhne primere, lahko
+rezultat programa primerjamo z rezultatom, ki ga izračunamo na roke ali na kak
+drug način. 
+#+BEGIN_SRC python :tangle test_horner.py
+  from horner import horner
+  import unittest
+  import random
+  class HornerTest(unittest.TestCase):
+      def test_primer(self):
+          p1  = [1, 2, 3]
+          y = horner(p1, 1)
+          self.assertEqual(y, 6)
+      def test_enka(self):
+          for i in range(5):
+              n = random.randint(5,10)
+              p = [random.random() - 0.5 for i in range(n+1)]
+              self.assertAlmostEqual(horner(p, 1), sum(p))
+              # vrednost polinoma v 1 je enaka vsoti elementov
+              self.assertAlmostEqual(horner(p, -1),
+                               (-1)**n*(sum(p[0::2]) - sum(p[1::2])))
+              # vrednost v -1 je enaka alternirajoči vsoti koeficientov
+
+  unittest.main()
+#+END_SRC
+Datoteka file:test_horner.py
+
+*** Rešitev
+#+name: horner
+#+BEGIN_SRC python :tangle horner.py
+  def horner(p, x):
+    """Izračuna vrednost polinoma s Hornerjevim algoritmom. Polinom ~p~ naj bo
+    podan kot seznam koeficientov, začenši z vodilnim, ~x~ pa je vrednost
+    neodvisne spremenljivke, v kateri želimo izračunati vrednost.
+    """
+    y = 0
+    for an in p:
+      y = y*x + an
+    return y
+#+END_SRC
+Datoteka file:horner.py
+** TODO Kotne funkcije 
 *** Tabela kotnih funkcij
 Napiši program, ki generira tabeli kotnih funkcij $\sin$ in $\cos$ na intervalu
 $[0,2\pi]$  v točkah $$x_i=i\frac{\pi}{100};\quad i=0,\ldots, 200.$$ Uporabi
@@ -747,9 +836,10 @@ $\cos(\frac{\pi}{100})\simeq 1$
 src_python{import math; return math.cos(math.pi/100)} {{{results(=0.9995065603657316=)}}}.
 
 Dobljene vrednosti primerjaj z vrednostmi, ki jih vrneta funkciji ~math.sin~
-in ~math.cos~, tako da poiščete razlike. Kolikšna je največja razlika med
+in ~math.cos~. Kolikšna je največja razlika med
 vrednostjo, ki jo je izračunal vaš program in vrednostjo, ki jo je dala vgrajena
-funkcija?   
+funkcija?
+
 *** Sinus in kosinus 1
 Napiši funkcijo, ki izračuna vrednost funkcije $\sin(x)$ in $\cos(x)$ na
 intervalu $[0,\frac{\pi}{2}]$, tako da uporabiš
@@ -760,8 +850,19 @@ $$\sin(x)\simeq x\text{ in } \cos(x)\simeq 1;\quad |x|<10^{-1}.$$
 *** Sinus in kosinus 2
 Funkcijo iz prejšnje naloge razširi na vsa realna števila. Uporabi periodičnost
 in simetrije funkcij $\sin$ in $\cos$.
-* Odvod
-** Simbolično odvajanje
+* TODO Odvod
+Odvod funkcije $f(x)$ je definiran kot limita diferenčnega kvocienta. Vrednost
+odvoda $f'(x)$ v neki točki $x$, veliko pove o tem, kako se funkcija obnaša lokalno v
+okolici točke $x$. Zato je eno osnovnih orodij analize.
+
+Lepa lastnost odvoda je, da lahko za vse elementarne funkcije njihov odvod zopet
+izrazimo z elemntarnimi funkcijami. Postopek odvajanja lahko zožimo na nekaj
+preprostih pravil in tabelo odvodov peščice funkcij. Zato je prerosto napisati
+program, ki ta postopek izvede. Pogledali si bomo različne načine, kako s
+programom lahko izračunamo odvod, pri čemer lahko izkoristimo preprosta pravila
+odvajanja.
+
+* TODO Simbolično odvajanje
 
 Naslednje naloge ilustrirajo, kako deluje simbolično odvajanje.
 Napisati želimo funkcijo v Pythonu, ki izračuna odvod dane funkcije f.
@@ -770,67 +871,103 @@ osnovnimi operacijami ~+~, ~-~, ~*~, ~/~, s potenco ~a^b~ in funkcijami
 ~sin~, ~cos~, ~exp~ in ~log~.
 Da bo programiranje lažje, bomo funkcijo zapisali v
 [[http://sl.wikipedia.org/wiki/Obrnjeni_poljski_zapis][obrnjeni poljki notaciji]]([[http://en.wikipedia.org/wiki/Reverse_Polish_notation][uporabili bomo angleško kratico RPN]]).
-*** RPN
-Napiši razred ~RPN~, ki predstavlja funkcijo spremenljivke ~x~
-podano v RPN obliki.
-Razred naj ima atribut ~izraz~, ki naj bo niz oblike
 
-#+BEGIN_EXAMPLE
-    'arg1 arg2 op1 arg3 ... argn funk',
-#+END_EXAMPLE
+** RPN
 
-sestavljen iz besed, ločenih s presledki. Besede so lahko
+ Napiši razred ~RPN~, ki predstavlja funkcijo spremenljivke ~x~
+ podano v RPN obliki.
+ Razred naj ima atribut ~izraz~, ki naj bo niz oblike
 
- - argumenti: število ali ~'x'~,
- - operacije: ~'+'~, ~'-'~, ~'*'~, ~'/'~ ali ~'^'~
- - funkcije: ~'sin'~, ~'cos'~, ~'exp'~ ali ~'log'~.
+ #+BEGIN_EXAMPLE
+     'arg1 arg2 op1 arg3 ... argn funk',
+ #+END_EXAMPLE
 
-Osnovne operacije zapišemo s 3 besedami
+ sestavljen iz besed, ločenih s presledki. Besede so lahko
 
-#+BEGIN_EXAMPLE
-    1 + 1   -> '1 1 +'
-    1 - 2   -> '1 2 -'
-    2 * 3   -> '2 3 *'
-    2 / 3   -> '2 3 /'
-    2 ^ 3   -> '2 3 ^'
-#+END_EXAMPLE
-Funkcije ~sin~, ~cos~, ~exp~, ~log~ pa zapišemo z dvema besedama:
+  - argumenti: število ali ~'x'~,
+  - operacije: ~'+'~, ~'-'~, ~'*'~, ~'/'~ ali ~'^'~
+  - funkcije: ~'sin'~, ~'cos'~, ~'exp'~ ali ~'log'~.
 
-#+BEGIN_EXAMPLE
-    sin(3.14) -> '3.14 sin'
-    e^2.5     -> '2.5 exp'
-#+END_EXAMPLE
-Primeri
-#+BEGIN_EXAMPLE
-    1 + 2 + 3       -> '1 2 3 + +' ali '1 2 + 3 +'
-    sin(2x)         -> '2 x * sin'
-    sqrt(x)         -> 'x 0.5 ^'
-    (x+1)/(x-1)     -> 'x 1 + x 1 - /'
-    x^2+2x-1        -> 'x 2 ^ 2 x * -1 + +'
-    log(sin(2/x+1)) -> '2 x / 1 + sin log'
-#+END_EXAMPLE
-Razred naj ima metodo ~__init__(izraz)~, ki inicializira atribut ~izraz~ in
-metodo ~vrednost(arg)~, ki naj vrne vrednost izraza, če spremenljivko ~x~
-zamenjamo z dano vrednostjo ~arg~.
+ Osnovne operacije zapišemo s 3 besedami
 
-Primer:
+ #+BEGIN_EXAMPLE
+     1 + 1   -> '1 1 +'
+     1 - 2   -> '1 2 -'
+     2 * 3   -> '2 3 *'
+     2 / 3   -> '2 3 /'
+     2 ^ 3   -> '2 3 ^'
+ #+END_EXAMPLE
+ Funkcije ~sin~, ~cos~, ~exp~, ~log~ pa zapišemo z dvema besedama:
 
-    >>> f = RPM('1 x +')
-    >>> f.vrednost(1)
-    2.0
-**** Rešitev
-#+BEGIN_SRC python :exports both :eval no-export
+ #+BEGIN_EXAMPLE
+     sin(3.14) -> '3.14 sin'
+     e^2.5     -> '2.5 exp'
+ #+END_EXAMPLE
+ Primeri
+ #+BEGIN_EXAMPLE
+     1 + 2 + 3       -> '1 2 3 + +' ali '1 2 + 3 +'
+     sin(2x)         -> '2 x * sin'
+     sqrt(x)         -> 'x 0.5 ^'
+     (x+1)/(x-1)     -> 'x 1 + x 1 - /'
+     x^2+2x-1        -> 'x 2 ^ 2 x * -1 + +'
+     log(sin(2/x+1)) -> '2 x / 1 + sin log'
+ #+END_EXAMPLE
+ Razred naj ima metodo ~__init__(izraz)~, ki inicializira atribut ~izraz~ in
+ metodo ~vrednost(arg)~, ki naj vrne vrednost izraza, če spremenljivko ~x~
+ zamenjamo z dano vrednostjo ~arg~.
+
+ Primer:
+ #+BEGIN_SRC python :results output :tangle
+     <<rpn>>
+     f = RPN('1 x +')
+     print(f.vrednost(1))
+ #+END_SRC
+
+ #+RESULTS:
+ : 2.0
+
+*** Namig
+Uporabite sklad. Razčlenite niz znakov in nato vsak znak, ki ni operator ali
+funkcija postavite na sklad. Ko pridete do operatorja, lahko argumente povlečete
+s sklada in rezultat spet shranite na sklad. Na koncu bo na skladu ostala
+vrednost izraza. V Pythonu lahko za sklad uporabite seznam in metode ~pop~ in ~append~.
+*** DONE Test
+    CLOSED: [2017-11-27 pon 23:51]
+#+BEGIN_SRC python :exports both :eval no-export :tangle test_rpn.py
+  from rpn import RPN
+  from math import sin, cos, log, exp
+  import unittest
+
+  class RPNTest(unittest.TestCase):
+      def test_vrednost(self):
+          self.assertEqual(RPN('2 x *').vrednost(3), 6)
+          self.assertEqual(RPN('2 x *').vrednost(-3), -6)
+          self.assertEqual(RPN('1 x 2 ^ sin +').vrednost(3), 1+sin(3**2))
+          self.assertEqual(RPN('1 x 2 ^ sin +').vrednost(3.14), 1+sin(3.14**2))
+          f_rpn = RPN('x 1 + x 2 ^ / 3 x * 4 - +')
+          f = lambda x: (x + 1)/x**2 + (3*x - 4)
+          g_rpn = RPN('x log sin cos exp')
+          g = lambda x: exp(cos(sin(log(x))))
+          for x in range(3):
+              self.assertEqual(f_rpn.vrednost(x/4 + 1), f(x/4 + 1))
+              self.assertEqual(g_rpn.vrednost(x/3 + 1), g(x/3 + 1))
+#+END_SRC
+Datoteka file:test_rpn.py
+*** DONE Rešitev
+    CLOSED: [2017-11-27 pon 23:32]
+#+NAME: rpn
+#+BEGIN_SRC python :exports both :eval no-export :tangle rpn.py
 
 import operator as op
-from math import sin,cos,exp,log
+from math import sin, cos, exp, log
 class RPN:
     # slovarja s ključi, ki so imeni operacij in funkcij in vrednostmi, ki so
     # Python funkcije za te operacije.
     operacije = {'+': op.add,'-': op.sub,'*': op.mul, '/': op.truediv, '^': op.pow}
     funkcije = {'sin':sin,'cos':cos,'exp':exp,'log':log}
-    def __init__(self,izraz):
+    def __init__(self, izraz):
         self.izraz = izraz
-    def vrednost(self,arg):
+    def vrednost(self, arg):
         sklad = [] # sklad, kjer hranimo delno izračunane vrednosti
         for beseda in self.izraz.split(' '):
             # ali smo prišli do opreracije
@@ -852,60 +989,35 @@ class RPN:
         return sklad.pop()
 
 #+END_SRC
-**** TODO Testi                                                    :noexport:
-#+BEGIN_SRC python :exports both :eval no-export
-Check.part()
-from math import sin
-Check.equal("RPN('2 x *').vrednost(3)", 6)
-Check.equal("RPN('2 x *').vrednost(-3)", -6)
-Check.equal("RPN('1 x 2 ^ sin +').vrednost(3)", 1+sin(3**2))
-Check.equal("RPN('1 x 2 ^ sin +').vrednost(3.14)", 1+sin(3.14**2))
-f = RPN('x 1 + x 2 ^ / 3 x * 4 -')
-g = RPN('x log sin cos exp')
-for x in range(3):
-    Check.secret(f.vrednost(x/4+1))
-    Check.secret(g.vrednost(x/3+1))
+
+** Prikaz RPN izraza
+ Razredu ~RPN~ dodaj metodo ~__str__~, ki vrne izraz zapisan klasično z
+ oklepaji in operatorji.
+
+ Primer:
+ #+BEGIN_SRC python
+     from rpn import RPN
+     f = RPN('3 x 2 x ^ + /')
+     print(str(f))
+ #+END_SRC
+
+ #+RESULTS:
+ : (3/(x+(2^x)))
+*** Namig
+Podobno kot pri metodi ~vrednost~ uporabi sklad.
+*** DONE Test  
+    CLOSED: [2017-11-28 tor 00:27]
+#+BEGIN_SRC python :tangle test_rpn.py
+  # testi za __str__
+      def test_str(self):
+          self.assertEqual(str(RPN('2 x *')), '(2*x)')
+          self.assertEqual(str(RPN('2 x x 3 ^ + *')), '(2*(x+(x^3)))')
+          self.assertEqual(str(RPN('2 sin x x 3 ^ + *')),'(sin(2)*(x+(x^3)))')
+  unittest.main()
 #+END_SRC
-*** Prikaz RPN izraza  
-Razredu ~RPN~ dodaj metodo ~__str__~, ki vrne izraz zapisan klasično z
-oklepaji in operatorji.
-Primer:
-
-    >>> f = RPM.new('3 x 2 x ^ + /')
-    >>> print(str(f))
-    (3/(x+(2^x)))
-**** Rešitev
-#+BEGIN_SRC python :exports both :eval no-export
-
-import operator as op
-from math import sin,cos,exp,log
-class RPN:
-    # slovarja s ključi, ki so imeni operacij in funkcij in vrednostmi, ki so
-    # Python funkcije za te operacije.
-    operacije = {'+': op.add,'-': op.sub,'*': op.mul, '/': op.truediv, '^': op.pow}
-    funkcije = {'sin':sin,'cos':cos,'exp':exp,'log':log}
-    def __init__(self,izraz):
-        self.izraz = izraz
-    def vrednost(self,arg):
-        sklad = [] # sklad, kjer hranimo delno izračunane vrednosti
-        for beseda in self.izraz.split(' '):
-            # ali smo prišli do opreracije
-            if beseda in self.operacije.keys():
-                b = sklad.pop()
-                a = sklad.pop()
-                rezultat = self.operacije[beseda](a,b)
-                sklad.append(rezultat)
-            # ali smo prišli do funkcije
-            elif beseda in self.funkcije.keys():
-                a = sklad.pop()
-                rezultat = self.funkcije[beseda](a)
-                sklad.append(rezultat)
-            elif beseda == 'x':
-                sklad.append(arg)
-            else:
-                sklad.append(float(beseda))
-        # na koncu dobimo v skladu le še končni rezultat
-        return sklad.pop()
+*** Rešitev
+#+BEGIN_SRC python :exports both :eval no-export :tangle rpn.py
+# metoda __str__
     def __str__(self):
         sklad = []
         for beseda in self.izraz.split(' '):
@@ -921,93 +1033,43 @@ class RPN:
             else:
                 sklad.append(str(beseda))
         return sklad.pop()
-
 #+END_SRC
-**** TODO Testi :noexport:
-#+BEGIN_SRC python
 
-Check.part()
-Check.equal("str(RPN('2 x *'))", '(2*x)')
-Check.equal("str(RPN('2 x x 3 ^ + *'))", '(2*(x+(x^3)))')
-Check.equal("str(RPN('2 sin x x 3 ^ + *'))",'(sin(2)*(x+(x^3)))')
-Check.secret(str(RPN('1 x cos x ^ sin +')))
-Check.secret(str(RPN('1 log x / sin x +')))
+** Odvod RPN
+ Razredu ~RPN~ dodaj metodo ~odvod~, ki vrne objekt istega razreda, ki vsebuje
+ izraz za odvod po spremenljivki ~x~.
 
-#+END_SRC
-*** Odvod RPN
-Razredu ~RPN~ dodaj metodo ~odvod~, ki vrne objekt istega razreda, ki vsebuje
-izraz za odvod po spremenljivki ~x~.
+ Primer:
+ #+BEGIN_EXAMPLE
+     >>> f = RPM.new('1 x +')
+     >>> df = f.odvod()
+     >>> print(df.vrednost(1))
+     1.0
+ #+END_EXAMPLE
 
-Primer:
-#+BEGIN_EXAMPLE
-    >>> f = RPM.new('1 x +')
-    >>> df = f.odvod()
-    >>> print(df.vrednost(1))
-    1.0
-#+END_EXAMPLE
+ Testnih primerov ne bomo navajali, ker je možno nalogo rešiti na več načinov,
+ pri katerih bo izraz za odvod različen (čeprav pravilen).
+ Za ilustracijo si poglejmo izraze
 
-Testnih primerov ne bomo navajali, ker je možno nalogo rešiti na več načinov,
-pri katerih bo izraz za odvod različen (čeprav pravilen).
-Za ilustracijo si poglejmo izraze
+ #+BEGIN_EXAMPLE
+     '1 x +', 'x 1 +' in '1 x 1 + *',
+ #+END_EXAMPLE
 
-#+BEGIN_EXAMPLE
-    '1 x +', 'x 1 +' in '1 x 1 + *',
-#+END_EXAMPLE
+ ki predstavljajo isto funkcijo ~f(x)=x+1~.
+ Testiramo tako, da izračunamo vrednost odvoda v nekaj naključno izbranih
+ fiksnih točkah, s čimer pravilnost odvoda precej dobro preverimo.
 
-ki predstavljajo isto funkcijo ~f(x)=x+1~.
-Testiramo tako, da izračunamo vrednost odvoda v nekaj naključno izbranih
-fiksnih točkah, s čimer pravilnost odvoda precej dobro preverimo.
+ Za začetek je dovolj, da metoda ~odvod~ deluje za izraze, ki ne vsebujejo potence ~'^'~.
 
-Za začetek je dovolj, da metoda ~odvod~ deluje za izraze, ki ne vsebujejo potence ~'^'~.
-
-**** Rešitev
-#+BEGIN_SRC python :exports both :eval no-export
-
-import operator as op
-from math import sin,cos,exp,log
-class RPN:
-    # slovarja s ključi, ki so imeni operacij in funkcij in vrednostmi, ki so
-    # Python funkcije za te operacije.
-    operacije = {'+': op.add,'-': op.sub,'*': op.mul, '/': op.truediv, '^': op.pow}
-    funkcije = {'sin':sin,'cos':cos,'exp':exp,'log':log}
+*** Rešitev
+#+BEGIN_SRC python :exports both :eval no-export :tangle rpn.py
+# funkcija odvod
     fodvod = {'sin': 'cos','cos':'sin -1 *','exp':'exp','log':'-1 ^'}
-    def __init__(self,izraz):
-        self.izraz = izraz
-    def vrednost(self,arg):
-        sklad = [] # sklad, kjer hranimo delno izračunane vrednosti
-        for beseda in self.izraz.split(' '):
-            # ali smo prišli do opreracije
-            if beseda in self.operacije.keys():
-                b = sklad.pop()
-                a = sklad.pop()
-                rezultat = self.operacije[beseda](a,b)
-                sklad.append(rezultat)
-            # ali smo prišli do funkcije
-            elif beseda in self.funkcije.keys():
-                a = sklad.pop()
-                rezultat = self.funkcije[beseda](a)
-                sklad.append(rezultat)
-            elif beseda == 'x':
-                sklad.append(arg)
-            else:
-                sklad.append(float(beseda))
-        # na koncu dobimo v skladu le še končni rezultat
-        return sklad.pop()
-    def __str__(self):
-        sklad = []
-        for beseda in self.izraz.split(' '):
-            if beseda in self.operacije.keys():
-                b = sklad.pop()
-                a = sklad.pop()
-                rezultat = '(' + str(a) + beseda + str(b) + ')'
-                sklad.append(rezultat)
-            elif beseda in self.funkcije.keys():
-                a = sklad.pop()
-                rezultat = beseda + '(' + str(a) + ')'
-                sklad.append(rezultat)
-            else:
-                sklad.append(str(beseda))
-        return sklad.pop()
+    pravila = {}
+    pravila['+'] = lambda f, g, df, dg: (df, dg, '+')
+    pravila['-'] = lambda f, g, df, dg: (df, dg, '-')
+    pravila['*'] = lambda f, g, df, dg: (df, g, '*', f, dg, '*', '+')
+    pravila['/'] = lambda f, g, df, dg: (df, g, '*', f, dg, '-', g, '2', '^', '/')
     def odvod(self):
         dfsklad = []
         fsklad = []
@@ -1017,14 +1079,7 @@ class RPN:
                 dg = dfsklad.pop()
                 f = fsklad.pop()
                 g = fsklad.pop()
-                if beseda in ['+','-']:
-                    # (f+g)' = f'+g'
-                    df = ' '.join((df, dg, beseda))
-                elif beseda == '*':
-                    # (f*g)' = f'g + g'f
-                    df = ' '.join((dg, f, '*', df, g, '* +'))
-                elif beseda == '/':
-                    df = ' '.join((g, df, '*', f, dg,'* -', g, '2 ^ /'))
+                df = ' '.join(self.pravila[beseda](f, g, df, dg))
                 dfsklad.append(df)
                 fsklad.append(' '.join((f, g, beseda)))
             elif beseda in self.funkcije.keys():
@@ -1043,7 +1098,7 @@ class RPN:
         return RPN(dfsklad.pop())
 
 #+END_SRC
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 
 Check.part()
@@ -1051,12 +1106,12 @@ from math import log,sin,cos
 izraz = "RPN('x cos x log *').odvod()"
 xi = (1.2,2.3,5,10.1,0.876,22.9876)
 for x in xi:
-    Check.equal(izraz + '.vrednost(%f)'%x ,cos(x)/x-log(x)*sin(x))
+    self.assertEqual(izraz + '.vrednost(%f)'%x ,cos(x)/x-log(x)*sin(x))
     Check.secret(RPN('x sin x cos /').odvod().vrednost(x))
     Check.secret(RPN('1 x sin + x 2 * log /').odvod().vrednost(x))
 
 #+END_SRC
-*** Odvod potence
+** Odvod potence
 Dopolni metodo ~odvod~, da deluje tudi za izraze, ki vsebujejo potenco ~^~.
 
 Primer:
@@ -1069,93 +1124,25 @@ Primer:
     >>> RPN('2 x ^').odvod().vrednost(0) # vrniti mora log(2)
     0.6931471805599453
 #+END_EXAMPLE
-**** Rešitev
-#+BEGIN_SRC python :exports both :eval no-export
-
-import operator as op
-from math import sin,cos,exp,log
-class RPN:
-    # slovarja s ključi, ki so imeni operacij in funkcij in vrednostmi, ki so
-    # Python funkcije za te operacije.
-    operacije = {'+': op.add,'-': op.sub,'*': op.mul, '/': op.truediv, '^': op.pow}
-    funkcije = {'sin':sin,'cos':cos,'exp':exp,'log':log}
-    fodvod = {'sin': 'cos','cos':'sin -1 *','exp':'exp','log':'-1 ^'}
-    def __init__(self,izraz):
-        self.izraz = izraz
-    def vrednost(self,arg):
-        sklad = [] # sklad, kjer hranimo delno izračunane vrednosti
-        for beseda in self.izraz.split(' '):
-            # ali smo prišli do opreracije
-            if beseda in self.operacije.keys():
-                b = sklad.pop()
-                a = sklad.pop()
-                rezultat = self.operacije[beseda](a,b)
-                sklad.append(rezultat)
-            # ali smo prišli do funkcije
-            elif beseda in self.funkcije.keys():
-                a = sklad.pop()
-                rezultat = self.funkcije[beseda](a)
-                sklad.append(rezultat)
-            elif beseda == 'x':
-                sklad.append(arg)
-            else:
-                sklad.append(float(beseda))
-        # na koncu dobimo v skladu le še končni rezultat
-        return sklad.pop()
-    def __str__(self):
-        sklad = []
-        for beseda in self.izraz.split(' '):
-            if beseda in self.operacije.keys():
-                b = sklad.pop()
-                a = sklad.pop()
-                rezultat = '(' + str(a) + beseda + str(b) + ')'
-                sklad.append(rezultat)
-            elif beseda in self.funkcije.keys():
-                a = sklad.pop()
-                rezultat = beseda + '(' + str(a) + ')'
-                sklad.append(rezultat)
-            else:
-                sklad.append(str(beseda))
-        return sklad.pop()
-    def odvod(self):
-        dfsklad = []
-        fsklad = []
-        for beseda in self.izraz.split(' '):
-            if beseda in self.operacije.keys():
-                dg = dfsklad.pop()
-                df = dfsklad.pop()
-                g = fsklad.pop()
-                f = fsklad.pop()
-                if beseda in ['+','-']:
-                    # (f+g)' = f'+g'
-                    df = ' '.join((df, dg, beseda))
-                elif beseda == '*':
-                    # (f*g)' = f'g + g'f
-                    df = ' '.join((dg, f, '*', df, g, '* +'))
-                elif beseda == '/':
-                    df = ' '.join((g, df, '*', f, dg,'* -', g, '2 ^ /'))
-                elif beseda == '^':
-                    # f(x)^g(x)' =f(x)^(g(x)-1)*(f(x)*log(f(x)*g'(x))+g(x)*f'(x))
-                    df = ' '.join((f, g, '1 - ^', dg, f, f, 'log * *', df, g, '* + *'))
-                dfsklad.append(df)
-                fsklad.append(' '.join((f, g, beseda)))
-            elif beseda in self.funkcije.keys():
-                # verižno pravilo (f(g(x)) = f'(x)*g'(x))
-                df = dfsklad.pop()
-                f = fsklad.pop()
-                df = ' '.join((df,f,self.fodvod[beseda],'*'))
-                dfsklad.append(df)
-                fsklad.append(' '.join((f,beseda)))
-            elif beseda == 'x':
-                dfsklad.append('1')
-                fsklad.append('x')
-            else:
-                dfsklad.append('0')
-                fsklad.append(beseda)
-        return RPN(dfsklad.pop())
-
+*** Matematična izpeljava
+Pravilo za odvod potence dveh funkcij $f(x)^{g(x)}$ je malce čudno, saj ni jasno
+katero pravilo lahko uporabimo $(x^n)' = nx^{n-1}$ ali $(e^x)' = e^x$. Odgovor
+je, da moramo uporabiti obe. Ampak kako? Pomagamo si z logaritmom. Naj bo
+\[h(x) = f(x)^{g(x)}\]
+Enačbo logaritmiramo in dobimo
+\[\log(h(x))=g(x)\log(f(x))\]
+Sedaj enačbo odvajamo
+\[\frac{h'(x)}{h(x)} = g'(x)\log(f(x)) + g(x)\frac{f'(x)}{f(x)}\]
+in pomnožimo z $h(x)$, ter $h$ nadomestimo z $f^g$:
+\[h'(x) = g'(x)\log(f(x))h(x) + \frac{g(x)f'(x)h(x)}{f(x)}\]
+\[\left(f(x)^{g(x)}\right)' =
+\log(f(x))f(x)^{g(x)}g'(x) + g(x)f(x)^{g(x)-1}f'(x).\] 
+*** Rešitev
+#+BEGIN_SRC python :exports both :eval no-export :tangle rpn.py
+# dodamo pravilo za potenco
+    pravila['^'] = lambda f, g, df, dg: (f, g, '1 - ^', dg, f, f, 'log * *', df, g, '* + *')
 #+END_SRC
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 
 #+BEGIN_SRC python :exports both :eval no-export
 Check.part()
@@ -1166,17 +1153,16 @@ izraz1 = "RPN('x 1 + x log ^').odvod()"
 izraz2 = "RPN('x x ^').odvod()"
 
 for x in xi:
-    Check.equal(izraz1 + '.vrednost(%f)'%x,(x+1)**log(x)*(log(x)/(x+1)+log(x+1)/x))
-    Check.equal(izraz2 + '.vrednost(%f)'%x, x**x*(log(x)+1))
+    self.assertEqual(izraz1 + '.vrednost(%f)'%x,(x+1)**log(x)*(log(x)/(x+1)+log(x+1)/x))
+    self.assertEqual(izraz2 + '.vrednost(%f)'%x, x**x*(log(x)+1))
     Check.secret(RPN("1 x + x x * ^").odvod().vrednost(x))
 #+END_SRC
-
-** Avtomatsko odvajanje
+* TODO Avtomatsko odvajanje
 Naloge ilustrirajo, kako deluje [[https://en.wikipedia.org/wiki/Automatic_differentiation][avtomatsko odvajanje]] računalniških programov.
 Računalniški program je le zaporedje osnovnih računskih operacij. Kontrolne
 strukture, kot so ~if~ stavek pa le odločijo, katero zaporedje računskih
 operacij se bo izvedlo. Zato lahko programe odvajamo kot kompozitume funkcij. 
-*** Preprosta funkcija
+** Preprosta funkcija
 Funkcija $f$ je podana s Python definicijo
 #+BEGIN_SRC python :exports both :eval no-export
   def f(x):
@@ -1194,24 +1180,24 @@ Na primer klic ~f(1)~ naj vrne vrednost odvoda $f$ v ~1~:
     >>> df(2)
     4
 #+END_EXAMPLE
-**** Rešitev
+*** Rešitev
 #+BEGIN_SRC python :exports both :eval no-export
   def df(x):
       "Odvod funkcije x^2"
       return 2*x
 #+END_SRC
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 
 Check.part()
-Check.equal('df(3)', 6)
-Check.equal('df(0.2)', 2*0.2)
-Check.equal('df(-1)', -2)
+self.assertEqual('df(3)', 6)
+self.assertEqual('df(0.2)', 2*0.2)
+self.assertEqual('df(-1)', -2)
 Check.secret(df(42))
 Check.secret(df(-123))
 
 #+END_SRC
-*** Malce bolj zapletena funkcija
+** Malce bolj zapletena funkcija
 Funkcija ~g(x)~ je podana s Python definicijo
 #+BEGIN_SRC python :exports both :eval no-export
     def g(x):
@@ -1232,7 +1218,7 @@ Na primer:
     >>> dg(2)
     11.75
 #+END_SRC
-**** Rešitev
+*** Rešitev
 Paziti moramo na vrstni red. Končni rezultat lahko zapišemo kot kompozitum
 dveh $y_2(x)=x(\frac{1}{y_1(x)}+y_1(x))$, kjer je $y_1(x)=x^2$. Zanima nas
 vrednost $y_2'(x)$. Uporabimo pravilo za produkt in verižno pravilo in dobimo, da je 
@@ -1249,7 +1235,7 @@ def dg(x):
     y = x*(1/y+y)
     return round(dy,10)
 #+END_SRC
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 # Definicija s formulo
 def dg_formula(x):
@@ -1257,7 +1243,7 @@ def dg_formula(x):
 #+END_SRC
 #+BEGIN_SRC python :exports both :eval no-export
 
-Check.equal('dg(-1)', 2)
+self.assertEqual('dg(-1)', 2)
 try:
     dg(0)
     Check.error("Klic dg(0) mora javiti napako!")
@@ -1268,14 +1254,14 @@ except:
 cases = [(0.5, -3.25), (-0.5, -3.25), (1, 2.0), (-1, 2.0), (2, 11.75), (-2, 11.75), (4, 47.9375), (-4, 47.9375)]
 for case in cases:
     x,dgv = case
-    Check.equal('dg(%f)'% x, dgv)
-Check.equal('dg(0.5)',-3.25)
-Check.equal('dg(-4)', 47.9375)
+    self.assertEqual('dg(%f)'% x, dgv)
+self.assertEqual('dg(0.5)',-3.25)
+self.assertEqual('dg(-4)', 47.9375)
 Check.secret(dg(42))
 for x in range(2,30,3):
     Check.secret(dg(x))
 #+END_SRC
-*** For zanka
+** For zanka
 Funkcija ~h(x)~ je podana s Python definicijo
 #+BEGIN_SRC python
     def h(x):
@@ -1298,12 +1284,12 @@ Na primer:
     0.25
 #+END_EXAMPLE
 
-**** Namig
+*** Namig
 Predelajte kodo za funkcijo ~h~ tako, da hkrati s
 funkcijo računate še njen odvod. Vsaki vrstici kode dodajte
 vrstico v kateri posodobite vrednost odvoda. Pazite na vrstni red!
 Katera pravila za odvajanje morate uporabiti?
-**** Rešitev
+*** Rešitev
 #+BEGIN_SRC python :exports both :eval no-export
 def dh(x):
     "Odvod funkcije s for zanko"
@@ -1314,7 +1300,7 @@ def dh(x):
         y = (x/y+y)/2
     return round(dy,10)
 #+END_SRC
-**** TODO Testi :noexport:
+*** TODO Testi                                                     :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 # funkcija h v resnici računa x^(1/2) s Haronovim obrazcem (tangentno metodo)
 def dh_aprox(x):
@@ -1333,12 +1319,12 @@ cases =  [(2, 0.3535533906, 0.7071067812),
           (9, 0.1666666667, 1.5)]
 for case in cases:
     x,dh1,dh2 = case
-    Check.equal('dh(%d)'% x, dh1)
-    Check.equal('dh(1/%d)'% x,dh2)
+    self.assertEqual('dh(%d)'% x, dh1)
+    self.assertEqual('dh(1/%d)'% x,dh2)
 for x in range(1,30,3):
     Check.secret(dh(x/10))
 #+END_SRC
-*** Kompozitum funkcij
+** TODO Kompozitum funkcij
 Funkcija ~k~ je podana s pomožno funkcijo ~r(x)~
 #+BEGIN_SRC python
         def r(x):
@@ -1369,9 +1355,9 @@ Na primer:
     -0.0034362142
 #+END_SRC
 
-**** Namig
+*** Namig
 V ~dk(x)~ uporabite funkcijo ~dr(x)~ in verižno pravilo.
-**** Rešitev
+*** Rešitev
 #+BEGIN_SRC python :exports both :eval no-export
 
 def r(x):
@@ -1405,7 +1391,7 @@ def dk(x):
     return round(dy,10)
 
 #+END_SRC
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 #+BEGIN_SRC python  :exports both :eval no-export
 
 Check.part()
@@ -1424,7 +1410,7 @@ try:
     Check.error("Klic dr(-1) bi moral javiti napako!")
 except:
     pass
-Check.equal('dk(4)',-0.0034362142)
+self.assertEqual('dk(4)',-0.0034362142)
 
 # Testi za dr in dk
 cases =  [(0, -2.4223733938, 0.0557006013),
@@ -1435,20 +1421,17 @@ cases =  [(0, -2.4223733938, 0.0557006013),
           (9, -0.0013654262, 0.12455767)]
 for case in cases:
     x, drv, dkv = case
-    Check.equal('dr(%d)'%x, drv)
-    Check.equal('dk(1/%d)'%(x+1),dkv)
+    self.assertEqual('dr(%d)'%x, drv)
+    self.assertEqual('dk(1/%d)'%(x+1),dkv)
 for x in range(1,30,3):
     Check.secret(dk(x/10))
     Check.secret(dr(x/10))
 #+END_SRC
-*** TODO Program kot zaporedje(kompozitum) preprostih operacij     :noexport:
-** Numerično odvajanje
+** TODO Numerično odvajanje                                        :noexport:
 *** Deljene diference za prvi odvoda
 *** Deljene diference za drugi odvod
-** Tangenta in normala
-* Integral 
-** Nedoločeni integral
-*** Integral polinoma
+* TODO Integral 
+** TODO Integral polinoma
 Napiši funkcijo ~integral(p)~, ki izračuna integral polinoma ~p~. Polinom 
 $$p(x) = a_n x^n + a_{n-1}x^{n-1}+\ldots + a_1 + a_0$
 naj bo podan s seznamom koeficientov ~p~ $=[a_n,a_{n-1},\ldots a_0]$.
@@ -1464,15 +1447,15 @@ print(integral(p))
 #+RESULTS:
 : [0.25, 0.3333333333333333, 0.5, 1.0, 0]
 
-**** Rešitev
+*** Rešitev
 #+name: integral
 #+BEGIN_SRC python :exports both :eval no-export
   def integral(p):
       n = len(p)
       return [p[i]/(n-i) for i in range(n)] + [0]
 #+END_SRC
-** Določeni integral
-*** Trapezna formula za določeni integral
+
+** Trapezna formula za določeni integral
 Napiši funkcijo ~trapez(f,a,b,n)~, ki izračuna približek integrala
 $$\int_a^bf(x)dx.$$ kot vsoto ploščin trapezov, ki jih dobimo, če interval
 $[a,b]$ razdelimo na podintervale $[x_i,x_{i+1}]$ enake dolžine in povežemo
@@ -1556,7 +1539,7 @@ Primer:
 
 #+RESULTS:
 : 0.5
-**** Namig
+*** Namig
 Velja
 $$\int_{x_i}^{x_{i+1}}f(x)dx=\int_{a}^{x_{1}}f(x)dx+\int_{x_1}^{x_{2}}f(x)dx+\ldots
 \int_{x_{n-1}}^{b}f(x)dx,$$
@@ -1565,7 +1548,7 @@ $$P=v\frac{a+b}{2}$$ izpeljite približek za integral
 $$\int_{x_i}^{x_{i+1}}f(x)dx$$
 in formulo za integral na intervalu $[a,b]$ dobite kot vsoto ploščin posameznih
 trapezov. 
-**** Matematična izpeljava
+*** Matematična izpeljava
 Če interval $[a,b]$ razdelimo na $n$ enakih delov, lahko krajišča podintervalov
 izračunamo kot $x_i = a+ih$, kjer je $h=\frac{b-a}{n}$ dolžina podintervala.
 Ploščina trapeza z oglišči $(x_i,0)$, $(x_{i+1},0)$, $(x_{i+1},f(x_{i+1}))$ in
@@ -1587,7 +1570,7 @@ $$
 \int_a^bf(x)dx \simeq \frac{h}{2}\left(f(a)+2\sum_{i=1}^{n-1}f(x_i)+f(b)\right).
 $$
  
-**** Rešitev
+*** Rešitev
 #+name: trapez
 #+BEGIN_SRC python :exports both :eval no-export
   def trapez(f,a,b,n):
@@ -1595,8 +1578,8 @@ $$
       return h/2*(f(a)+2*sum(f(a+(i+1)*h) for i in range(n-1))+f(b))
 #+END_SRC
 
-**** Testi
-*** Dolžina loka krivulje
+*** Testi
+** Dolžina loka krivulje
 Napiši funkcijo ~dolzina(f,a,b,n)~, ki izračuna dolžino loka grafa funkcije
 $f(x)$ kot vsoto dolžin daljic, ki jih dobimo, če razdelimo interval $[a,b]$ na
 podintervale $[x_i,x_{i+1}]$ enake dolžine in povežemo točke
@@ -1715,10 +1698,10 @@ Primerjamo še s trapezno formulo
 : 1.479525185093328
 : 1.478979251951247
 : 1.4789451321908484
-**** Namig
+*** Namig
 Dolžina daljice med točkama $(x_0,y_0)$ in $(x_1,y_1)$ je enaka
 $$\sqrt{(x_1-x_0)^2+(y_1-y_0)^2}.$$
-**** Rešitev
+*** Rešitev
 Označimo s $h=x_{i+1}-x_i$ dolžino podintervalov. Razdalja med $(x_i,f(x_i))$ in
 $(x_{i+1},f(x_{i+1}))$ je tako enaka
 $$ \sqrt{h^2+(f(x_{i+1})-f(x_i))^2}.$$
@@ -1733,10 +1716,9 @@ $$ \sqrt{h^2+(f(x_{i+1})-f(x_i))^2}.$$
           dy = f(a+(i+1)*h) - f(a+i*h)
           d += (h**2 + dy**2)**0.5
       return d
-#+END_SRC
-* Vektorji v ravnini in prostoru 
-** Vektorji
-*** Python razred za vektorje
+#+END_SRC 
+* Vektorji
+** Python razred za vektorje
 Spodaj napisani preprost razred ~Vektor~ predstavlja vektorje kot $n$-terice števil.
 #+name: Vektor
 #+BEGIN_SRC python :exports both :eval no-export
@@ -1776,7 +1758,7 @@ print(a+b, a-b, 2*a,b*0.5)
 #+RESULTS:
 : (4, 4, 4) (-2, 0, 2) (2, 4, 6) (1.5, 1.0, 0.5)
 
-**** Rešitev
+*** Rešitev
 #+name: Vektor_osnove
 #+BEGIN_SRC python :exports both :eval no-export
   def __add__(self,b):
@@ -1793,7 +1775,7 @@ print(a+b, a-b, 2*a,b*0.5)
   setattr(Vektor, '__sub__', __sub__)
   setattr(Vektor, '__mul__', __mul__)
 #+END_SRC
-*** Skalarni in vektorski produkt
+** Skalarni in vektorski produkt
 Definiraj funkciji ~dot(a,b)~ in ~cross(a,b)~, ki izračuna skalarni in vektorski
 produkt dveh vektorjev ~a~ in ~b~.
 #+name: dot_cross¸
@@ -1810,7 +1792,7 @@ produkt dveh vektorjev ~a~ in ~b~.
 #+RESULTS:
 : None
 
-*** Enakost, kolinearnost in koplanarnost vektorjev
+** Enakost, kolinearnost in koplanarnost vektorjev
  Npiši funkcijo ~kolinearna(a,b)~, ki preveri ali sta dva vektorja ~a~ in ~b~
  kolinearna in vrne ~True~, če sta kolinearna in ~False~, če nista.
  Vektorja ~a~ in ~b~ sta bodisi seznama tipa ~list~ ali n-terici tipa ~tuple~.
@@ -1822,7 +1804,7 @@ kolinearna([3,2], [6,4]), kolinearna((0,0,1), (1,0,0))
 
 #+RESULTS:
 : (True, False)
-**** Rešitev
+*** Rešitev
 #+name: kolinearna
 #+BEGIN_SRC python :session kolinearna :exports both :eval no-export
   def kolinearna(a, b):
@@ -1848,15 +1830,15 @@ kolinearna([3,2], [6,4]), kolinearna((0,0,1), (1,0,0))
 
 #+RESULTS: kolinearna
 
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 Check.part()
-Check.equal('kolinearna([1,2,3], [2,4,6])', True)
-Check.equal('kolinearna([0,0,0,0], [1,2,3,4])', True)
-Check.equal('kolinearna([1,0], [1,0,0])', False)
+self.assertEqual('kolinearna([1,2,3], [2,4,6])', True)
+self.assertEqual('kolinearna([0,0,0,0], [1,2,3,4])', True)
+self.assertEqual('kolinearna([1,0], [1,0,0])', False)
 Check.secret(kolinearna([0,0,1],[0,0,2]))
 Check.secret(kolinearna([1,2],[-1,-2]))
 Check.secret(kolinearna([0,0,1],[0,1,-2]))
-*** Koplanarni vektorji 
+** Koplanarni vektorji 
 Npiši funkcijo ~koplanarni(a,b,c)~, ki preveri ali trije 3D vektorji ~a~, ~b~ in ~c~
 ležijo na isti ravnini in vrne ~True~, če ležijo in ~False~ sicer.
 Vektorji ~a~, ~b~ in ~c~ so bodisi seznama tipa ~list~ ali n-terici tipa ~tuple~.
@@ -1867,7 +1849,7 @@ Na primer:
 print(koplanarni([3,2,0], [6,4,0],[-1,2,0]))
 print(koplanarni((1,0,0), (0,1,0),(0,0,1)))
 #+END_SRC
-**** Rešitev
+*** Rešitev
 #+name: koplanarni
 #+BEGIN_SRC python :exports both :eval no-export
 
@@ -1882,19 +1864,19 @@ def koplanarni(a, b, c):
     # pri koplanarnih vektorjih je mešani produkt enak 0
     return dot(a,cross(b,c)) == 0
 #+END_SRC
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 Check.part()
-Check.equal('koplanarni([1,2,0], [2,4,0],[-2,3,0])', True)
-Check.equal('koplanarni([1,0,0], [0,1,0],[0,0,1])', False)
-Check.equal('koplanarni([1,2,2], [0,1,2],[0,0,1])', False)
-Check.equal('koplanarni([1,0,-3], [0,1,0],[1,1,-3])', True)
-Check.equal('koplanarni([1,2,3], [0,1,2],[0,0,0])', True)
-Check.equal('koplanarni([0,1,0], [0,1,2],[1,0,1])', False)
+self.assertEqual('koplanarni([1,2,0], [2,4,0],[-2,3,0])', True)
+self.assertEqual('koplanarni([1,0,0], [0,1,0],[0,0,1])', False)
+self.assertEqual('koplanarni([1,2,2], [0,1,2],[0,0,1])', False)
+self.assertEqual('koplanarni([1,0,-3], [0,1,0],[1,1,-3])', True)
+self.assertEqual('koplanarni([1,2,3], [0,1,2],[0,0,0])', True)
+self.assertEqual('koplanarni([0,1,0], [0,1,2],[1,0,1])', False)
 Check.secret(koplanarni([1,1,2], [2,1,2],[1,2,1]))
 Check.secret(koplanarni([1,2,1], [1,1,1],[1,3,1]))
 Check.secret(koplanarni([2,2,2], [1,-2,1],[1,1,1]))
 Check.secret(koplanarni([1,1,0], [0,1,2],[1,-1,1]))
-*** Linearna odvisnost
+** Linearna odvisnost
 Napiši funkcijo ~odvisni(*vektorji)~, ki preveri ali so dani vektorji
 linearno odvisni in vrne ~True~, če so odvisni in ~False~, če niso.
 Vektorji so lahko poljubne dimenzije. Uporabiš
@@ -1908,7 +1890,7 @@ Na primer:
     >>> odvisni([1,2,3],[1,2,4])
     False
 #+END_SRC
-**** Rešitev
+*** Rešitev
 #+name: odvisni
 #+BEGIN_SRC python :exports both :eval no-export
 import numpy as np
@@ -1916,19 +1898,19 @@ def odvisni(*vektorji):
     matrika = np.array(vektorji)
     return np.linalg.matrix_rank(matrika)<len(vektorji)
 #+END_SRC
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 
 #+BEGIN_SRC python :exports both :eval no-export
 Check.part()
-Check.equal('odvisni(list(range(10)),10*[1])', False)
-Check.equal('odvisni(3*[1],3*[2],3*[0])', True)
-Check.equal('odvisni([1,0,0],[0,1,1],[0,1,-1])', False)
+self.assertEqual('odvisni(list(range(10)),10*[1])', False)
+self.assertEqual('odvisni(3*[1],3*[2],3*[0])', True)
+self.assertEqual('odvisni([1,0,0],[0,1,1],[0,1,-1])', False)
 Check.secret(odvisni([1,1,1],[1,2,3],[0,0,0]))
 Check.secret(odvisni([1,1,1],[1,1,2],[0,1,0]))
 #+END_SRC
 
-** Premica in ravnina v 3D
-*** Razred za ravnino v prostoru
+* Premica in ravnina v 3D
+** Razred za ravnino v prostoru
 Sestavite razred ~Ravnina~, ki predstavlja ravnino v prostoru.
 Razred naj ima metodo ~__init__(self,n,T)~, ki ravnino določi z normalo in točko
 in metodo ~vsebuje(self,T)~, ki preveri ali točka ~T~ leži na ravnini.
@@ -1947,7 +1929,7 @@ Na primer:
     >>> Ravnina([1,1,1],[0,0,0]) == Ravnina([-1,-1,-1],[1,0,-1])
     True
 
-**** Rešitev
+*** Rešitev
 
 #+name: ravnina
 #+BEGIN_SRC python :exports both :eval no-export
@@ -1965,25 +1947,25 @@ class Ravnina:
         # preverimo, če sta vektorja koeficientov kolinearna (ne najbolj optimalno)
         return a*f == b*e and a*g==c*e and b*g==c*f and a*h==d*e and b*h==d*f and c*h==d*g
 #+END_SRC
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 
 #+BEGIN_SRC python :exports both :eval no-export
 Check.part()
-Check.equal('Ravnina([1,2,3],[1,0,0]).vsebuje([0,-1,1])', True)
-Check.equal('Ravnina([1,2,3],[1,0,0]).vsebuje([0,1,1])', False)
+self.assertEqual('Ravnina([1,2,3],[1,0,0]).vsebuje([0,-1,1])', True)
+self.assertEqual('Ravnina([1,2,3],[1,0,0]).vsebuje([0,1,1])', False)
 Check.secret('Ravnina([1,2,3],[1,2,3]).vsebuje([0,1,1])')
 Check.secret('Ravnina([1,2,3],[1,2,3]).vsebuje([14,0,0])')
 
 Check.part()
-Check.equal('Ravnina([1,2,3],[1,0,0])==Ravnina([1,2,3],[0,-1,1])', True)
-Check.equal('Ravnina([1,2,3],[1,0,0])==Ravnina([2,4,6],[1,0,1])', False)
-Check.equal('Ravnina([1,2,3],[1,0,0])==Ravnina([2,4,6],[1,0,0])', True)
+self.assertEqual('Ravnina([1,2,3],[1,0,0])==Ravnina([1,2,3],[0,-1,1])', True)
+self.assertEqual('Ravnina([1,2,3],[1,0,0])==Ravnina([2,4,6],[1,0,1])', False)
+self.assertEqual('Ravnina([1,2,3],[1,0,0])==Ravnina([2,4,6],[1,0,0])', True)
 Check.secret('Ravnina([1,2,3],[1,2,3])==Ravnina([1,2,3],[1,2,-3])')
 Check.secret('Ravnina([1,2,3],[1,2,3])==Ravnina([3,6,9],[14,0,0])')
 Check.secret('Ravnina([0,0,3],[1,2,3])==Ravnina([1,2,3],[14,0,0])')
 Check.secret('Ravnina([0,2,0],[1,2,3])==Ravnina([0,1,0],[1,2,3])')
 #+END_SRC
-*** Razred za premico v prostoru
+** Razred za premico v prostoru
 Sestavite razred ~Premica~, ki predstavlja premico v prostoru.
 Razred naj ima metodo ~__init__(self,e,T)~, ki premico določi
 s smernim vektorjem ~e~ in točko ~T~. Razred naj ima tudi metodo ~skozi_tocke(A,B)~, ki naj vrne premico skozi točki ~A~ in ~B~ in metodo
@@ -1997,7 +1979,7 @@ Na primer:
     >>> p == q
     True
 #+END_SRC
-**** Rešitev
+*** Rešitev
 
 #+name: premica
 #+BEGIN_SRC python :exports both :eval no-export
@@ -2019,20 +2001,20 @@ class Premica:
         r,s,t = T0T
         return a*s == b*r and a*t==c*r and b*t==c*s and a*e == b*d and a*f==c*d and b*f==c*e
 #+END_SRC
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 #+BEGIN_SRC python
 
 Check.part()
-Check.equal('Premica([1,2,3],[1,0,0])==Premica([-1,-2,-3],[0,-2,-3])', True)
-Check.equal('Premica([1,2,0],[1,0,0])==Premica([2,4,0],[2,2,0])', True)
-Check.equal('Premica([1,2,0],[1,0,0])==Premica([2,4,0],[2,1,0])', False)
-Check.equal('Premica([1,2,0],[1,0,0])==Premica.skozi_tocke([1,0,0],[2,2,0])', True)
-Check.equal('Premica.skozi_tocke([1,1,1],[3,5,1])==Premica([2,4,0],[2,1,0])', False)
+self.assertEqual('Premica([1,2,3],[1,0,0])==Premica([-1,-2,-3],[0,-2,-3])', True)
+self.assertEqual('Premica([1,2,0],[1,0,0])==Premica([2,4,0],[2,2,0])', True)
+self.assertEqual('Premica([1,2,0],[1,0,0])==Premica([2,4,0],[2,1,0])', False)
+self.assertEqual('Premica([1,2,0],[1,0,0])==Premica.skozi_tocke([1,0,0],[2,2,0])', True)
+self.assertEqual('Premica.skozi_tocke([1,1,1],[3,5,1])==Premica([2,4,0],[2,1,0])', False)
 Check.secret('Premica([1,2,3],[1,2,3])==Premica([1,2,3],[1,2,-3])')
 Check.secret('Premica([1,2,3],[1,2,3])==Premica([1,2,3],[0,0,0])')
 #+END_SRC
 #+END_SRC
-*** Presečišče premice in ravnine
+** Presečišče premice in ravnine
 Napišite funkcijo ~presecisce(p,R)~, ki izračuna presečišče
 premice ~p~ in ravnine ~R~. če presečišča ni
 ali jih je neskončno naj funkcija javi napako tipa
@@ -2048,7 +2030,7 @@ Na primer:
     None
 #+END_SRC
 
-**** Rešitev
+*** Rešitev
 #+name: presecisce
 #+BEGIN_SRC python :exports both :eval no-export
 
@@ -2077,11 +2059,11 @@ def presecisce(p,R):
 
 #+END_SRC
 
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 
 #+BEGIN_SRC python :exports both :eval no-export
 Check.part()
-Check.equal('presecisce(Premica([1,2,3],[0,-2,-3]),Ravnina([-1,-2,-3],[0,-2,-3]))', [0,-2,-3])
+self.assertEqual('presecisce(Premica([1,2,3],[0,-2,-3]),Ravnina([-1,-2,-3],[0,-2,-3]))', [0,-2,-3])
 try:
     koda = 'presecisce(Premica([1,2,0],[1,0,0]),Ravnina([2,-1,0],[2,2,0]))'
     eval(koda)
@@ -2090,17 +2072,17 @@ except Exception as ex:
     errmsg = "Nič ali neskončno presečišč!"
     if ex.args[0] != errmsg:
         Check.error("Če je presečišč neskončno ali nobenega, mora funkcija javiti napako z Exception('%s')" % errmsg)
-Check.equal('presecisce(Premica([1,2,3],[1,0,0]),Ravnina([-1,-2,-3],[-4,0,-3]))', [0,-2,-3])
-Check.equal('presecisce(Premica.skozi_tocke([1,1,1],[0,2,2]),Ravnina([-1,0,1],[0,2,1]))',[0.5,1.5,1.5])
+self.assertEqual('presecisce(Premica([1,2,3],[1,0,0]),Ravnina([-1,-2,-3],[-4,0,-3]))', [0,-2,-3])
+self.assertEqual('presecisce(Premica.skozi_tocke([1,1,1],[0,2,2]),Ravnina([-1,0,1],[0,2,1]))',[0.5,1.5,1.5])
 for i in range(10):
   Check.secret('presecisce(Premica([1,2+i,3],[0,1,i]),Ravnina([-1+i,-2,-3],[0,-2,-3]))')
 Check.secret('presecisce(Premica.skozi_tocke([1,2,3],[0,2,1]),Ravnina([-1,-2,-3],[0,-2,-3]))')
 #+END_SRC
 
-** Raytracing: krogla in točkasto svetilo
+* Raytracing: krogla in točkasto svetilo
 Pri tej nalogi bomo generirali sliko krogle osvetljene z enim točkastim svetilom 
 v praznem prostoru.
-*** Presečišče poltraka in ravnine
+** Presečišče poltraka in ravnine
 Napiši funkcijo ~presecisce(poltrak, krogla)~, ki izračuna prvo presečišče
 poltraka in krogle oziroma vrne ~None~, če presečišča ni. Poltrak naj bo podan
 kot par trojic ~(T0,e)~, kjer je ~T0~ začetna točka poltraka, ~e~ pa smerni
@@ -2117,7 +2099,7 @@ Primer:
     >>> presecisce((0,0,0),(1,0,0)), ((0,0,0),1)) # vrne None
 #+END_SRC
 
-**** Rešitev
+*** Rešitev
 #+BEGIN_SRC python :exports both :eval no-export
 
 def dot(x,y):
@@ -2146,15 +2128,15 @@ def presecisce(poltrak, krogla):
 
 #+END_SRC
 Check.part()
-Check.equal('presecisce(((0,0,0),(1,0,0)), ((2,0,0),1))', (1,0,0))
-Check.equal('presecisce(((0,0,0),(-1,0,0)), ((2,0,0),1.5))', None)
-Check.equal('presecisce(((0,0,0),(1,0,0)), ((0,0,0),2))', None)
+self.assertEqual('presecisce(((0,0,0),(1,0,0)), ((2,0,0),1))', (1,0,0))
+self.assertEqual('presecisce(((0,0,0),(-1,0,0)), ((2,0,0),1.5))', None)
+self.assertEqual('presecisce(((0,0,0),(1,0,0)), ((0,0,0),2))', None)
 Check.secret(presecisce(((1,1,1),(1,1,1)),((2,0,0),1)))
 Check.secret(presecisce(((1,2,-1),(-1,2,2)),((2,3,1),3)))
 Check.secret(presecisce(((1,0,1),(1,2,1)),((2,1,-1),2)))
 Check.secret(presecisce(((1,0,1),(1,2,2)),((5,10,0),6)))
 
-*** Osvetljenost
+** Osvetljenost
 Napiši funkcijo ~osvetljenost(T, krogla, svetilo)~, ki določi osvetljenost točke ~T~ na obodu krogle ~krogla=(S,r)~,
 če kroglo osvetlimo s svetilom v točki ~S~. Osvetljenost izračunamo s formulo
 $$\frac{\cos{\alpha}}{r^2},$$
@@ -2170,7 +2152,7 @@ Primer:
     >>> osvetljenost((1,0,0),((2,0,0),1),(0,3**0.5,0))
     0.125
 
-**** Rešitev
+*** Rešitev
 #+BEGIN_SRC python :exports both :eval no-export
 
 def dot(x,y):
@@ -2185,13 +2167,13 @@ def osvetljenost(T, krogla, svetilo):
 
 #+END_SRC
 Check.part()
-Check.equal('osvetljenost((1,0,0),((2,0,0),1), (0,0,0))', 1)
-Check.equal('osvetljenost((1,0,0),((2,0,0),1),(4,0,0))', 0)
-Check.equal('osvetljenost((1,0,0),((2,0,0),1),(0,3**0.5,0))', 0.125)
+self.assertEqual('osvetljenost((1,0,0),((2,0,0),1), (0,0,0))', 1)
+self.assertEqual('osvetljenost((1,0,0),((2,0,0),1),(4,0,0))', 0)
+self.assertEqual('osvetljenost((1,0,0),((2,0,0),1),(0,3**0.5,0))', 0.125)
 Check.secret(osvetljenost((1,0,0),((2,0,0),1),(1,3**0.5,0)))
 Check.secret(osvetljenost((0,0,0),((2,0,0),2),(-1,3,0)))
 
-*** Krogla osvetljena s točkastim svetilom 
+** Krogla osvetljena s točkastim svetilom 
 Napiši funkcijo ~pogled(kamera,okvir, krogla, svetilo, slika)~, ki izdela sliko (~slika~ tipa ~PIL.Image~) ~krogle~ osvetljene s ~svetilom~,
 ki jo naredi ~kamera~ skozi dani ~okvir~.
 
@@ -2307,7 +2289,7 @@ def pogled(camera, okvir, krogla, svetilo, slika):
 
 #+END_SRC
 
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 
 Check.part()
@@ -2325,20 +2307,20 @@ pixels = slika.load()
 #slika.convert(mode='L').save(buf, format="PNG")
 #print("<img alt=\"Slika krogle\" src=\"data:image/png;base64,%s\">"%base64.b64encode(buf.getvalue()))
 
-Check.equal('slika.getpixel((0,0))', 0)
-Check.equal('slika.getpixel((100,100))', 85.13904571533203)
+self.assertEqual('slika.getpixel((0,0))', 0)
+self.assertEqual('slika.getpixel((100,100))', 85.13904571533203)
 Check.secret(slika.getpixel((100,125)))
 
 #+END_SRC
 
-** Raytracing: tetraeder in točkasto svetilo
+* Raytracing: tetraeder in točkasto svetilo
 
 Na Khan academy Pixar [[https://www.khanacademy.org/partner-content/pixar/rendering][prikazuje]], kako delajo risane filme.
 Pomemben del procesa, ki pripelje do končnega izdelka je tudi metoda 
 „sledenja žarkom“(angl. raytracing), ki omogoča verno poustvarjanje osvetlitve.
 Ta naloga ilustrira, kako deluje „raytracing“.
 
-*** Presečišče poltraka in ravnine
+** Presečišče poltraka in ravnine
 
 Definiraj funkcijo ~presek(p, R)~ ki vrne presečišče poltraka ~p~ in ravnine ~R~.
 Če presečišča ni, naj funkcija vrne ~None~. Poltrak je podan kot par dveh točk (trojice števil),
@@ -2357,7 +2339,7 @@ Primer:
 
 #+END_SRC
 
-**** Rešitev
+*** Rešitev
 #+BEGIN_SRC python :exports both :eval no-export
 
 def dot(x,y):
@@ -2382,14 +2364,14 @@ def presek(p, R):
 
 #+END_SRC
 
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 
 #+BEGIN_SRC python :exports both :eval no-export
 
 Check.part()
-Check.equal('presek(((0,0,2),(0,0,1)),(1,1,1,0))', (0,0,0))
-Check.equal('presek(((0,0,1),(0,0,2)),(1,1,1,0))', None)
-Check.equal('presek(((1,1,1),(2,2,2)),(1,-1,0,2))',None)
+self.assertEqual('presek(((0,0,2),(0,0,1)),(1,1,1,0))', (0,0,0))
+self.assertEqual('presek(((0,0,1),(0,0,2)),(1,1,1,0))', None)
+self.assertEqual('presek(((1,1,1),(2,2,2)),(1,-1,0,2))',None)
 Check.secret(presek(((1,1,1),(1,2,2)),(1,2,3,4)))
 Check.secret(presek(((1,2,2),(1,1,1)),(3,2,1,-4)))
 Check.secret(presek(((1,0,2),(1,1,1)),(0,2,1,1)))
@@ -2398,7 +2380,7 @@ Check.secret(presek(((1,2,0),(1,1,0)),(3,0,1,-4)))
 
 #+END_SRC
 
-*** Na kateri strani ravnine leži točka?
+** Na kateri strani ravnine leži točka?
 
 Definiraj funkcijo ~stran(T,R)~, ki pove na kateri strani ravnine ~R~ leži točka ~T~. 
 Funkcija naj vrne ~1~, če točka leži nad ravnino (glede na smer normale), ~-1~, če točka leži pod ravnino
@@ -2414,7 +2396,7 @@ ravnina pa s koeficienti enačbe $ax+by+cz=d$ kot četvorka števil ~R=(a,b,c,d)
     >>> stran((0,0,0),(0,0,1,0))
     0
 
-**** Rešitev
+*** Rešitev
 #+BEGIN_SRC python :exports both :eval no-export
 
 def dot(x,y):
@@ -2434,15 +2416,15 @@ def stran(T, R):
 
 #+END_SRC
 
-**** TODO Testi                                                    :noexport:
+*** TODO Testi                                                     :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 
 Check.part()
-Check.equal('stran((0,0,1),(0,0,1,0))', 1)
-Check.equal('stran((0,0,-1),(0,0,1,0))', -1)
-Check.equal('stran((0,0,2),(1,1,1,0))', 1)
-Check.equal('stran((0,1,1),(-2,1,1,2))', 0)
-Check.equal('stran((1,0,1),(2,2,1,4))', -1)
+self.assertEqual('stran((0,0,1),(0,0,1,0))', 1)
+self.assertEqual('stran((0,0,-1),(0,0,1,0))', -1)
+self.assertEqual('stran((0,0,2),(1,1,1,0))', 1)
+self.assertEqual('stran((0,1,1),(-2,1,1,2))', 0)
+self.assertEqual('stran((1,0,1),(2,2,1,4))', -1)
 Check.secret(stran((2,-3,1),(2,2,1,3)))
 Check.secret(stran((4,-3,1),(2,2,1,3)))
 Check.secret(stran((2,-3,1),(2,-5,1,3)))
@@ -2451,7 +2433,7 @@ Check.secret(stran((0.5,-3,1),(2,2,1,6)))
 
 #+END_SRC
 
-*** Ali leži dana točka na trikotniku ABC?
+** Ali leži dana točka na trikotniku ABC?
 
 Večina modelov teles v 3D je sestavljena iz majhnih trikotnikov(triangulirana),
 zato mora program za raytracing vedeti, če svetlobni žarek zadene trikotnik in
@@ -2483,7 +2465,7 @@ Primer
     False
 
 #+END_SRC
-**** Rešitev
+*** Rešitev
 #+BEGIN_SRC python :exports both :eval no-export
 
 def dot(x,y):
@@ -2525,12 +2507,12 @@ def na_trikotniku(T,ABC):
 
 #+END_SRC
 Check.part()
-Check.equal('na_trikotniku((1,1,0), ((0,0,0), (3,0,0), (0,3,0)))', True)
-Check.equal('na_trikotniku((1,1,0), ((0,0,1), (3,0,1), (0,3,1)))', False)
-Check.equal('na_trikotniku((1,1,0), ((0,0,0), (2,0,0), (0,2,0)))', True)
-Check.equal('na_trikotniku((1,1,0), ((0,0,0), (1,0,0), (0,1,0)))', False)
-Check.equal('na_trikotniku((1,1,1), ((3,0,0), (0,3,0), (0,0,3)))', True)
-Check.equal('na_trikotniku((1,2,-1), ((3,0,0), (0,3,0), (0,0,3)))', False)
+self.assertEqual('na_trikotniku((1,1,0), ((0,0,0), (3,0,0), (0,3,0)))', True)
+self.assertEqual('na_trikotniku((1,1,0), ((0,0,1), (3,0,1), (0,3,1)))', False)
+self.assertEqual('na_trikotniku((1,1,0), ((0,0,0), (2,0,0), (0,2,0)))', True)
+self.assertEqual('na_trikotniku((1,1,0), ((0,0,0), (1,0,0), (0,1,0)))', False)
+self.assertEqual('na_trikotniku((1,1,1), ((3,0,0), (0,3,0), (0,0,3)))', True)
+self.assertEqual('na_trikotniku((1,2,-1), ((3,0,0), (0,3,0), (0,0,3)))', False)
 Check.secret(na_trikotniku((1,2,3), ((0,1,3), (-1,0,3), (1,3,2))))
 Check.secret(na_trikotniku((1,1,0), ((0,0,0), (3,0,0), (0,3,0))))
 Check.secret(na_trikotniku((1,1,2), ((1,2,-3), (3,-3,-1), (2,3,3))))
@@ -2539,7 +2521,7 @@ Check.secret(na_trikotniku((1,-2,0), ((0,0,0), (3,1,2), (0,3,1))))
 Check.secret(na_trikotniku((0,0,0), ((1,-1,0), (3,-2,-1), (-2,3,-1))))
 Check.secret(na_trikotniku((1,1,2), ((0,0,0), (3,0,0), (0,3,0))))
 Check.secret(na_trikotniku((1,1,0.5), ((0,0,1.5), (3,0,0), (0,3,0))))
-*** Kam se odbije žarek
+** Kam se odbije žarek
 
 Definiraj funkcijo ~odboj(p, R)~, ki pove, kam se odbije svetlobni žarek, ki ga predstavlja poltrak ~p~, ko vpade na ravnino ~R~.
 
@@ -2560,7 +2542,7 @@ Primer
     None
 
 #+END_SRC
-**** Rešitev
+*** Rešitev
 #+BEGIN_SRC python :exports both :eval no-export
 
 def dot(x,y):
@@ -2593,8 +2575,8 @@ def odboj(p, R):
 #+BEGIN_SRC python :exports both :eval no-export
 
 Check.part()
-Check.equal('odboj(((0,0,1),(1,0,-1)), (0,0,1,0))', ((1,0,0),(1,0,1)))
-Check.equal('odboj(((0,0,1),(-1,0,1)), (0,0,1,0))', None)
+self.assertEqual('odboj(((0,0,1),(1,0,-1)), (0,0,1,0))', ((1,0,0),(1,0,1)))
+self.assertEqual('odboj(((0,0,1),(-1,0,1)), (0,0,1,0))', None)
 Check.secret(odboj(((0,1,1),(1,-1,0)), (1,1,1,0)))
 Check.secret(odboj(((0,1,0),(1,-1,0)), (0,2,1,2)))
 Check.secret(odboj(((2,1,0),(1,-1,5)), (0,3,1,-3)))
@@ -2603,9 +2585,9 @@ Check.secret(odboj(((0,1,3),(-1,-1,3)), (0,5,1,1)))
 Check.secret(odboj(((0,1,1),(-2,-1,2)), (1,6,1,1)))
 
 #+END_SRC
-**** Ali točka leži na trikotniku?
-*** TODO Večkratni odboji :noexport:
-* Matrike in sistemi enačb 
+*** Ali točka leži na trikotniku?
+** TODO Večkratni odboji                                           :noexport:
+* TODO Matrike in sistemi enačb 
 ** Matrike
 *** Python razred za matrike
 ** Sistemi enačb
@@ -2618,7 +2600,8 @@ interpolacijskega polinoma, ki interpolira podatke ~x~ in ~y~.
 *** Maksimum funkcije podane s tabelo
 Napišite funkcijo ~maksimum(x,y)~, ki poišče približno vrednost lokacije
 maksimuma in vrednosti maksima s pomočjo kvadratne interpolacije.  
-* Licenca 
+* DONE Licenca 
+  CLOSED: [2017-11-28 tor 00:32]
 #+BEGIN_EXPORT html
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
 <img alt="Creative Commons licenca" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
