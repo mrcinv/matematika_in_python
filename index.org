@@ -6,7 +6,6 @@
 #+OPTIONS: email:t f:t inline:t num:2 p:nil pri:nil prop:nil stat:t tags:t
 #+OPTIONS: tasks:t tex:t timestamp:t title:t toc:t todo:nil |:t
 #+TITLE: Matematika skozi Python
-#+DATE: <2017-01-26 čet>
 #+AUTHOR: Martin Vuk
 #+EMAIL: martin.vuk@fri.uni-lj.si
 #+LANGUAGE: sl
@@ -19,6 +18,7 @@
   :PROPERTIES:
   :UNNUMBERED: t
   :END:
+ 
 Pred vami je priročnik, ki vam bo pomagal poglobiti in povezati znanje
 programiranja in matematike. Nastal kot dopolnilno gradivo pri predmetu
 Matematika za študente visokošolskega programa na Fakulteti za računalništvo in
@@ -32,9 +32,8 @@ pomoč pri reševanju nalog so na voljo tudi kratki videi na [[https://www.youtu
 Matematika]]. Priročnik je na voljo v več formatih:
 
 - [[file:index.html][HTML spletna stran]],
-- [[file:index.pdf][PDF dokument]],
 - predmet [[https://www.projekt-tomo.si/course/15/][Matematika]] na portalu [[https://www.projekt-tomo.si/][Projekt Tomo]] in
-- [[http:index.org][izvorna koda]] v obliki  [[https://orgmode.org][Org-mode]] za urejevalnik [[https://www.gnu.org/software/emacs/][Emacs]].
+- [[file:index.org][izvorna koda]] v obliki  [[https://orgmode.org][Org-mode]] za urejevalnik [[https://www.gnu.org/software/emacs/][Emacs]].
  
 ** Kako uporabljati priročnik
 Vsekakor najprej poskusite rešiti naloge povsem samostojno. Če se vam zatakne,
