@@ -1,4 +1,3 @@
-# -*- org-export-babel-evaluate: nil -*-
 # #+SETUPFILE: org-html-themes/setup/theme-readtheorg-local.setup
 #+SETUPFILE: org-bootstrap-document/setup.org
 #+OPTIONS: ':nil *:t -:t ::t <:t H:4 \n:nil ^:t arch:headline author:t
@@ -13,6 +12,7 @@
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 25.1.1 (Org mode 9.0.3)
 #+PROPERTY: header-args:python :exports both :noweb strip-export :results output replace 
+# -*- org-export-babel-evaluate: nil -*-
 * DONE Uvod 
   CLOSED: [2017-11-26 ned 22:55]
   :PROPERTIES:
@@ -34,7 +34,8 @@ Matematika]]. Priročnik je na voljo v več formatih:
 - [[file:index.html][HTML spletna stran]],
 - predmet [[https://www.projekt-tomo.si/course/15/][Matematika]] na portalu [[https://www.projekt-tomo.si/][Projekt Tomo]] in
 - [[file:index.org][izvorna koda]] v obliki  [[https://orgmode.org][Org-mode]] za urejevalnik [[https://www.gnu.org/software/emacs/][Emacs]].
- 
+
+Martin Vuk, avtor 
 ** Kako uporabljati priročnik
 Vsekakor najprej poskusite rešiti naloge povsem samostojno. Če se vam zatakne,
 si poglejte splošna matematična navodila in poskusite vsaj programerski del
@@ -849,10 +850,10 @@ $$\sin(x)\simeq x\text{ in } \cos(x)\simeq 1;\quad |x|<10^{-1}.$$
 *** Sinus in kosinus 2
 Funkcijo iz prejšnje naloge razširi na vsa realna števila. Uporabi periodičnost
 in simetrije funkcij $\sin$ in $\cos$.
-* TODO Odvod
-Odvod funkcije $f(x)$ je definiran kot limita diferenčnega kvocienta. Vrednost
-odvoda $f'(x)$ v neki točki $x$, veliko pove o tem, kako se funkcija obnaša lokalno v
-okolici točke $x$. Zato je eno osnovnih orodij analize.
+* TODO Simbolično odvajanje
+Odvod funkcije $f(x)$ je definiran kot limita diferenčnega kvocienta. Vendar ga
+lahko preprosto računamo za funkcije, ki so podane eksplicitno s formulo, zgolj
+z uporabo nekaj pravil in tabelo elementarnih odvodov.
 
 Lepa lastnost odvoda je, da lahko za vse elementarne funkcije njihov odvod zopet
 izrazimo z elemntarnimi funkcijami. Postopek odvajanja lahko zožimo na nekaj
@@ -860,8 +861,6 @@ preprostih pravil in tabelo odvodov peščice funkcij. Zato je prerosto napisati
 program, ki ta postopek izvede. Pogledali si bomo različne načine, kako s
 programom lahko izračunamo odvod, pri čemer lahko izkoristimo preprosta pravila
 odvajanja.
-
-* TODO Simbolično odvajanje
 
 Naslednje naloge ilustrirajo, kako deluje simbolično odvajanje.
 Napisati želimo funkcijo v Pythonu, ki izračuna odvod dane funkcije f.
@@ -1157,6 +1156,21 @@ for x in xi:
     Check.secret(RPN("1 x + x x * ^").odvod().vrednost(x))
 #+END_SRC
 * TODO Avtomatsko odvajanje
+Vrednost odvoda $f'(x)$ v neki točki $x$, veliko pove o tem, kako se funkcija
+obnaša lokalno v okolici točke $x$. Zato je eno osnovnih orodij analize.
+Računalniški programe so, če malce poenostavimo, pravzaprav zaporedje osnovnih
+operacij na spremenljivkah, zato si jih lahko predstavljamo kot funkcije, ki
+vhodne parametre preslikajo v izhodne vrednosti. Lahko se vprašamo, kako se
+spreminjajo vrednosti na izhodu, če malce spremenimo vhodne parametre. Odgovor
+nam da odvod. Odvod se zato veliko uporablja pri optimizaciji in strojnem učenju,
+kjer je optimalna rešitev minimum primerno izbrane kriterijske funkcije. Lokalne
+minimume kriterijske funkcije se pogosto išče z [[https://en.wikipedia.org/wiki/Gradient_descent][metodo najhitrejšega spusta]], pri
+kateri potrebujemo izračun vrednost odvoda v posameznih točkah.
+ 
+Dejstvo, da je program le zaporedje enostavnih operacij, lahko izkoristimo zato,
+da posamezen program predelamo tako, da poleg vrednosti računa še vrednosti
+odvoda. To idejo uporabljajo različne metode [[https://en.wikipedia.org/wiki/Automatic_differentiation][avtomatskega odvajanja]].
+
 Naloge ilustrirajo, kako deluje [[https://en.wikipedia.org/wiki/Automatic_differentiation][avtomatsko odvajanje]] računalniških programov.
 Računalniški program je le zaporedje osnovnih računskih operacij. Kontrolne
 strukture, kot so ~if~ stavek pa le odločijo, katero zaporedje računskih
@@ -1432,7 +1446,7 @@ for x in range(1,30,3):
 * TODO Integral 
 ** TODO Integral polinoma
 Napiši funkcijo ~integral(p)~, ki izračuna integral polinoma ~p~. Polinom 
-$$p(x) = a_n x^n + a_{n-1}x^{n-1}+\ldots + a_1 + a_0$
+$$p(x) = a_n x^n + a_{n-1}x^{n-1}+\ldots + a_1 + a_0$$
 naj bo podan s seznamom koeficientov ~p~ $=[a_n,a_{n-1},\ldots a_0]$.
 
 Primer:
@@ -1465,7 +1479,7 @@ sliko).
 #+header: :exports results :file trapez.png
 #+header: :packages '(("" "pgfplots")) :border 1em :results raw
 #+header: :header '("\\pgfplotsset{compat=newest}")
-#+BEGIN_SRC latex
+#+BEGIN_SRC latex :exports results :file trapez.png
 \pgfplotsset{
     integral axis/.style={
         axis lines=middle,
@@ -1530,7 +1544,7 @@ sliko).
 #+RESULTS:
 [[file:trapez.png]]
 Primer:
-#+BEGIN_SRC python :results output :exports both :exports both :eval no-export
+#+BEGIN_SRC python :results output :noweb strip-export :exports both :eval no-export
   <<trapez>>
   f = lambda x: x**2 
   print(trapez(f,0,1,1))
@@ -1577,7 +1591,7 @@ $$
       return h/2*(f(a)+2*sum(f(a+(i+1)*h) for i in range(n-1))+f(b))
 #+END_SRC
 
-*** Testi
+*** TODO Testi                                                     :noexport:
 ** Dolžina loka krivulje
 Napiši funkcijo ~dolzina(f,a,b,n)~, ki izračuna dolžino loka grafa funkcije
 $f(x)$ kot vsoto dolžin daljic, ki jih dobimo, če razdelimo interval $[a,b]$ na
@@ -1593,7 +1607,7 @@ in trapezno formulo za izračun integrala.
 #+header: :exports results :file dolzina.png
 #+header: :packages '(("" "pgfplots")) :border 1em :results raw
 #+header: :header '("\\pgfplotsset{compat=newest}")
-#+BEGIN_SRC latex
+#+BEGIN_SRC latex :exports results
 \pgfplotsset{
     integral axis/.style={
         axis lines=middle,
@@ -1743,7 +1757,23 @@ Razred ~Vektor~ razširi z naslednjimi metodami
 - ~__mul__~
 - ~__rmul__~
 ki predstavljajo osnovne operacije med vektorji oziroma med vektorji in števili.
+Razred lahko razširimo z osnovnimi operacijami, tako da z ukazom ~setattr~
+prepišemo 
+#+BEGIN_SRC python :exports both :eval no
+  def __add__(self,b):
+      ...
+  def __sub__(self,b):
+      ...
+  def __mul__(self,alfa):
+      ...
+  def __rmul__(self,alfa):
+      ...
 
+  setattr(Vektor, '__add__', __add__)
+  setattr(Vektor, '__rmul__', __rmul__)
+  setattr(Vektor, '__sub__', __sub__)
+  setattr(Vektor, '__mul__', __mul__)
+#+END_SRC
 Primer:
 
 #+BEGIN_SRC python :results output :exports both :eval no-export
