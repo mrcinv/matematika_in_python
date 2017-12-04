@@ -40,10 +40,8 @@ Martin Vuk, avtor
 Vsekakor najprej poskusite rešiti naloge povsem samostojno. Če se vam zatakne,
 si poglejte splošna matematična navodila in poskusite vsaj programerski del
 rešiti sami. Če tudi to ne gre, lahko pokukate v rešitev. Rešitve ne kopirajte,
-ampak jo raje prepišite ali še bolje napišite sami. Tako bosMatematika skozi Pythonte imeli
+ampak jo raje prepišite ali še bolje napišite sami. Tako bose imeli
 več od tega.
-
-
 
 * DONE Zaporedja in vrste
   CLOSED: [2017-11-27 pon 09:42]
@@ -1730,11 +1728,12 @@ $$ \sqrt{h^2+(f(x_{i+1})-f(x_i))^2}.$$
           d += (h**2 + dy**2)**0.5
       return d
 #+END_SRC 
-* Vektorji
+* DONE Vektorji
+  CLOSED: [2017-12-01 pet 14:49]
 ** Python razred za vektorje
 Spodaj napisani preprost razred ~Vektor~ predstavlja vektorje kot $n$-terice števil.
 #+name: Vektor
-#+BEGIN_SRC python :exports both :eval no-export
+#+BEGIN_SRC python :exports both :eval no-export :tangle vektorji.py
   class Vektor:
       def __init__(self, *vred):
           if len(vred)==1 and hasattr(vred,'__getitem__'):
@@ -1789,7 +1788,7 @@ print(a+b, a-b, 2*a,b*0.5)
 
 *** Rešitev
 #+name: Vektor_osnove
-#+BEGIN_SRC python :exports both :eval no-export
+#+BEGIN_SRC python :exports both :eval no-export :tangle vektorji.py
   def __add__(self,b):
       return Vektor(ai + bi for ai,bi in zip(self,b))
   def __sub__(self,b):
@@ -1812,8 +1811,8 @@ seznamom (~list~) ali n-terico (~tuple~) oziroma podobnimi tipi.
     :PROPERTIES:
     :HTML_CONTAINER_CLASS: resitev
     :END:
- #+name: dot_cross¸
- #+BEGIN_SRC python :exports both :eval no-export
+ #+name: dot_cross
+ #+BEGIN_SRC python :exports both :eval no-export :tangle vektorji.py
    def dot(a,b):
        return sum(ai*bi for ai, bi in zip(a,b))
    def cross(a,b):
@@ -1825,48 +1824,23 @@ seznamom (~list~) ali n-terico (~tuple~) oziroma podobnimi tipi.
  #+RESULTS:
  : None
 
-** Enakost, kolinearnost in koplanarnost vektorjev
+** Kolinearnost vektorjev
  Npiši funkcijo ~kolinearna(a,b)~, ki preveri ali sta dva vektorja ~a~ in ~b~
  kolinearna in vrne ~True~, če sta kolinearna in ~False~, če nista.
  Vektorja ~a~ in ~b~ sta bodisi seznama tipa ~list~ ali n-terici tipa ~tuple~.
  
  Na primer:
-#+BEGIN_SRC python :session kolinearna :results output :exports both :exports both :eval no-export
-kolinearna([3,2], [6,4]), kolinearna((0,0,1), (1,0,0))
+#+BEGIN_SRC python :results output :exports both :exports both :eval no-export
+from vektorji import kolinearna
+print (kolinearna([3,2], [6,4]), kolinearna((0,0,1), (1,0,0)))
 #+END_SRC
 
 #+RESULTS:
-: (True, False)
-*** Rešitev
-#+name: kolinearna
-#+BEGIN_SRC python :session kolinearna :exports both :eval no-export
-  def kolinearna(a, b):
-      n, m = len(a), len(b)
-      if n != m:
-          # vektorja nista enakih dimenzij
-          return False
-      for i in range(n):
-          if a[i] !=0:
-              # we have found the pivot
-              k = b[i]/a[i]
-              prvi, drugi = a, b
-              break
-          elif b[i] != 0:
-              k = a[i]/b[i]
-              prvi, drugi = b,a
-              break
-      for j in range(i+1,n):
-          if k*prvi[j] != drugi[j]:
-              return False
-      return True
-#+END_SRC
-
-#+RESULTS: kolinearna
 
 *** DONE Testi                                                     
     CLOSED: [2017-12-01 pet 10:56]
 #+name: test_kolinearna
-#+BEGIN_SRC python :tangle test_vektorji
+#+BEGIN_SRC python :tangle test_vektorji.py
   from vektorji import kolinearna
   import unittest
   class VektorTest(unittest.TestCase):
@@ -1878,6 +1852,29 @@ kolinearna([3,2], [6,4]), kolinearna((0,0,1), (1,0,0))
               self.assertTrue(kolinearna((1, 2), (-1, -2)))
               self.assertFalse(kolinearna([0, 0, 1], (0, 1, -2)))
   unittest.main()
+#+END_SRC
+
+#+RESULTS: test_kolinearna
+
+*** Rešitev
+#+BEGIN_SRC python :tangle vektorji.py
+  def kolinearna(a, b):
+      n, m = len(a), len(b)
+      if n != m: # vektorja nista enakih dimenzij
+          return False
+      for i in range(n):
+          if a[i] !=0: # we have found the pivot
+              k = b[i]/a[i]
+              prvi, drugi = a, b
+              break
+          elif b[i] != 0:
+              k = a[i]/b[i]
+              prvi, drugi = b, a
+              break
+      for j in range(i+1,n):
+          if k*prvi[j] != drugi[j]:
+              return False
+      return True
 #+END_SRC
 ** Koplanarni vektorji 
 Napiši funkcijo ~koplanarni(a,b,c)~, ki preveri ali trije 3D vektorji ~a~, ~b~ in ~c~
@@ -1898,14 +1895,7 @@ print(koplanarni((1,0,0), (0,1,0), (0,0,1)))
 
 *** Rešitev
 #+name: koplanarni
-#+BEGIN_SRC python :exports both :eval no-export
-def dot(x,y):
-    "Izračuna skalarni produkt dveh vektorjev"
-    return sum(x[i]*y[i] for i in range(len(x)))
-def cross(x,y):
-    "Izračuna vektorski produkt dveh vektorjev"
-    return (x[1]*y[2]-x[2]*y[1], x[2]*y[0]-x[0]*y[2], x[0]*y[1]-x[1]*y[0])
-
+#+BEGIN_SRC python :exports both :eval no-export :tangle vektorji.py
 def koplanarni(a, b, c):
     # pri koplanarnih vektorjih je mešani produkt enak 0
     return dot(a,cross(b,c)) == 0
@@ -1913,7 +1903,7 @@ def koplanarni(a, b, c):
 *** DONE Testi
     CLOSED: [2017-12-01 pet 13:18]
 
-#+BEGIN_SRC python
+#+BEGIN_SRC python :tangle test_vektorji.py
   from vektor import koplanarni
   import unittest
 
@@ -1928,7 +1918,7 @@ def koplanarni(a, b, c):
   unittest.main()
 #+END_SRC
 
-** Linearna odvisnost
+** TODO Linearna odvisnost                                         :noexport:
 Napiši funkcijo ~odvisni(*vektorji)~, ki preveri ali so dani vektorji
 linearno odvisni in vrne ~True~, če so odvisni in ~False~, če niso.
 Vektorji so lahko poljubne dimenzije. Uporabiš
@@ -1962,7 +1952,8 @@ Check.secret(odvisni([1,1,1],[1,1,2],[0,1,0]))
 #+END_SRC
 
 
-* Premica in ravnina v 3D
+* DONE Premica in ravnina v 3D
+  CLOSED: [2017-12-04 pon 12:10]
 ** Razred za ravnino v prostoru
 Sestavite razred ~Ravnina~, ki predstavlja ravnino v prostoru.
 Razred naj ima metodo ~__init__(self,n,T)~, ki ravnino določi z normalo in točko
@@ -1970,23 +1961,31 @@ in metodo ~vsebuje(self,T)~, ki preveri ali točka ~T~ leži na ravnini.
 Na primer:
 
 #+BEGIN_SRC python  :exports both :eval no-export
+from geometrija import Ravnina 
 R = Ravnina([1,1,1],[0,0,0]) # ravnina x+y+z=0
-R.vsebuje([1,0,-1])
+print(R.vsebuje([1,0,-1]))
 #+END_SRC
+
+#+RESULTS:
+: True
 
 Dopolnite razred ~Ravnina~ z metodo ~__eq__(self,other)~, ki preveri
 ali objekta ~self~ in ~other~ predstavljata isto ravnino.
 
 Na primer:
+#+BEGIN_SRC python 
+from geometrija import Ravnina 
+print(Ravnina([1,1,1],[0,0,0]) == Ravnina([-1,-1,-1],[1,0,-1]))
+#+END_SRC
 
-    >>> Ravnina([1,1,1],[0,0,0]) == Ravnina([-1,-1,-1],[1,0,-1])
-    True
+#+RESULTS:
+: True
 
 *** Rešitev
-
+Uporabimo metodi ~dot~ in ~kolinearna~ iz prejšnjih nalog (file:vektorji.py).
 #+name: ravnina
-#+BEGIN_SRC python :exports both :eval no-export
-from numpy import dot
+#+BEGIN_SRC python :exports both :eval no-export :noweb yes :tangle geometrija.py
+from vektorji import dot, kolinearna
 class Ravnina:
     def __init__(self,n,T):
         self.n = n # koeficientni a b c
@@ -1995,11 +1994,13 @@ class Ravnina:
     def vsebuje(self,T):
         return dot(self.n,T) == self.d
     def __eq__(self,other):
-        a,b,c,d = self.n+[self.d]
-        e,f,g,h = other.n+[other.d]
-        # preverimo, če sta vektorja koeficientov kolinearna (ne najbolj optimalno)
-        return a*f == b*e and a*g==c*e and b*g==c*f and a*h==d*e and b*h==d*f and c*h==d*g
+        koef_self = self.n + [self.d]
+        koef_other = other.n + [other.d]
+        # preverimo, če sta vektorja koeficientov kolinearna
+        return kolinearna(koef_self, koef_other)
 #+END_SRC
+file:geometrija.py
+
 *** TODO Testi                                                     :noexport:
 
 #+BEGIN_SRC python :exports both :eval no-export
@@ -2021,27 +2022,30 @@ Check.secret('Ravnina([0,2,0],[1,2,3])==Ravnina([0,1,0],[1,2,3])')
 ** Razred za premico v prostoru
 Sestavite razred ~Premica~, ki predstavlja premico v prostoru.
 Razred naj ima metodo ~__init__(self,e,T)~, ki premico določi
-s smernim vektorjem ~e~ in točko ~T~. Razred naj ima tudi metodo ~skozi_tocke(A,B)~, ki naj vrne premico skozi točki ~A~ in ~B~ in metodo
+s smernim vektorjem ~e~ in točko ~T~. Razred naj ima tudi metodo ~skozi_tocki(A,B)~, ki naj vrne premico skozi točki ~A~ in ~B~ in metodo
 ~__eq__(self,p)~, ki preveri ali sta dve premici enaki.
 
 Na primer:
 #+BEGIN_SRC python :exports both :eval no-export
-
-    >>> p = Premica([1,2,3],[0,1,2]) # premica x=t,y=1+2t,z=2+3t
-    >>> q = Premica.skozi_tocke([0,1,2],[1,3,5])
-    >>> p == q
-    True
+from geometrija import Premica
+p = Premica([1,2,3],[0,1,2]) # premica x=t,y=1+2t,z=2+3t
+q = Premica.skozi_tocki([0,1,2],[1,3,5])
+print(p == q)
 #+END_SRC
-*** Rešitev
 
+#+RESULTS:
+: True
+
+*** Rešitev
+Uporabimo metodi ~dot~ in ~kolinearna~ iz prejšnjih nalog (file:vektorji.py).
 #+name: premica
-#+BEGIN_SRC python :exports both :eval no-export
-from numpy import dot
+#+BEGIN_SRC python :exports both :eval no-export :tangle geometrija.py
+from vektorji import dot, kolinearna
 class Premica:
     def __init__(self,e,T0):
         self.e = e # koeficientni a b c
         self.T0 = T0 # točka na premici
-    def skozi_tocke(A,B):
+    def skozi_tocki(A,B):
         e = [B[i]-A[i] for i in range(len(A))] # e=B-A
         return Premica(e,A)
     def __eq__(self,other):
@@ -2052,8 +2056,10 @@ class Premica:
         d,e,f = other.e
         T0T = [self.T0[i]-other.T0[i] for i in range(3)] # razlika
         r,s,t = T0T
-        return a*s == b*r and a*t==c*r and b*t==c*s and a*e == b*d and a*f==c*d and b*f==c*e
+        return kolinearna(self.e, other.e) and kolinearna(self.e, T0T)
 #+END_SRC
+
+file:geometrija.py
 *** TODO Testi                                                     :noexport:
 #+BEGIN_SRC python
 
@@ -2061,8 +2067,8 @@ Check.part()
 self.assertEqual('Premica([1,2,3],[1,0,0])==Premica([-1,-2,-3],[0,-2,-3])', True)
 self.assertEqual('Premica([1,2,0],[1,0,0])==Premica([2,4,0],[2,2,0])', True)
 self.assertEqual('Premica([1,2,0],[1,0,0])==Premica([2,4,0],[2,1,0])', False)
-self.assertEqual('Premica([1,2,0],[1,0,0])==Premica.skozi_tocke([1,0,0],[2,2,0])', True)
-self.assertEqual('Premica.skozi_tocke([1,1,1],[3,5,1])==Premica([2,4,0],[2,1,0])', False)
+self.assertEqual('Premica([1,2,0],[1,0,0])==Premica.skozi_tocki([1,0,0],[2,2,0])', True)
+self.assertEqual('Premica.skozi_tocki([1,1,1],[3,5,1])==Premica([2,4,0],[2,1,0])', False)
 Check.secret('Premica([1,2,3],[1,2,3])==Premica([1,2,3],[1,2,-3])')
 Check.secret('Premica([1,2,3],[1,2,3])==Premica([1,2,3],[0,0,0])')
 #+END_SRC
@@ -2071,47 +2077,40 @@ Check.secret('Premica([1,2,3],[1,2,3])==Premica([1,2,3],[0,0,0])')
 Napišite funkcijo ~presecisce(p,R)~, ki izračuna presečišče
 premice ~p~ in ravnine ~R~. če presečišča ni
 ali jih je neskončno naj funkcija javi napako tipa
-~Exception('Presečišča ni ali jih je neskončno')~. 
+~ValueError('Presečišča ni ali jih je neskončno')~. 
 Argument ~p~ naj bo razreda ~Premica~, ~R~ pa razreda ~Ravnina~.
 
 Na primer:
 
 #+BEGIN_SRC python :exports both :eval no-export
-    >>> presecisce(Premica([1,2,3],[1,2,3]), Ravnina([1,1,1],[1,2,3]))
-    [1,2,3]
-    >>> presecisce(Premica([1,0,-1],[0,0,1]), Ravnina([1,1,1],[0,0,2]))
-    None
+  from geometrija import Premica, Ravnina, presecisce
+
+  T1 = presecisce(Premica([1,2,3],[1,2,3]), Ravnina([1,1,1],[1,2,3]))
+  print(T1)
+  try:
+      T2 = presecisce(Premica([1,0,-1],[0,0,1]), Ravnina([1,1,1],[0,0,2]))
+  except ValueError as error:
+      print(error)
 #+END_SRC
+
+#+RESULTS:
+: [1.0, 2.0, 3.0]
+: Nič ali neskončno presečišč!
 
 *** Rešitev
 #+name: presecisce
-#+BEGIN_SRC python :exports both :eval no-export
-
-from numpy import dot
-from numpy.linalg import solve
-class Ravnina:
-    def __init__(self,n,T):
-        self.n = n # koeficientni a b c
-        self.d = dot(n,T) # koeficient d
-    def vsebuje(self,T):
-        return dot(self.n,T) == self.d
-
-class Premica:
-    def __init__(self,e,T0):
-        self.e = e # koeficientni a b c
-        self.T0 = T0 # točka na premici
-    def skozi_tocke(A,B):
-        e = [B[i]-A[i] for i in range(len(A))] # e=B-A
-        return Premica(e,A)
+#+BEGIN_SRC python :exports both :eval no-export :tangle geometrija.py
+from vektorji import dot
 
 def presecisce(p,R):
-    if dot(p.e,R.n)==0:
-        raise Exception('Nič ali neskončno presečišč!')
-    t = (R.d-dot(R.n,p.T0))/dot(R.n,p.e)
-    return [p.T0[i]+t*p.e[i] for i in range(3)]
+    if dot(p.e, R.n)==0:
+        raise ValueError('Nič ali neskončno presečišč!')
+    t = (R.d - dot(R.n, p.T0))/dot(R.n, p.e)
+    return [p.T0[i] + t*p.e[i] for i in range(3)]
 
 #+END_SRC
 
+file:geometrija.py
 *** TODO Testi                                                     :noexport:
 
 #+BEGIN_SRC python :exports both :eval no-export
@@ -2126,16 +2125,35 @@ except Exception as ex:
     if ex.args[0] != errmsg:
         Check.error("Če je presečišč neskončno ali nobenega, mora funkcija javiti napako z Exception('%s')" % errmsg)
 self.assertEqual('presecisce(Premica([1,2,3],[1,0,0]),Ravnina([-1,-2,-3],[-4,0,-3]))', [0,-2,-3])
-self.assertEqual('presecisce(Premica.skozi_tocke([1,1,1],[0,2,2]),Ravnina([-1,0,1],[0,2,1]))',[0.5,1.5,1.5])
+self.assertEqual('presecisce(Premica.skozi_tocki([1,1,1],[0,2,2]),Ravnina([-1,0,1],[0,2,1]))',[0.5,1.5,1.5])
 for i in range(10):
   Check.secret('presecisce(Premica([1,2+i,3],[0,1,i]),Ravnina([-1+i,-2,-3],[0,-2,-3]))')
-Check.secret('presecisce(Premica.skozi_tocke([1,2,3],[0,2,1]),Ravnina([-1,-2,-3],[0,-2,-3]))')
+Check.secret('presecisce(Premica.skozi_tocki([1,2,3],[0,2,1]),Ravnina([-1,-2,-3],[0,-2,-3]))')
 #+END_SRC
 
 * Raytracing: krogla in točkasto svetilo
-Pri tej nalogi bomo generirali sliko krogle osvetljene z enim točkastim svetilom 
-v praznem prostoru.
-** Presečišče poltraka in ravnine
+Pri tej nalogi bomo spoznali najpreporstejšo različico metode [[https://en.wikipedia.org/wiki/Ray_tracing_(graphics)][sledenja žarkom
+(ang. raytracing)]]. Omenjena metoda se uporablja za izdelavo vernih slik, ki
+predstavljajo 3 dimenzionalne objekte. Generirali bomo sliko krogle osvetljene z
+enim točkastim svetilom v praznem prostoru. Svetlobnemu žarku iz kamere, sledimo
+do prve ovire in v točki, kjer se žarek ovire dotakne, izračunamo osvetljenost.
+Izračunano vrednost uporabimo kot sivinsko vrednost piksla v končni sliki.
+Naloga je razdeljena na tri dele.
+
+ - Žarek predstavimo s poltrakom in mu sldimo do prve ovire (krogle). Najprej
+   moramo torej poiskati presečišče poltraka in krogle.
+
+ - Osvetljenost v določeni točki je odvisna od kota pod katerim je ta točka
+   osvetljena in oddaljenosti od svetila. Za dano točko na krogli moramo
+   poiskati kot med tangentno ravnino in daljico med točko in svetilom.
+ 
+ - Vse skupaj moramo sestaviti v sliko. Izberemo i položaj kamere in okvir,
+   skozi katerega gledamo v prostor. Nato izberemo točke v tem okvirju,
+   razporejene v kvadratno mrežo, in skoznje pošljemo žarke. Osvetljenost v
+   presečišču posameznega žarka s kroglo nam da sivinsko vrednost piksla na
+   končni sliki. 
+
+** Presečišče poltraka in krogle
 Napiši funkcijo ~presecisce(poltrak, krogla)~, ki izračuna prvo presečišče
 poltraka in krogle oziroma vrne ~None~, če presečišča ni. Poltrak naj bo podan
 kot par trojic ~(T0,e)~, kjer je ~T0~ začetna točka poltraka, ~e~ pa smerni
@@ -2146,17 +2164,20 @@ krogle in ~r~ polmer. Če je izhodišče poltraka znotraj krogle, naj funkcija v
 Primer:
 
 #+BEGIN_SRC python :exports both :eval no-export
-    >>> presecisce(((0,0,0),(1,0,0)), ((2,0,0),1))
-    (1,0,0)
-    >>> presecisce(((0,0,0),(-1,0,0)), ((2,0,0),1)) # vrne None
-    >>> presecisce((0,0,0),(1,0,0)), ((0,0,0),1)) # vrne None
+    from raytracing import presecisce
+    print(presecisce(((0,0,0),(1,0,0)), ((2,0,0),1)))
+    print(presecisce(((0,0,0),(-1,0,0)), ((2,0,0),1))) # vrne None
+    print(presecisce(((0,0,0),(1,0,0)), ((0,0,0),1))) # vrne None
 #+END_SRC
 
-*** Rešitev
-#+BEGIN_SRC python :exports both :eval no-export
+#+RESULTS:
+: (1.0, 0.0, 0.0)
+: None
+: None
 
-def dot(x,y):
-    return sum(x[i]*y[i] for i in range(len(x)))
+*** Rešitev
+#+BEGIN_SRC python :exports both :eval no-export :tangle raytracing.py
+from vektorji import dot
 
 def presecisce(poltrak, krogla):
     T0, e = poltrak
@@ -2180,6 +2201,10 @@ def presecisce(poltrak, krogla):
         return tuple(T0[i]+t*e[i] for i in range(len(T0)))
 
 #+END_SRC
+file:raytracing.py
+*** Test :noexport:
+#+BEGIN_SRC python
+
 Check.part()
 self.assertEqual('presecisce(((0,0,0),(1,0,0)), ((2,0,0),1))', (1,0,0))
 self.assertEqual('presecisce(((0,0,0),(-1,0,0)), ((2,0,0),1.5))', None)
@@ -2189,6 +2214,7 @@ Check.secret(presecisce(((1,2,-1),(-1,2,2)),((2,3,1),3)))
 Check.secret(presecisce(((1,0,1),(1,2,1)),((2,1,-1),2)))
 Check.secret(presecisce(((1,0,1),(1,2,2)),((5,10,0),6)))
 
+#+END_SRC
 ** Osvetljenost
 Napiši funkcijo ~osvetljenost(T, krogla, svetilo)~, ki določi osvetljenost točke ~T~ na obodu krogle ~krogla=(S,r)~,
 če kroglo osvetlimo s svetilom v točki ~S~. Osvetljenost izračunamo s formulo
@@ -2196,20 +2222,21 @@ $$\frac{\cos{\alpha}}{r^2},$$
 kjer je $r$ razdalja med točko na krogli in svetilom, kot $\alpha$ pa je kot med normalo na kroglo dani točki in vpadnim žarkom (daljico,
 ki točko $T$ povezuje s svetilom).
 Če je kot $\alpha$ večji kot $\pi/2$, naj funkcija vrne $0$.
-Primer:
 
-    >>> osvetljenost((1,0,0),((2,0,0),1), (0,0,0))
-    1
-    >>> osvetljenost((1,0,0),((2,0,0),1),(4,0,0))
-    0
-    >>> osvetljenost((1,0,0),((2,0,0),1),(0,3**0.5,0))
-    0.125
+Primer:
+#+BEGIN_SRC python
+     from raytracing import osvetljenost 
+     o1 =osvetljenost((1,0,0),((2,0,0),1), (0,0,0))
+     o2 = osvetljenost((1,0,0),((2,0,0),1),(4,0,0))
+     o3 = osvetljenost((1,0,0),((2,0,0),1),(0,3**0.5,0))
+     print(o1, o2, o3)
+#+END_SRC
+
+#+RESULTS:
+: 1.0 0 0.12500000000000003
 
 *** Rešitev
-#+BEGIN_SRC python :exports both :eval no-export
-
-def dot(x,y):
-    return sum(x[i]*y[i] for i in range(len(x)))
+#+BEGIN_SRC python :exports both :eval no-export :tangle raytracing.py
 
 def osvetljenost(T, krogla, svetilo):
     S, r = krogla
@@ -2219,24 +2246,31 @@ def osvetljenost(T, krogla, svetilo):
     return max(0, dot(n,TL)/dot(n,n)**0.5/dot(TL,TL)**1.5)
 
 #+END_SRC
+*** Test :noexport:
+#+BEGIN_SRC python
+
 Check.part()
 self.assertEqual('osvetljenost((1,0,0),((2,0,0),1), (0,0,0))', 1)
 self.assertEqual('osvetljenost((1,0,0),((2,0,0),1),(4,0,0))', 0)
 self.assertEqual('osvetljenost((1,0,0),((2,0,0),1),(0,3**0.5,0))', 0.125)
 Check.secret(osvetljenost((1,0,0),((2,0,0),1),(1,3**0.5,0)))
 Check.secret(osvetljenost((0,0,0),((2,0,0),2),(-1,3,0)))
-
+#+END_SRC
 ** Krogla osvetljena s točkastim svetilom 
-Napiši funkcijo ~pogled(kamera,okvir, krogla, svetilo, slika)~, ki izdela sliko (~slika~ tipa ~PIL.Image~) ~krogle~ osvetljene s ~svetilom~,
-ki jo naredi ~kamera~ skozi dani ~okvir~.
+Napiši funkcijo ~pogled(kamera,okvir, krogla, svetilo, slika)~, ki izdela sliko
+(~slika~ tipa ~PIL.Image~) ~krogle~ osvetljene s ~svetilom~, ki jo naredi
+~kamera~ skozi dani ~okvir~.
 
 Parametri:
 
 - ~kamera~: trojica koordinat položaja kamere v prostoru
-- ~okvir~: par ~(A,u,v)~, kjer je ~A~ oglišče, ~u~ in ~v~ pa vektorja stranic paralelograma $ABCD$
+- ~okvir~: par ~(A,u,v)~, kjer je ~A~ oglišče, ~u~ in ~v~ pa vektorja stranic
+  paralelograma $ABCD$
 - ~krogla~: par ~((xs,ys,zs),r)~
-- ~svetilo~: par ~((xl,yl,zl),P)~, kjer je prva trojica predstavlja koordinate svetila, ~P~ pa je število, sorazmerno moči svetila.
-- ~slika~ : objekt tipa ~PIL.Image~, ki ga dobimo z ukazom ~PIL.Image('F',(n,m),"black")~
+- ~svetilo~: par ~((xl,yl,zl),P)~, kjer je prva trojica predstavlja koordinate
+  svetila, ~P~ pa je število, sorazmerno moči svetila.
+- ~slika~ : objekt tipa ~PIL.Image~, ki ga dobimo z ukazom
+  ~PIL.Image('F',(n,m),"black")~
 
 Vrednost piksla z indeksi $(i,j)$ na sliki, naj bo enaka osvetljenosti
 $$\frac{P\cos\alpha}{r^2}$$
@@ -2246,12 +2280,13 @@ $$\vec{r}_T=\vec{r}_{A}+\frac{i}{n}\vec{u}+\frac{m-j}{m}\vec{v}.$$
 Primer:
 
 #+BEGIN_SRC python :exports both :eval no-export
-    >>>from PIL import Image
-    >>>slika = Image.new('F',(255,255),"black")
-    >>>kamera = (0,0,0); okvir = ((1,-1,-1),(0,2,0),(0,0,2));
-    >>>krogla = ((2,0,0),1); svetilo = ((0,-3,0),500);
-    >>>pogled(kamera, okvir, krogla, svetilo, slika)
-    >>>slika.show()
+    from PIL import Image
+    from raytracing import pogled
+    slika = Image.new('F',(255,255),"black")
+    kamera = (0,0,0); okvir = ((1,-1,-1),(0,2,0),(0,0,2));
+    krogla = ((2,0,0),1); svetilo = ((0,-3,0),500);
+    pogled(kamera, okvir, krogla, svetilo, slika)
+    slika.show()
 #+END_SRC
 
 Prikaže sliko
@@ -2260,47 +2295,18 @@ Prikaže sliko
       #+END_EXPORT
 
 #+BEGIN_SRC python :exports both :eval no-export
-    >>> slika.getpixel((100,100))
+    slika.getpixel((100,100))
     85.13904571533203
 #+END_SRC
-#+BEGIN_SRC python :exports both :eval no-export
 
-def dot(x,y):
-    return sum(x[i]*y[i] for i in range(len(x)))
+*** Rešitev
+#+BEGIN_SRC python :exports both :eval no-export :tangle raytracing.py
 def plus(x,y):
     return [x[i]+y[i] for i in range(len(x))]
 def minus(x,y):
     return [x[i]-y[i] for i in range(len(x))]
 def mul(alfa,x):
     return [alfa*x[i] for i in range(len(x))]
-
-def osvetljenost(T, krogla, svetilo):
-    S, r = krogla
-    L = svetilo
-    n = tuple(T[i]-S[i] for i in range(len(S)))
-    TL = tuple(L[i]-T[i] for i in range(len(T)))
-    return max(0, dot(n,TL)/dot(n,n)**0.5/dot(TL,TL)**1.5)
-
-def presecisce(poltrak, krogla):
-    T0, e = poltrak
-    S, r = krogla
-    # vektorska enacba krogle (rT - rS).(rT - rS)=r
-    # rT.rT - 2rT.rS + rS.rS - r = 0
-    # enacba poltraka rT = rT0 + t*e
-    # presecisce doloca kvadratna enacba
-    # (rT0 + t*e).(rT0 + t*e) - 2(rT0 + t*e).rS + rS.rS - r = 0
-    # e.e*t^2 + 2*rT0.e*t + rT0.rT0 -2*rT0.rS - 2*e.rS*t + rS.rS - r = 0
-    a = dot(e,e)
-    b = 2*(dot(e,T0)-dot(e,S))
-    c = dot(T0,T0) - 2*dot(T0,S) + dot(S,S) - r*r
-    D = b**2 - 4*a*c
-    if D<0:
-        return None
-    t = (-b-D**0.5)/(2*a)
-    if t<0:
-        return None
-    else:
-        return tuple(T0[i]+t*e[i] for i in range(len(T0)))
 
 def pogled(camera, okvir, krogla, svetilo, slika):
     n, m = slika.size
@@ -2341,7 +2347,7 @@ def pogled(camera, okvir, krogla, svetilo, slika):
     return slika
 
 #+END_SRC
-
+file:raytracing.py
 *** TODO Testi                                                     :noexport:
 #+BEGIN_SRC python :exports both :eval no-export
 
@@ -2366,7 +2372,7 @@ Check.secret(slika.getpixel((100,125)))
 
 #+END_SRC
 
-* Raytracing: tetraeder in točkasto svetilo
+* Raytracing: tetraeder in točkasto svetilo :noexport:
 
 Na Khan academy Pixar [[https://www.khanacademy.org/partner-content/pixar/rendering][prikazuje]], kako delajo risane filme.
 Pomemben del procesa, ki pripelje do končnega izdelka je tudi metoda 
@@ -2640,7 +2646,7 @@ Check.secret(odboj(((0,1,1),(-2,-1,2)), (1,6,1,1)))
 #+END_SRC
 *** Ali točka leži na trikotniku?
 ** TODO Večkratni odboji                                           :noexport:
-* TODO Matrike in sistemi enačb 
+* TODO Matrike in sistemi enačb                                    :noexport:
 ** Matrike
 *** Python razred za matrike
 ** Sistemi enačb
